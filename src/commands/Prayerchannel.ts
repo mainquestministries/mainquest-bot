@@ -17,27 +17,31 @@ export class UserCommand extends Command {
 	}
 
 	public async contextMenuRun(interaction: Command.ContextMenuInteraction) {
-		const current_guild = await prisma.guild.findMany({
-			where: { id: interaction.guildId as string }
-		});
-		if (current_guild.length === 0) {
-			await prisma.guild.create({
+		if ( interaction.guildId === null) {
+			return interaction.reply("Es ist ein Fehler aufgetreten. Problemlösung: Funktionen nur dort nutzen, wo sie sinnvoll sind!")
+		}
+		try { await prisma.guildconfig.findFirstOrThrow({
+			where: {
+				id: interaction.guildId as string
+			}})
+			
+			await prisma.guildconfig.update({
+				where: {
+					id: interaction.guildId
+				},
 				data: {
-					id: interaction.guildId as string,
 					p_channel: interaction.channelId
 				}
-			});
-			return await interaction.reply({
-				content: `Registered guild: *${interaction.guild?.name}* with prayerchannel ${interaction.channel?.toString()} `
-			});
+			})
+		} catch (e) {
+				await prisma.guildconfig.create({
+					data: {
+						id: interaction.guildId as string,
+						p_channel: interaction.channelId
+					}
+				})
+			}
+		return interaction.reply("Neue Konfiguration gespeichert.")
 		}
-
-		await prisma.guild.update({
-			where: { id: interaction.guildId as string },
-			data: { p_channel: interaction.channelId }
-		});
-		return await interaction.reply({
-			content: `Updated guild: *${interaction.guild?.name}* with prayerchannel ${interaction.channel?.toString()}`
-		});
 	}
-}
+

@@ -11,31 +11,30 @@ datasource db {
 }
 
 model guildconfig {
-  id String @id
+  id        String @id
   p_channel String
 }
-model usermessage {
-  id      String      @id
-  user    String?
-  guild   String?
-  channel String?
-  entries userentry[]
+
+model Message {
+  id              Int      @id @default(autoincrement())
+  message_content Json
+  scheduled_at    DateTime
+  embeds          Embed[]
+  guild           String?
+  user_id         String?
+  channel         String?
+  status          String
+  repetitions Int @default(7)
 }
 
-model userentry {
-  id      Int   @id @default(autoincrement())
-  content entry @relation(fields: [entryUserentry_id], references: [userentry_id])
-
-  usermessage       usermessage? @relation(fields: [usermessageId], references: [id])
-  usermessageId     String?
-  entryUserentry_id Int
-}
-
-model entry {
-  userentry_id Int
-  userentry    userentry[]
-  Title String
-  Content String
-
-  @@id([userentry_id])
+model Embed {
+  id        Int      @id @default(autoincrement())
+  Message   Message? @relation(fields: [messageId], references: [id])
+  messageId Int?
+  original_message_id String
+  content String
+  author String
+  author_avatar_url String
+  title String
+  sended Int @default(0)
 }
