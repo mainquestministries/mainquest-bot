@@ -6,16 +6,47 @@ const prisma = new PrismaClient()
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public async run(reaction: MessageReaction, user: User) {
-		let guild = null
-		try {guild = (await prisma.guildconfig.findFirstOrThrow({
+		
+		try {await prisma.guildconfig.findFirstOrThrow({
 			where: {
 				id: reaction.message.guildId as string,
 				p_channel: reaction.message.channelId
 			}
-		}))} catch (e) {
+		})} catch (e) {
 			return
 		}
+    
+        if ((await prisma.message.count(
+                {
+                    where: { id : user.id}
+                }
+        )) === 0) {
+            await prisma.message.create(
+                {
+                    data: {
+                        message_content: "Dein Abo für heute",
+                        id: user.id,
+                    }
+                }
+            )}
 
-		
-	}
-}
+
+        await prisma.message.update({
+
+            where: {
+                id: user.id},
+            data: {
+                embeds: {
+                   create: {
+                      original_message_id: reaction.message.id as string,
+                      content: reaction.message.content as string,
+                      author: reaction.message.member?.displayName as string,
+                      author_avatar_url: reaction.message.author?.displayAvatarURL() as string,
+                      title: `Gebetsanliegen von ${reaction.message.member?.displayName}`,
+                      
+                   } 
+                }
+            }
+        }) 
+
+        }}

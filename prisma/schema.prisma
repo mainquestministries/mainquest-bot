@@ -16,25 +16,25 @@ model guildconfig {
 }
 
 model Message {
-  id              Int      @id @default(autoincrement())
-  message_content Json
-  scheduled_at    DateTime
+  id String @id
+  message_content String
+  hour Int @default(7)
+  minute Int @default(0)
   embeds          Embed[]
   guild           String?
-  user_id         String?
   channel         String?
-  status          String
   repetitions Int @default(7)
 }
 
 model Embed {
   id        Int      @id @default(autoincrement())
   Message   Message? @relation(fields: [messageId], references: [id])
-  messageId Int?
+  messageId String?
   original_message_id String
   content String
   author String
   author_avatar_url String
   title String
+  color Int?
   sended Int @default(0)
 }
