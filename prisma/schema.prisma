@@ -16,7 +16,7 @@ model guildconfig {
 }
 
 model Message {
-  id String @id
+  id String @id //user to send this message to
   message_content String
   hour Int @default(7)
   minute Int @default(0)
