@@ -30,9 +30,30 @@ export class UserEvent extends Listener {
 						sended: msg.repetitions
 					}
 				})
+				/* Every Embed was sended
+				prisma.embed.updateMany({
+					where: {
+						messageId: msg.id
+					},
+					data: {
+						sended: {
+							increment: 1
+						}
+					}
+				})*/
 				let embeds : MessageEmbed[] = [] 
-				msg.embeds.forEach((embed) => 
-				{embeds.push(new MessageEmbed(
+				msg.embeds.forEach(async (embed) => 
+				{
+					await prisma.embed.update({
+						where: {
+							id: embed.id
+						},
+						data: {
+							sended: embed.sended+1
+						}
+						
+					})
+					embeds.push(new MessageEmbed(
 					{
 						title: embed.title,
 						description: embed.content,
@@ -49,17 +70,12 @@ export class UserEvent extends Listener {
 					embeds: embeds
 				})
 				
-		 }
-		 )}, 30000 // Every 30 seconds
+		 })
+		 
+		 }, 30000 // Every 30 seconds
 		  )	
 			// Every Embed was sended
-			prisma.embed.updateMany({
-				data: {
-					sended: {
-						increment: 1
-					}
-				}
-			})
+			
 	}
 	
 
