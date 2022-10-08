@@ -1,3 +1,3 @@
 #TODO:
 - add field userconfig
-- install all nerdtree plugins
+- let user configure himself
