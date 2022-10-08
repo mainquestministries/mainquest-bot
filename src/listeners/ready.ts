@@ -23,8 +23,14 @@ export class UserEvent extends Listener {
 			)
 			let next_user = null
 			msg.forEach(async (msg) => {
-				let embeds : MessageEmbed[] = [] 
 				next_user = await this.container.client.users.fetch(msg.id, {force: true})
+				await prisma.embed.deleteMany({
+					where: {
+						messageId: msg.id,
+						sended: msg.repetitions
+					}
+				})
+				let embeds : MessageEmbed[] = [] 
 				msg.embeds.forEach((embed) => 
 				{embeds.push(new MessageEmbed(
 					{
@@ -42,9 +48,20 @@ export class UserEvent extends Listener {
 					content: msg.message_content,
 					embeds: embeds
 				})
-		 } )	
-		})
+				
+		 }
+		 )}
+		  )	
+			// Every Embed was sended
+			prisma.embed.updateMany({
+				data: {
+					sended: {
+						increment: 1
+					}
+				}
+			})
 	}
+	
 
 	private printBanner() {
 		const success = green('+');
