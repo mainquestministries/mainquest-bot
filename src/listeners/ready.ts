@@ -50,7 +50,7 @@ export class UserEvent extends Listener {
 				})
 				
 		 }
-		 )}
+		 )}, 30000 // Every 30 seconds
 		  )	
 			// Every Embed was sended
 			prisma.embed.updateMany({
