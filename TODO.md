@@ -1,3 +1,4 @@
-#TODO:
-- add field userconfig
-- let user configure himself
+# TODO
+Check Reaction Emoji
+Create Worker function
+Word of the Day 

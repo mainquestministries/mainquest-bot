@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { MessageEmbed } from 'discord.js';
 const prisma = new PrismaClient()
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -14,65 +13,7 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		setInterval(async () => {
-			const msg = await prisma.message.findMany(
-				{
-					include: {
-						embeds: true
-					}
-				}
-			)
-			let next_user = null
-			msg.forEach(async (msg) => {
-				next_user = await this.container.client.users.fetch(msg.id, {force: true})
-				await prisma.embed.deleteMany({
-					where: {
-						messageId: msg.id,
-						sended: msg.repetitions
-					}
-				})
-				/* Every Embed was sended
-				prisma.embed.updateMany({
-					where: {
-						messageId: msg.id
-					},
-					data: {
-						sended: {
-							increment: 1
-						}
-					}
-				})*/
-				let embeds : MessageEmbed[] = [] 
-				msg.embeds.forEach(async (embed) => 
-				{
-					await prisma.embed.update({
-						where: {
-							id: embed.id
-						},
-						data: {
-							sended: embed.sended+1
-						}
-						
-					})
-					embeds.push(new MessageEmbed(
-					{
-						title: embed.title,
-						description: embed.content,
-						author: {
-							name: embed.author,
-							 icon_url: embed.author_avatar_url,
-							 proxyIconURL: embed.author_avatar_url
-						},
-
-					}
-				))}) // TODO: Decrease embeds and delete them
-				await next_user.send({
-					content: msg.message_content,
-					embeds: embeds
-				})
-				
-		 })
-		 
-		 }, 30000 // Every 30 seconds
+		}, 29999 // Every 30 seconds
 		  )	
 			// Every Embed was sended
 			
