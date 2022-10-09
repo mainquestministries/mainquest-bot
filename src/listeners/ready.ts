@@ -24,35 +24,54 @@ export class UserEvent extends Listener {
 			let next_user = null
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, {force: true})
-				await prisma.embed.deleteMany({
+				await prisma.message.update({
 					where: {
-						messageId: msg.id,
-						sended: msg.repetitions
-					}
-				})
-				/* every embed was sended
-				prisma.embed.updatemany({
-					where: {
-						messageid: msg.id
+						id: msg.id
 					},
 					data: {
-						sended: {
-							increment: 0
+						embeds: {
+							deleteMany: {
+								sended: msg.repetitions
+							}
 						}
 					}
-				})*/
+				})
+				await prisma.message.update({
+					where: {
+						id: msg.id
+					},
+					data: {
+						embeds: {
+							updateMany: {
+								where: {
+									messageId: msg.id
+								},
+								data: {
+									sended: {
+										increment: 1
+									}
+								}
+							}
+						}
+					}
+				})
 				let embeds : MessageEmbed[] = [] 
+				
 				msg.embeds.forEach(async (embed) => 
 				{
-					await prisma.embed.update({
-						where: {
-							id: embed.id
-						},
-						data: {
-							sended: embed.sended+1
-						}
+					try {
+						await prisma.embed.update({
+							where: {
+								id: embed.id
+							},
+							data: {
+								sended: embed.sended+1
+							}
+							
+						})
+					} catch  {
 						
-					})
+					}
 					embeds.push(new MessageEmbed(
 					{
 						title: embed.title,
@@ -65,12 +84,13 @@ export class UserEvent extends Listener {
 
 					}
 				))}) // TODO: Decrease embeds and delete them
+				if (embeds.length > 0) {
 				await next_user.send({
 					content: msg.message_content,
 					embeds: embeds
-				})
+				})}
 				
-		 })
+		 }) 
 		}, 29999 // Every 30 seconds
 		  )}
 		else {
