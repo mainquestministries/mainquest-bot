@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-const prisma = new PrismaClient()
+import { simple_worker } from '../workers/simple_worker';
 const dev = process.env.NODE_ENV !== 'production';
 
 @ApplyOptions<Listener.Options>({ once: true })
@@ -13,6 +12,7 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		setInterval(async () => {
+			simple_worker(this.container)
 		}, 29999 // Every 30 seconds
 		  )	
 			// Every Embed was sended
