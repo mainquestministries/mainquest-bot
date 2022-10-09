@@ -7,6 +7,8 @@ const prisma = new PrismaClient()
 export class UserEvent extends Listener {
 	public async run(reaction: MessageReaction, user: User) {
 		
+        if (!(reaction.emoji.name === '🙏🏻')) return
+
 		try {await prisma.guildconfig.findFirstOrThrow({
 			where: {
 				id: reaction.message.guildId as string,

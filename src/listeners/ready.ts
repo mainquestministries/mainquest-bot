@@ -1,9 +1,10 @@
+import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { simple_worker } from '../workers/simple_worker';
+import { MessageEmbed } from 'discord.js';
 const dev = process.env.NODE_ENV !== 'production';
-
+const prisma = new PrismaClient()
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserEvent extends Listener {
 	private readonly style = dev ? yellow : blue;
@@ -11,11 +12,70 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
+		if (dev) {
 		setInterval(async () => {
-			simple_worker(this.container)
+			const msg = await prisma.message.findMany(
+				{
+					include: {
+						embeds: true
+					}
+				}
+			)
+			let next_user = null
+			msg.forEach(async (msg) => {
+				next_user = await this.container.client.users.fetch(msg.id, {force: true})
+				await prisma.embed.deleteMany({
+					where: {
+						messageId: msg.id,
+						sended: msg.repetitions
+					}
+				})
+				/* every embed was sended
+				prisma.embed.updatemany({
+					where: {
+						messageid: msg.id
+					},
+					data: {
+						sended: {
+							increment: 0
+						}
+					}
+				})*/
+				let embeds : MessageEmbed[] = [] 
+				msg.embeds.forEach(async (embed) => 
+				{
+					await prisma.embed.update({
+						where: {
+							id: embed.id
+						},
+						data: {
+							sended: embed.sended+1
+						}
+						
+					})
+					embeds.push(new MessageEmbed(
+					{
+						title: embed.title,
+						description: embed.content,
+						author: {
+							name: embed.author,
+							 icon_url: embed.author_avatar_url,
+							 proxyIconURL: embed.author_avatar_url
+						},
+
+					}
+				))}) // TODO: Decrease embeds and delete them
+				await next_user.send({
+					content: msg.message_content,
+					embeds: embeds
+				})
+				
+		 })
 		}, 29999 // Every 30 seconds
-		  )	
-			// Every Embed was sended
+		  )}
+		else {
+
+		}
 			
 	}
 	
