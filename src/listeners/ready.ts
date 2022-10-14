@@ -55,23 +55,12 @@ export class UserEvent extends Listener {
 						}
 					}
 				})
+				// Works until this line
 				let embeds : MessageEmbed[] = [] 
-				
+				this.container.logger.debug("Valid Embeds: " + msg.embeds.length)
 				msg.embeds.forEach(async (embed) => 
 				{
-					try {
-						await prisma.embed.update({
-							where: {
-								id: embed.id
-							},
-							data: {
-								sended: embed.sended+1
-							}
-							
-						})
-					} catch  {
-						
-					}
+					
 					embeds.push(new MessageEmbed(
 					{
 						title: embed.title,
@@ -84,6 +73,7 @@ export class UserEvent extends Listener {
 
 					}
 				))}) // TODO: Decrease embeds and delete them
+				this.container.logger.info(`Embeds: ${embeds.length}`)
 				if (embeds.length > 0) {
 				await next_user.send({
 					content: msg.message_content,
@@ -91,7 +81,8 @@ export class UserEvent extends Listener {
 				})}
 				
 		 }) 
-		}, 29999 // Every 30 seconds
+		this.container.logger.info("Called Routine")
+		}, 20000 // Every 20 seconds
 		  )}
 		else {
 
