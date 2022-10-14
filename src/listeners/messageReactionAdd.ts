@@ -32,8 +32,10 @@ export class UserEvent extends Listener {
                 }
             )}
         let fetched_user = await reaction.message.author?.fetch(true)
-        const color = fetched_user?.accentColor
-        this.container.logger.debug("Color: "+ color)
+        let color_ = 0
+        if (fetched_user?.accentColor){
+            color_ = fetched_user?.accentColor}
+        this.container.logger.debug("Color: "+ color_)
         await prisma.message.update({
 
             where: {
@@ -46,7 +48,7 @@ export class UserEvent extends Listener {
                       author: reaction.message.member?.displayName as string,
                       author_avatar_url: reaction.message.author?.displayAvatarURL() as string,
                       title: `Gebetsanliegen von ${reaction.message.member?.displayName}`,
-                      //color: 
+                      color: color_
                       
                    } 
                 }

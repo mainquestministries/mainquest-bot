@@ -60,11 +60,18 @@ export class UserEvent extends Listener {
 				this.container.logger.debug("Valid Embeds: " + msg.embeds.length)
 				msg.embeds.forEach(async (embed) => 
 				{
-					
+					let color_temp = 0
+					if (embed.color === null) {
+						color_temp = 0
+					}	
+					else {
+						color_temp = embed.color
+					}
 					embeds.push(new MessageEmbed(
 					{
 						title: embed.title,
 						description: embed.content,
+						color: color_temp,
 						author: {
 							name: embed.author,
 							 icon_url: embed.author_avatar_url,
