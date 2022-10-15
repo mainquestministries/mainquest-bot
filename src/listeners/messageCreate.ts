@@ -7,16 +7,17 @@ const prisma = new PrismaClient()
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public async run(message : Message) {
-		prisma.guildconfig.findFirstOrThrow({
+		if (message.author.bot) return
+		try {
+		await prisma.guildconfig.findFirstOrThrow({
 			where: {
 				p_channel: message.channelId,
 				id: `${message.guildId}`
 			}
-		}).catch(() => {
-			this.container.logger.info("Got message - Wrong channel")
-		}).then(() => {
-			message.react("🔔")
-		})
+		})}	catch {
+			return
+		}
+		await message.react("🔔")	
 		
 	}
 }
