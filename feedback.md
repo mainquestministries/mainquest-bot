@@ -12,7 +12,7 @@ z. B. Montag Mittwoch Freitag
 => Reagieren mit 1, 2, 3, 4, 5, 6, 7 // nicht mit interactions, Idee: Actionrowbuilder, empheral
 Nutzer clickt dann auf jeden Wochentag, den er haben will
 
-npm: Agenda zum schedulen nutzen
+<https://github.com/node-cron/node-cron>
 
 ## Next Stage
 
