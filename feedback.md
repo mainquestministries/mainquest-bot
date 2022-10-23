@@ -1,12 +1,21 @@
-# Feedback:
-Custom Emoji für Erinnerung, z. B. brennender Brief / Glocke
-//Gebetsanliegen - Farbe vom Avatar 
-//Jedes Mal reagieren mit Erinnerungs-Emoji
-Jeden zweiten Tag Nachricht senden -> 3 mal sended
-Aussuchen: Jeden 1. / 2. / 7.
+# Feedback
 
-Einmal pro Woche / Alle zwei Tage / Zweimal bzw. Einmal pro Woche
-Bei der ersten Nachricht direkt schreiben, wann und wie oft
+## Done
+
+*Gebetsanliegen - Farbe vom Avatar*
+*Jedes Mal reagieren mit Erinnerungs-Emoji*
+
+## TODO
 
 z. B. Montag Mittwoch Freitag
 
+=> Reagieren mit 1, 2, 3, 4, 5, 6, 7
+Nutzer clickt dann auf jeden Wochentag, den er haben will
+
+npm: Agenda zum schedulen nutzen
+
+## Next Stage
+
+Custom Emoji für Erinnerung, z. B. brennender Brief / Glocke
+
+Losungen schicken

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, userconfig } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
@@ -24,6 +24,22 @@ export class UserEvent extends Listener {
 			let next_user = null
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, {force: true})
+				let send_today = false
+				try {
+					let db_userconfig : userconfig
+					db_userconfig = await prisma.userconfig.findFirstOrThrow({
+						where: {
+							id: next_user.id
+						}
+					})
+					if (new Date().getDay() in db_userconfig.days) {
+						send_today = true
+					}
+				} catch {
+					// Send Message to find out
+					await next_user.send({ content: "Ich weiß nicht, wann ich dir deine Benachrichtigungen zustellen soll... \n" +
+				 "Benutze doch bitte /benachrichtigungen_einstellen, um es mir mitzuteilen. \nDein Mainquestbot."})
+				}
 				await prisma.message.update({
 					where: {
 						id: msg.id
@@ -79,9 +95,9 @@ export class UserEvent extends Listener {
 						},
 
 					}
-				))}) // TODO: Decrease embeds and delete them
+				))})
 				this.container.logger.info(`Embeds: ${embeds.length}`)
-				if (embeds.length > 0) {
+				if (send_today && embeds.length > 0) {
 				await next_user.send({
 					content: msg.message_content,
 					embeds: embeds

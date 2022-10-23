@@ -15,6 +15,11 @@ model guildconfig {
   p_channel String
 }
 
+model userconfig {
+  id String @id
+  days Int[] @default([6])
+}
+
 model Message {
   id String @id //user to send this message to
   message_content String
