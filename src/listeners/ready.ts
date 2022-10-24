@@ -13,10 +13,8 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		let cron_str = '0 0 8 * * * *'; // Set for production to every day.
-		if (dev) {
-			cron_str = '* * * * *';
-		}
+		const cron_str = dev ? '* * * * *' : '0 0 8 * * * *'; // Set for production to every day
+		
 		cron.schedule(
 			cron_str,
 			async (now) => {
@@ -80,7 +78,6 @@ export class UserEvent extends Listener {
 					});
 					// Works until this line
 					let embeds: MessageEmbed[] = [];
-					this.container.logger.debug('Valid Embeds: ' + msg.embeds.length);
 					msg.embeds.forEach(async (embed) => {
 						let color_temp = 0;
 						if (embed.color === null) {
