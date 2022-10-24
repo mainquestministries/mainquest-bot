@@ -16,30 +16,30 @@ model guildconfig {
 }
 
 model userconfig {
-  id String @id
-  days Int[] @default([6])
+  id   String @id
+  days Int[]  @default([6])
 }
 
 model Message {
-  id String @id //user to send this message to
+  id              String  @id //user to send this message to
   message_content String
-  hour Int @default(7)
-  minute Int @default(0)
+  hour            Int     @default(7)
+  minute          Int     @default(0)
   embeds          Embed[]
   guild           String?
   channel         String?
-  repetitions Int @default(7)
+  repetitions     Int     @default(7)
 }
 
 model Embed {
-  id        Int      @id @default(autoincrement())
-  Message   Message? @relation(fields: [messageId], references: [id])
-  messageId String?
+  id                  Int      @id @default(autoincrement())
+  Message             Message? @relation(fields: [messageId], references: [id])
+  messageId           String?
   original_message_id String
-  content String
-  author String
-  author_avatar_url String
-  title String
-  color Int?
-  sended Int @default(0)
+  content             String
+  author              String
+  author_avatar_url   String
+  title               String
+  color               Int?
+  sended              Int      @default(0)
 }

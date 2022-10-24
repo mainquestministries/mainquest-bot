@@ -17,14 +17,16 @@ export class UserCommand extends Command {
 	}
 
 	public async contextMenuRun(interaction: Command.ContextMenuInteraction) {
-		if ( interaction.guildId === null) {
-			return interaction.reply("Es ist ein Fehler aufgetreten. Problemlösung: Funktionen nur dort nutzen, wo sie sinnvoll sind!")
+		if (interaction.guildId === null) {
+			return interaction.reply('Es ist ein Fehler aufgetreten. Problemlösung: Funktionen nur dort nutzen, wo sie sinnvoll sind!');
 		}
-		try { await prisma.guildconfig.findFirstOrThrow({
-			where: {
-				id: interaction.guildId as string
-			}})
-			
+		try {
+			await prisma.guildconfig.findFirstOrThrow({
+				where: {
+					id: interaction.guildId as string
+				}
+			});
+
 			await prisma.guildconfig.update({
 				where: {
 					id: interaction.guildId
@@ -32,16 +34,15 @@ export class UserCommand extends Command {
 				data: {
 					p_channel: interaction.channelId
 				}
-			})
+			});
 		} catch (e) {
-				await prisma.guildconfig.create({
-					data: {
-						id: interaction.guildId as string,
-						p_channel: interaction.channelId
-					}
-				})
-			}
-		return interaction.reply("Neue Konfiguration gespeichert.")
+			await prisma.guildconfig.create({
+				data: {
+					id: interaction.guildId as string,
+					p_channel: interaction.channelId
+				}
+			});
 		}
+		return interaction.reply('Neue Konfiguration gespeichert.');
 	}
-
+}
