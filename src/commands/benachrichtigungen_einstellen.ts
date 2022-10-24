@@ -10,6 +10,9 @@ export class UserCommand extends Command {
 			builder //
 				.setName(this.name)
 				.setDescription(this.description)
+				.addStringOption((option) => option.setName("Konfiguration").setDescription("Konfiguration auwählen."
+				+ " Siehe github.com/mainquestministries/mainquest_bot/...") //TODO
+				.setRequired(true))
 		);
 	}
 
