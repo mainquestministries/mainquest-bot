@@ -13,13 +13,13 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		let cron_str = '7 * * * *'; // Set for production to every day.
+		let cron_str = '0 0 8 * * * *'; // Set for production to every day.
 		if (dev) {
 			cron_str = '* * * * *';
 		}
 		cron.schedule(
 			cron_str,
-			async () => {
+			async (now) => {
 				const msg = await prisma.message.findMany({
 					include: {
 						embeds: true
@@ -36,7 +36,7 @@ export class UserEvent extends Listener {
 								id: next_user.id
 							}
 						});
-						if (new Date().getDay() in db_userconfig.days) {
+						if (now.getDay() in db_userconfig.days) {
 							send_today = true;
 						}
 					} catch {
