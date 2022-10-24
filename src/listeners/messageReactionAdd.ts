@@ -37,7 +37,8 @@ export class UserEvent extends Listener {
 		if (fetched_user?.accentColor) {
 			color_ = fetched_user?.accentColor;
 		}
-		this.container.logger.debug('Color: ' + color_);
+		this.container.logger.info("New Reaction by "+ user.id + " on ID: "+ 
+			reaction.message.id);
 		await prisma.message.update({
 			where: {
 				id: user.id

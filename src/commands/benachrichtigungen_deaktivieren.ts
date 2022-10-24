@@ -37,6 +37,7 @@ export class UserCommand extends Command {
 				days: []
 			}
 		});
+		this.container.logger.info("Messages deactivated for user: "+ interaction.user.id)
 		return await interaction.reply({
 			content: 'Du wirst nicht mehr benachrichtigt. Benutze /benachrichtigung_einstellen, um dich wieder benachrichtigen zu lassen.',
 			ephemeral: true

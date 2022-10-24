@@ -101,16 +101,16 @@ export class UserEvent extends Listener {
 							})
 						);
 					});
-					this.container.logger.info(`Embeds: ${embeds.length}`);
+					
 					if (send_today && embeds.length > 0) {
+						this.container.logger.info(`Sending Embeds: ${embeds.length}`);
 						await next_user.send({
 							content: msg.message_content,
 							embeds: embeds
 						});
 					}
-				});
-				this.container.logger.info('Called Routine');
-			} // Every 20 seconds
+				})
+			} 
 		);
 	}
 
