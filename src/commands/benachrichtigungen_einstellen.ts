@@ -16,8 +16,8 @@ export class UserCommand extends Command {
 						.setName("wochentage")
 						.setDescription("An wie vielen Tagen pro Woche willst du erinnert werden?")
 						.setRequired(true)
-						.setChoices({name: "Jeder Tag", value: 7}, {name: "3x pro Woche", value: 3}, // 7 - 1, 3 - 2, 2- 3, 1 - 4
-						{name: "2x pro Woche", value: 2}, {name: "1x pro Woche", value: 1}) // range: 1-7
+						.setChoices({name: "Jeder Tag", value: 1}, {name: "3x pro Woche", value: 2}, // 7 - 1, 3 - 2, 2- 3, 1 - 4
+						{name: "2x pro Woche", value: 3}, {name: "1x pro Woche", value: 4}) // range: 1-7
 				)
 				.addIntegerOption((option) =>
 					option
@@ -35,10 +35,8 @@ export class UserCommand extends Command {
 		if (typeof possible_weeks !== undefined){
 			weeks = interaction.options.data[1].value as number
 		}
-		let modulo_choices : Record<number, number>= {
-			7: 1, 3: 2, 2: 3, 1: 4
-		}
-		const modulo_ = modulo_choices[interaction.options.data[0].value as number];
+		
+		const modulo_ = interaction.options.data[0].value as number;
 		await prisma.message.update({
 			where: {
 				id: interaction.user.id
