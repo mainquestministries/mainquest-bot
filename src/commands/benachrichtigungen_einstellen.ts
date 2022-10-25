@@ -13,16 +13,16 @@ export class UserCommand extends Command {
 				.setDescription(this.description)
 				.addIntegerOption((option) =>
 					option
-						.setName('Tage pro Woche')
-						.setDescription('An wie vielen Tagen pro Woche willst du erinnert werden?')
+						.setName("wochentage")
+						.setDescription("An wie vielen Tagen pro Woche willst du erinnert werden?")
 						.setRequired(true)
 						.setChoices({name: "Jeder Tag", value: 7}, {name: "3x pro Woche", value: 3}, // 7 - 1, 3 - 2, 2- 3, 1 - 4
 						{name: "2x pro Woche", value: 2}, {name: "1x pro Woche", value: 1}) // range: 1-7
 				)
 				.addIntegerOption((option) =>
 					option
-						.setName('Wochen')
-						.setDescription('Wie viele Wochen willst du erinnert werden?')
+						.setName("wochen")
+						.setDescription("Wie viele Wochen willst du erinnert werden?")
 						.setMaxValue(4)
 						.setMinValue(1)
 				)
@@ -30,7 +30,11 @@ export class UserCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputInteraction) {
-		const weeks = interaction.options.data[1].value as number;
+		let weeks  = 1
+		let possible_weeks = interaction.options.data[1].value
+		if (typeof possible_weeks !== undefined){
+			weeks = interaction.options.data[1].value as number
+		}
 		let modulo_choices : Record<number, number>= {
 			7: 1, 3: 2, 2: 3, 1: 4
 		}
@@ -55,6 +59,6 @@ export class UserCommand extends Command {
 				}
 			}
 		})
-		return await interaction.reply({ content: 'Hello world!', ephemeral: true });
+		return await interaction.reply({ content: 'Neue Einstellung übernommen', ephemeral: true });
 	}
 }
