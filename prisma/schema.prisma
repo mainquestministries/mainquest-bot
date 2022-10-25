@@ -15,20 +15,15 @@ model guildconfig {
   p_channel String
 }
 
-model userconfig {
-  id   String @id
-  days Int[]  @default([6])
-}
-
 model Message {
   id              String  @id //user to send this message to
   message_content String
   hour            Int     @default(7)
   minute          Int     @default(0)
   embeds          Embed[]
-  guild           String?
-  channel         String?
   repetitions     Int     @default(7)
+  modulo          Int     @default(7)
+  disabled Boolean @default(false)
 }
 
 model Embed {

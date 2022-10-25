@@ -1,4 +1,4 @@
-import { PrismaClient, userconfig } from '@prisma/client';
+import { PrismaClient} from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
@@ -14,101 +14,94 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		const cron_str = dev ? '* * * * *' : '0 0 8 * * * *'; // Set for production to every day
-		
-		cron.schedule(
-			cron_str,
-			async (now) => {
-				const msg = await prisma.message.findMany({
-					include: {
-						embeds: true
+
+		cron.schedule(cron_str, async (now) => {
+			const msg = await prisma.message.findMany({
+				include: {
+					embeds: true
+				}
+			});
+			let next_user = null;
+			msg.forEach(async (msg) => {
+				next_user = await this.container.client.users.fetch(msg.id, { force: true });
+				let send_today = false;
+				try {
+					
+					if (msg.disabled === false && (now.getDay()+1 % msg.modulo < 1)) {
+						
+						send_today = true;
+					}
+				} catch {
+					// Send Message to find out
+					await next_user.send({
+						content:
+							'Ich weiß nicht, wann ich dir deine Benachrichtigungen zustellen soll... \n' +
+							'Benutze doch bitte /benachrichtigungen_einstellen, um es mir mitzuteilen. \nDein Mainquestbot.'
+					});
+				}
+				await prisma.message.update({
+					where: {
+						id: msg.id
+					},
+					data: {
+						embeds: {
+							deleteMany: {
+								sended: msg.repetitions
+							}
+						}
 					}
 				});
-				let next_user = null;
-				msg.forEach(async (msg) => {
-					next_user = await this.container.client.users.fetch(msg.id, { force: true });
-					let send_today = false;
-					try {
-						let db_userconfig: userconfig;
-						db_userconfig = await prisma.userconfig.findFirstOrThrow({
-							where: {
-								id: next_user.id
-							}
-						});
-						if (now.getDay() in db_userconfig.days) {
-							send_today = true;
-						}
-					} catch {
-						// Send Message to find out
-						await next_user.send({
-							content:
-								'Ich weiß nicht, wann ich dir deine Benachrichtigungen zustellen soll... \n' +
-								'Benutze doch bitte /benachrichtigungen_einstellen, um es mir mitzuteilen. \nDein Mainquestbot.'
-						});
-					}
-					await prisma.message.update({
-						where: {
-							id: msg.id
-						},
-						data: {
-							embeds: {
-								deleteMany: {
-									sended: msg.repetitions
-								}
-							}
-						}
-					});
-					await prisma.message.update({
-						where: {
-							id: msg.id
-						},
-						data: {
-							embeds: {
-								updateMany: {
-									where: {
-										messageId: msg.id
-									},
-									data: {
-										sended: {
-											increment: 1
-										}
+				await prisma.message.update({
+					where: {
+						id: msg.id
+					},
+					data: {
+						embeds: {
+							updateMany: {
+								where: {
+									messageId: msg.id
+								},
+								data: {
+									sended: {
+										increment: 1
 									}
 								}
 							}
 						}
-					});
-					// Works until this line
-					let embeds: MessageEmbed[] = [];
-					msg.embeds.forEach(async (embed) => {
-						let color_temp = 0;
-						if (embed.color === null) {
-							color_temp = 0;
-						} else {
-							color_temp = embed.color;
-						}
-						embeds.push(
-							new MessageEmbed({
-								title: embed.title,
-								description: embed.content,
-								color: color_temp,
-								author: {
-									name: embed.author,
-									icon_url: embed.author_avatar_url,
-									proxyIconURL: embed.author_avatar_url
-								}
-							})
-						);
-					});
-					
-					if (send_today && embeds.length > 0) {
-						this.container.logger.info(`Sending Embeds: ${embeds.length}`);
-						await next_user.send({
-							content: msg.message_content,
-							embeds: embeds
-						});
 					}
-				})
-			} 
-		);
+				});
+				// Works until this line
+				let embeds: MessageEmbed[] = [];
+				msg.embeds.forEach(async (embed) => {
+					let color_temp = 0;
+					if (embed.color === null) {
+						color_temp = 0;
+					} else {
+						color_temp = embed.color;
+					}
+					embeds.push(
+						new MessageEmbed({
+							title: embed.title,
+							description: embed.content,
+							color: color_temp,
+							author: {
+								name: embed.author,
+								icon_url: embed.author_avatar_url,
+								proxyIconURL: embed.author_avatar_url
+							}
+						})
+					);
+				});
+
+				if (send_today && embeds.length > 0) {
+					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
+					await next_user.send({
+						content: msg.message_content,
+						embeds: embeds
+					});
+				}
+			});
+		});
 	}
 
 	private printBanner() {

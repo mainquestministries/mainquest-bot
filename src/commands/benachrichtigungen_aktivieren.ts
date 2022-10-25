@@ -4,7 +4,7 @@ import { Command } from '@sapphire/framework';
 const prisma = new PrismaClient();
 
 @ApplyOptions<Command.Options>({
-	description: 'Benachrichtigungen aktivieren'
+	description: 'Benachrichtigungen'
 })
 export class UserCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -21,13 +21,13 @@ export class UserCommand extends Command {
 				id: interaction.user.id
 			},
 			data: {
-				disabled: true
+				disabled: false
 								
 			}
 		})
 		this.container.logger.info('Messages deactivated for user: ' + interaction.user.id);
 		return await interaction.reply({
-			content: 'Du wirst nicht mehr benachrichtigt. Benutze /benachrichtigung_aktivieren, um dich wieder benachrichtigen zu lassen.',
+			content: 'Benachrichtigungen aktiviert.',
 			ephemeral: true
 		});
 	}
