@@ -13,7 +13,7 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		const cron_str = dev ? '* * * * *' : '0 0 8 * * * *'; // Set for production to every day
+		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *'; // Set for production to every day
 
 		cron.schedule(cron_str, async (now) => {
 			const msg = await prisma.message.findMany({
@@ -22,23 +22,16 @@ export class UserEvent extends Listener {
 				}
 			});
 			let next_user = null;
+			this.container.logger.info("*** Starting Routine")
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
-				try {
+				
 					
-					if (msg.disabled === false && (now.getDay()+1 % msg.modulo < 1)) {
+					if (msg.disabled === false && (now.getDay() % msg.modulo === 0)) {
 						
 						send_today = true;
 					}
-				} catch {
-					// Send Message to find out
-					await next_user.send({
-						content:
-							'Ich weiß nicht, wann ich dir deine Benachrichtigungen zustellen soll... \n' +
-							'Benutze doch bitte /benachrichtigungen_einstellen, um es mir mitzuteilen. \nDein Mainquestbot.'
-					});
-				}
 				await prisma.message.update({
 					where: {
 						id: msg.id
@@ -92,7 +85,7 @@ export class UserEvent extends Listener {
 						})
 					);
 				});
-
+				this.container.logger.debug("Should be sended: " + send_today)
 				if (send_today && embeds.length > 0) {
 					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
 					await next_user.send({
@@ -101,6 +94,7 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
+			this.container.logger.info("*** Ended Routine")
 		});
 	}
 
