@@ -53,7 +53,7 @@ npm run start
 
 #### Mit docker
 
-Docker erfordert keine Vorbereitung.
+**Docker erfordert keine Vorbereitung.**
 
 ```sh
 docker build -t mainquest:bot .
