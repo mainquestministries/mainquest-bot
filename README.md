@@ -45,4 +45,31 @@ oder
 
 ### Produktionsumgebungen
 
-WORK IN PROGRESS
+#### Mit docker:
+
+```sh
+docker build -t mainquest:bot .
+```
+
+Ausführen:
+
+```sh
+docker run --network=host \
+           --env DATABASE_URL="postgresql://YOUR_DATABASE_STRING" \
+           --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
+     mainquestbot:latest
+```
+
+#### Ohne docker:
+
+```sh
+npm install
+npx prisma generate
+npm run build
+```
+
+Und zum ausführen:
+
+```sh
+npm run start
+```
