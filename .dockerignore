@@ -1,0 +1,11 @@
+.env
+src/.env
+init.py
+startdb
+*.md
+database/
+prisma/migrations/
+.git/
+.prettierignore 
+.gitignore
+dist/

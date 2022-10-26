@@ -12,6 +12,7 @@ node_modules/
 .DS_Store
 
 dist/
+startcontainer
 
 # Ignore the config file (contains sensitive information such as tokens)
 config.ts

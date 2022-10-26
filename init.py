@@ -11,11 +11,9 @@ else:
 if not os.path.exists("./src/.env"):
     print("Please enter your Discord-token")
     d_token = input("Discord token> ")
-    owners = input("Enter your own id. Can be left blank.")
     with open("./src/.env", "w") as f:
-        f.writelines(
-            ["DISCORD_TOKEN=\"{}\"".format(d_token),
-            f"OWNERS={owners}"]
+        f.write(
+            "DISCORD_TOKEN=\"{}\"".format(d_token)
         )
 else:
     print("Token already exists")

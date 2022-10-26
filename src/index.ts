@@ -1,6 +1,7 @@
 import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient()
 const client = new SapphireClient({
 	defaultPrefix: '!',
 	regexPrefix: /^(hey +)?bot[,! ]/i,
@@ -28,10 +29,12 @@ const main = async () => {
 	try {
 		client.logger.info('Logging in');
 		await client.login();
+		await prisma.$connect()
 		client.logger.info('logged in');
 	} catch (error) {
 		client.logger.fatal(error);
 		client.destroy();
+		await prisma.$disconnect()
 		process.exit(1);
 	}
 };
