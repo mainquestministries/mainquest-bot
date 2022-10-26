@@ -13,7 +13,7 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *'; // Set for production to every day
+		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *'; 
 
 		cron.schedule(cron_str, async (now) => {
 			const msg = await prisma.message.findMany({
@@ -28,7 +28,7 @@ export class UserEvent extends Listener {
 				let send_today = false;
 				
 					
-					if (msg.disabled === false && (now.getDay() % msg.modulo === 0)) {
+					if (msg.disabled === false && ((now.getDay()+1) % msg.modulo === 0)) {
 						
 						send_today = true;
 					}
@@ -63,7 +63,6 @@ export class UserEvent extends Listener {
 						}
 					}
 				});
-				// Works until this line
 				let embeds: MessageEmbed[] = [];
 				msg.embeds.forEach(async (embed) => {
 					let color_temp = 0;
