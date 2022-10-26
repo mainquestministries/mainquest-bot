@@ -37,8 +37,6 @@ oder
 
 ### Produktionsumgebungen
 
-#### Ohne docker
-
 ```sh
 npm install
 npx prisma generate
@@ -51,7 +49,7 @@ Und zum ausführen:
 npm run start
 ```
 
-#### Mit docker
+### Produktionsumgebung mit Docker
 
 **Docker erfordert keine Vorbereitung.**
 
