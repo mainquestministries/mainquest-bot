@@ -1,30 +1,48 @@
-# TypeScript Sapphire Bot example
+# Mainquest-Bot
 
-This is a basic setup of a Discord bot using the [sapphire framework][sapphire] written in TypeScript
+Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
-## How to use it?
+## Benutzung
 
-### Prerequisite
+### Vorbereitung
+
+Normale Installation:
 
 ```sh
 npm install
 ```
 
-### Development
+Produktion:
 
-This example can be run with `tsc-watch` to watch the files and automatically restart your bot.
+```sh
+npm ci
+```
+
+Zum automatischem konfigurieren `python3 ./init.py` ausführen.
+Das Programm konfiguriert die Datenbank automatisch. Bitte halte die Verbindung
+zu deiner Postgres-Datenbank bereit.
+
+Fahre deine Datenbank hoch. Wenn du keine hast,
+Nutze `./startdb`, um eine docker-Datenbank zu starten.
+Auf anderen Betriebssystemen als auf Linux musst du database/docker-compose.yml
+selber hochfahren.
+
+Führe nun
+`npx prisma migrate dev`
+aus, um das Datenbankschema auf deine Datenbank übertragen.
+
+### Entwicklungsumgebungen
+
+Im Watch-Modus lokal ausführen
 
 ```sh
 npm run watch:start
 ```
 
-### Production
+oder
 
-You can also run the bot with `npm dev`, this will first build your code and then run `node ./dist/index.js`. But this is not the recommended way to run a bot in production.
+`npm run dev`
 
-## License
+### Produktionsumgebungen
 
-Dedicated to the public domain via the [Unlicense], courtesy of the Sapphire Community and its contributors.
-
-[sapphire]: https://github.com/sapphiredev/framework
-[unlicense]: https://github.com/sapphiredev/examples/blob/main/LICENSE.md
+WORK IN PROGRESS
