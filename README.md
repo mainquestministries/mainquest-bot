@@ -6,16 +6,8 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ### Vorbereitung
 
-Normale Installation:
-
 ```sh
 npm install
-```
-
-Produktion:
-
-```sh
-npm ci
 ```
 
 Zum automatischem konfigurieren `python3 ./init.py` ausführen.
@@ -45,7 +37,23 @@ oder
 
 ### Produktionsumgebungen
 
-#### Mit docker:
+#### Ohne docker
+
+```sh
+npm install
+npx prisma generate
+npm run build
+```
+
+Und zum ausführen:
+
+```sh
+npm run start
+```
+
+#### Mit docker
+
+Docker erfordert keine Vorbereitung.
 
 ```sh
 docker build -t mainquest:bot .
@@ -58,18 +66,4 @@ docker run --network=host \
            --env DATABASE_URL="postgresql://YOUR_DATABASE_STRING" \
            --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
      mainquestbot:latest
-```
-
-#### Ohne docker:
-
-```sh
-npm install
-npx prisma generate
-npm run build
-```
-
-Und zum ausführen:
-
-```sh
-npm run start
 ```
