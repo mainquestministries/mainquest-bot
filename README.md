@@ -61,6 +61,7 @@ Migrieren:
 
 ```sh
 npm install
+echo DATABASE_URL="postgresql://YOUR_DATABASE_URL" > ./.env
 npx prisma migrate deploy
 ```
 
