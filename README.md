@@ -20,20 +20,22 @@ Auf anderen Betriebssystemen als auf Linux musst du database/docker-compose.yml
 selber hochfahren.
 
 Führe nun
-`npx prisma migrate dev`
+`npx prisma migrate deploy`
 aus, um das Datenbankschema auf deine Datenbank übertragen.
 
 ### Entwicklungsumgebungen
 
-Im Watch-Modus lokal ausführen
+Mit `tsc-watch` lokal ausführen
 
 ```sh
 npm run watch:start
 ```
 
-oder
+oder, ohne `tsc-watch`:
 
-`npm run dev`
+```sh
+npm run dev
+```
 
 ### Produktionsumgebungen
 
@@ -51,7 +53,18 @@ npm run start
 
 ### Produktionsumgebung mit Docker
 
-**Docker erfordert keine Vorbereitung.**
+Docker erfordert keine Vorbereitung.
+Du benötigst dennoch deine Datenbank und die Verbindungsdetails.
+Die Migration wird jedoch nicht automatisch ausgeführt.
+
+Migrieren:
+
+```sh
+npm install
+npx prisma migrate deploy
+```
+
+Container erstellen:
 
 ```sh
 docker build -t mainquest:bot .
