@@ -1,5 +1,5 @@
 name:
-  "Build Docker Image"
+  "CI CD pipeline"
 on:
   push:
     branches: [ "master" ]
