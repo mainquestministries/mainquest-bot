@@ -19,7 +19,6 @@ RUN apt-get update && \
 
 # Enable one of the following depending on whether you use yarn or npm, then remove the other one
 # COPY --chown=node:node yarn.lock .
-COPY --chown=node:node package-lock.json .
 
 # If you use Yarn v3 then enable the following lines:
 # COPY --chown=node:node .yarnrc.yml .
@@ -38,7 +37,7 @@ ENV NODE_OPTIONS="--enable-source-maps"
 COPY --chown=node:node package.json .
 COPY --chown=node:node tsconfig.json .
 
-RUN sed -i 's/"prepare": "husky install\( .github\/husky\)\?"/"prepare": ""/' ./package.json
+# RUN sed -i 's/"prepare": "husky install\( .github\/husky\)\?"/"prepare": ""/' ./package.json
 
 
 # ================ #
