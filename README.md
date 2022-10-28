@@ -68,7 +68,12 @@ npx prisma migrate deploy
 Container erstellen:
 
 ```sh
-docker build -t mainquest:bot .
+docker build -t mainquestbot:latest .
+```
+Alternativ kann der Container auch heruntergeladen werden:
+
+```sh
+docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 ```
 
 Ausführen:
