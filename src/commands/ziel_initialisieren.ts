@@ -1,22 +1,21 @@
+import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { ApplicationCommandType } from 'discord-api-types/v10';
-import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 @ApplyOptions<Command.Options>({
-	description: 'A basic contextMenu command'
+	description: 'Registriert aktuellen Kanal als Ziel'
 })
 export class UserCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerContextMenuCommand((builder) =>
+		registry.registerChatInputCommand((builder) =>
 			builder //
 				.setName(this.name)
-				.setType(ApplicationCommandType.Message)
+				.setDescription(this.description)
 		);
 	}
 
-	public async contextMenuRun(interaction: Command.ContextMenuInteraction) {
+	public override async chatInputRun(interaction: Command.ChatInputInteraction) {
 		if (interaction.guildId === null) {
 			return interaction.reply('Es ist ein Fehler aufgetreten. Problemlösung: Funktionen nur dort nutzen, wo sie sinnvoll sind!');
 		}
@@ -43,6 +42,6 @@ export class UserCommand extends Command {
 				}
 			});
 		}
-		return interaction.reply('Neue Konfiguration gespeichert.');
+		return interaction.reply({content:'Neue Konfiguration gespeichert.', ephemeral: true});
 	}
 }
