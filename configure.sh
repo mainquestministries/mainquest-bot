@@ -5,4 +5,5 @@ cp scripts/init.js .
 node ./init.js
 export exit_=$?
 rm ./init.js
+rm ./scripts/init.js
 exit $exit_
