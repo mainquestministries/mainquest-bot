@@ -5,9 +5,8 @@
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
 		"skipLibCheck": true,
-		"module": "ESNEXT",
-		"target": "ESNext",
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"composite": true,
 	},
 	"include": ["src"]
 }
