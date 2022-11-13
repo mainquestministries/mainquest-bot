@@ -1,10 +1,11 @@
-import { PromptObject } from "prompts"
+import type { PromptObject } from "prompts"
 import {execa} from "execa"
-import { copyFileSync, readFileSync, rmSync, writeFileSync } from "fs"
+import { copyFileSync, rmSync, writeFileSync } from "fs"
 import prompts from "prompts"
-import { join } from "path"
+import path, { join } from "path"
 import { Spinner } from "@favware/colorette-spinner";
 
+const __dirname = path.resolve(path.dirname(''))
 function write_file(filename: string, data: any) {
     /**
      * flags:
@@ -14,11 +15,6 @@ function write_file(filename: string, data: any) {
     writeFileSync(join(__dirname, filename), data, {
       flag: 'w',
     });
-  
-    const contents = readFileSync(join(__dirname, filename), 'utf-8');
-    console.log(contents); // 👉️ "One Two Three Four"
-  
-    return contents;
   }
 
 function copy(src:string, dest:string) {
@@ -54,6 +50,7 @@ type PromptTypes = "database_type" | "database_string" | "discord_token"
 
 async function main() {const response = await prompts<PromptTypes>(Prompt)
 
+
 const discord_token=`DISCORD_TOKEN=\"${response.discord_token}\"`
 const database_type=response.database_type
 const database_string= `DATABASE_URL=\"postgresql://${response.database_string}\"`
@@ -66,6 +63,7 @@ let npx_args= ["prisma", "migrate", "dev", "--name", "init"]
 if (database_type==="postgres") {
     npx_args =["prisma", "migrate", "deploy"]
     copy("./postgres.prisma", "./prisma/schema.prisma")
+    write_file("./.env", database_string)
 }
 else {
 copy("./sqlite.prisma", "./prisma/schema.prisma")
@@ -74,7 +72,7 @@ rmSync(join(__dirname, "prisma/migrations",
     force: true,
     recursive: true
 })}
-write_file("./.env", database_string)
+
 const spin = new Spinner()
 spin.start({text: "Writing to Database. Please wait."})
 try {
@@ -92,3 +90,4 @@ spin.stop({
     text: "Succeded",
     mark: "✅"
 })}
+main()

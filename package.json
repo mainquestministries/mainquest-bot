@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "author": "@sapphire",
   "license": "UNLICENSE",
+  "type": "module",
   "dependencies": {
     "@favware/colorette-spinner": "^1.0.1",
     "@prisma/client": "^4.4.0",
@@ -49,7 +50,9 @@
     "watch:start": "tsc-watch -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
     "preformat": "prisma format",
     "format": "prettier --write \"src/**/*.ts\"",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "preconfigure": "tsc",
+    "configure": "node dist/init.js"
   },
   "prettier": "@sapphire/prettier-config"
 }
