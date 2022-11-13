@@ -3,6 +3,7 @@ node_modules/
 .vs/
 .idea/
 *.iml
+scripts/init.js
 
 # Yarn files
 .yarn/install-state.gz
