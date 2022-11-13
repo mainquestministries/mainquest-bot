@@ -4,6 +4,7 @@ node_modules/
 .idea/
 *.iml
 prisma/schema.prisma
+data/dev.db
 
 # Yarn files
 .yarn/install-state.gz

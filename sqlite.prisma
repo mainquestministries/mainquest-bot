@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" //default postgresql
-  url      = env("DATABASE_URL")
+  provider = "sqlite" //default postgresql
+  url      = "file:./data/dev.db"
 }
 
 model guildconfig {
