@@ -3,7 +3,7 @@ node_modules/
 .vs/
 .idea/
 *.iml
-scripts/init.js
+prisma/schema.prisma
 
 # Yarn files
 .yarn/install-state.gz

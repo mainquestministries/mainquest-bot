@@ -65,6 +65,7 @@ write_file("./src/.env", discord_token)
 let npx_args= ["prisma", "migrate", "dev", "--name", "init"]
 if (database_type==="postgres") {
     npx_args =["prisma", "migrate", "deploy"]
+    copy("./postgres.prisma", "./prisma/schema.prisma")
 }
 else {
 copy("./sqlite.prisma", "./prisma/schema.prisma")

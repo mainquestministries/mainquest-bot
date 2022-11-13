@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" //default postgresql
+  url      = env("DATABASE_URL")
+}
+
+model guildconfig {
+  id        String @id
+  p_channel String
+}
+
+model Message {
+  id              String  @id //user to send this message to
+  message_content String
+  hour            Int     @default(7)
+  minute          Int     @default(0)
+  embeds          Embed[]
+  repetitions     Int     @default(7)
+  modulo          Int     @default(7)
+  disabled Boolean @default(false)
+}
+
+model Embed {
+  id                  Int      @id @default(autoincrement())
+  Message             Message? @relation(fields: [messageId], references: [id])
+  messageId           String?
+  original_message_id String
+  content             String
+  author              String
+  author_avatar_url   String
+  title               String
+  color               Int?
+  sended              Int      @default(0)
+}
