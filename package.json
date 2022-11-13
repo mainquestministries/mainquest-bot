@@ -2,8 +2,12 @@
   "name": "mainquest-bot",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "type": "module",
   "author": "@sapphire",
   "license": "UNLICENSE",
+  "imports": {
+    "#lib/*": "./dist/lib/*.js"
+  },
   "dependencies": {
     "@favware/colorette-spinner": "^1.0.1",
     "@prisma/client": "^4.4.0",

@@ -2,10 +2,10 @@ import type { PromptObject } from "prompts"
 import {execa} from "execa"
 import { copyFileSync, rmSync, writeFileSync } from "fs"
 import prompts from "prompts"
-import { join } from "path"
+import path, { join } from "path"
 import { Spinner } from "@favware/colorette-spinner";
 
-//const __dirname = path.resolve(path.dirname(''))
+const __dirname = path.resolve(path.dirname(''))
 function write_file(filename: string, data: any) {
     /**
      * flags:
