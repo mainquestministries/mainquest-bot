@@ -1,5 +1,4 @@
 #! /bin/sh
 cd ./database
-sudo systemctl start docker
 docker compose up -d
 cd ..
