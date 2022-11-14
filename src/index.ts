@@ -1,6 +1,7 @@
 import '#lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient()
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -28,6 +29,7 @@ const client = new SapphireClient({
 const main = async () => {
 	try {
 		client.logger.info('Logging in');
+		//console.log("Token: "+process.env["DISCORD_TOKEN"])
 		await client.login();
 		await prisma.$connect()
 		client.logger.info('logged in');
