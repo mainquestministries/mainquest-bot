@@ -55,7 +55,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "studio": "prisma studio",
     "preconfigure": "tsc",
-    "configure": "node dist/init.js"
+    "configure": "node dist/init.js",
+    "migrate": "prisma migrate dev"
   },
   "prettier": "@sapphire/prettier-config"
 }

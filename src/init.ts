@@ -101,6 +101,6 @@ spin.stop({
 else {
     //console.log("Please remove everything in the prisma/ folder. ")
     //console.log("Copy postgres.prisma into the folder.")
-    console.log("Run npx \nprisma migrate dev --name init \nmanually")
+    console.log("Run \nnpm run migrate\nmanually")
 }}
 main()
