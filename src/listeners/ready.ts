@@ -27,7 +27,7 @@ export class UserEvent extends Listener {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
 				
-					if (now === "manual") return
+					//if (now === "manual") return
 					if (msg.disabled === false && ((now.getDay()+1) % msg.modulo === 0)) {
 						
 						send_today = true;

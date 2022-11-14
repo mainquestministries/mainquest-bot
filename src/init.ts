@@ -58,10 +58,9 @@ const database_string= `DATABASE_URL=\"postgresql://${response.database_string}\
 if(response.discord_token !== "(Reuse)")
 write_file("./src/.env", discord_token)
 
-
-let npx_args= ["prisma", "migrate", "dev", "--name", "init"]
+const npx_args =["prisma", "migrate", "deploy"]
+//let npx_args= ["prisma", "migrate", "dev", "--name", "init"]
 if (database_type==="postgres") {
-    npx_args =["prisma", "migrate", "deploy"]
     copy("./postgres.prisma", "./prisma/schema.prisma")
     write_file("./.env", database_string)
 }
@@ -76,8 +75,8 @@ rmSync(join(__dirname, "prisma/migrations",
 const spin = new Spinner()
 spin.start({text: "Writing to Database. Please wait."})
 try {
-execa("npx", npx_args)
-execa("npx", ["prisma", "generate"])
+await execa("npx", npx_args)
+await execa("npx", ["prisma", "generate"])
 } catch (e){
     spin.error({
         text: "Failed to write to the Database. Please rerun the program to enter a new connection string.",
