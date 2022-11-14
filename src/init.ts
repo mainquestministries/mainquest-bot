@@ -1,6 +1,6 @@
 import type { PromptObject } from "prompts"
 import {execa} from "execa"
-import { copyFileSync, rmSync, writeFileSync } from "fs"
+import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "fs"
 import prompts from "prompts"
 import path, { join } from "path"
 import { Spinner } from "@favware/colorette-spinner";
@@ -20,7 +20,8 @@ function write_file(filename: string, data: any) {
 function copy(src:string, dest:string) {
     copyFileSync(join(__dirname, src), join(__dirname, dest))
 }
-const Prompt : PromptObject<PromptTypes>[] = [{
+const Prompt : PromptObject<PromptTypes>[] = [
+    {
     type : "select",
     name: "database_type",
     message: "Which database do you want?",
@@ -59,13 +60,20 @@ if(response.discord_token !== "(Reuse)")
 write_file("./src/.env", discord_token)
 
 const npx_args =["prisma", "migrate", "deploy"]
-//let npx_args= ["prisma", "migrate", "dev", "--name", "init"]
+let write_to_db = true
 if (database_type==="postgres") {
-    copy("./postgres.prisma", "./prisma/schema.prisma")
+    
     write_file("./.env", database_string)
+    rmSync(join(__dirname, "./prisma"), {
+        force: true,
+        recursive: true
+    })
+    mkdirSync(join(__dirname, "./prisma"))
+    copy("./postgres.prisma", "./prisma/schema.prisma")
+    write_to_db=false
 }
 else {
-copy("./sqlite.prisma", "./prisma/schema.prisma")
+//copy("./sqlite.prisma", "./prisma/schema.prisma")
 rmSync(join(__dirname, "prisma/migrations", 
 ), {
     force: true,
@@ -73,20 +81,26 @@ rmSync(join(__dirname, "prisma/migrations",
 })}
 
 const spin = new Spinner()
-spin.start({text: "Writing to Database. Please wait."})
+if (write_to_db){
+spin.start({text: "Writing to Database. Please wait.🐈"})
 try {
 await execa("npx", npx_args)
 await execa("npx", ["prisma", "generate"])
 } catch (e){
     spin.error({
-        text: "Failed to write to the Database. Please rerun the program to enter a new connection string.",
-        mark: "❌"
+        text: "Failed to write to the Database.",
+        mark: "😿"
     })
     console.error(e)
     process.exit(1)
 };
 spin.stop({
     text: "Succeded",
-    mark: "✅"
+    mark: "😸"
 })}
+else {
+    //console.log("Please remove everything in the prisma/ folder. ")
+    //console.log("Copy postgres.prisma into the folder.")
+    console.log("Run npx \nprisma migrate dev --name init \nmanually")
+}}
 main()
