@@ -1,5 +1,6 @@
-import { join } from 'path';
+import path, { join } from 'path';
 
+const __dirname = path.resolve(path.dirname(''))
 export const rootDir = join(__dirname, '..', '..');
 export const srcDir = join(rootDir, 'src');
 

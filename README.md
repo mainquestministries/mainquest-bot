@@ -14,6 +14,8 @@ Zum automatischem konfigurieren `python3 ./init.py` ausführen.
 Das Programm konfiguriert die Datenbank automatisch. Bitte halte die Verbindung
 zu deiner Postgres-Datenbank bereit.
 
+TODO: Es wird noch eine andere Möglichkeit entwickelt.
+
 Fahre deine Datenbank hoch. Wenn du keine hast,
 Nutze `./startdb`, um eine docker-Datenbank zu starten.
 Auf anderen Betriebssystemen als auf Linux musst du database/docker-compose.yml

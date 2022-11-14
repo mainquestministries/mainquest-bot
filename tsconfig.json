@@ -4,7 +4,14 @@
 		"rootDir": "src",
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"target": "ES6",
+		"module": "ES6",
+		"baseUrl": "./",
+		"paths": {
+			"#lib/*": ["src/lib/*.ts"]
+		}
 	},
 	"include": ["src"]
 }

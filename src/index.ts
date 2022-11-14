@@ -1,4 +1,4 @@
-import './lib/setup';
+import '#lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient()
