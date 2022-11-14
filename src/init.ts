@@ -26,10 +26,10 @@ const Prompt : PromptObject<PromptTypes>[] = [{
     message: "Which database do you want?",
     choices: [
         {
-            title: "PostgreSQL", value: "postgres"
+            title: "SQLite (Recommended for testing)", value: "sqlite"
         },
         {
-            title: "SQLite", value: "sqlite"
+            title: "PostgreSQL (Recommended for production environments", value: "postgres"
         }
     ]
 },
