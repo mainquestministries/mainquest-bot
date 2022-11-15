@@ -15,7 +15,8 @@ export class UserEvent extends Listener {
 		this.printStoreDebugInformation();
 		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
 
-		cron.schedule(cron_str, async (now) => {
+		cron.schedule(cron_str, async () => {
+			const now = new Date()
 			const msg = await prisma.message.findMany({
 				include: {
 					embeds: true
