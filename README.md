@@ -8,22 +8,9 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ```sh
 npm install
+npm run configure
 ```
-
-Zum automatischem konfigurieren `python3 ./init.py` ausführen.
-Das Programm konfiguriert die Datenbank automatisch. Bitte halte die Verbindung
-zu deiner Postgres-Datenbank bereit.
-
-TODO: Es wird noch eine andere Möglichkeit entwickelt.
-
-Fahre deine Datenbank hoch. Wenn du keine hast,
-Nutze `./startdb`, um eine docker-Datenbank zu starten.
-Auf anderen Betriebssystemen als auf Linux musst du database/docker-compose.yml
-selber hochfahren.
-
-Führe nun
-`npx prisma migrate deploy`
-aus, um das Datenbankschema auf deine Datenbank übertragen.
+Folge den Anweisungen des Programms.
 
 ### Entwicklungsumgebungen
 
@@ -42,8 +29,6 @@ npm run dev
 ### Produktionsumgebungen
 
 ```sh
-npm install
-npx prisma generate
 npm run build
 ```
 
@@ -63,10 +48,8 @@ Migrieren:
 
 ```sh
 npm install
-echo DATABASE_URL="postgresql://YOUR_DATABASE_URL" > ./.env
-npx prisma migrate deploy
+npm run configure
 ```
-
 Container erstellen:
 
 ```sh
@@ -80,9 +63,11 @@ docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 
 Ausführen:
 
+Die Datenbank-URL
+
 ```sh
-docker run --network=host \
-           --env DATABASE_URL="postgresql://YOUR_DATABASE_STRING" \
+docker run --network=host \ # wenn nicht SQLite verwendet wird
+           --env DATABASE_URL="postgresql://YOUR_DATABASE_STRING" \ # wenn nicht SQLite verwendet wird
            --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
      mainquestbot:latest
 ```
