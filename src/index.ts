@@ -28,6 +28,7 @@ const client = new SapphireClient({
 const main = async () => {
 	try {
 		client.logger.info('Logging in');
+		//console.log("Token: "+process.env["DISCORD_TOKEN"])
 		await client.login();
 		await prisma.$connect();
 		client.logger.info('logged in');

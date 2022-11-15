@@ -12,6 +12,7 @@ import { inspect } from 'util';
 import { srcDir } from '#lib/constants';
 
 // Read env var
+if((process.env["DISCORD_TOKEN"]) === undefined)
 config({ path: join(srcDir, '.env') });
 
 // Set default inspection depth
