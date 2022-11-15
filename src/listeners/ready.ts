@@ -1,4 +1,4 @@
-import { PrismaClient} from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
@@ -13,7 +13,7 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *'; 
+		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
 
 		cron.schedule(cron_str, async (now) => {
 			const msg = await prisma.message.findMany({
@@ -22,16 +22,15 @@ export class UserEvent extends Listener {
 				}
 			});
 			let next_user = null;
-			this.container.logger.info("*** Starting Routine")
+			this.container.logger.info('*** Starting Routine');
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
-				
-					if (now === "manual") return
-					if (msg.disabled === false && ((now.getDay()+1) % msg.modulo === 0)) {
-						
-						send_today = true;
-					}
+
+				if (now === 'manual') return;
+				if (msg.disabled === false && (now.getDay() + 1) % msg.modulo === 0) {
+					send_today = true;
+				}
 				await prisma.message.update({
 					where: {
 						id: msg.id
@@ -84,7 +83,7 @@ export class UserEvent extends Listener {
 						})
 					);
 				});
-				this.container.logger.debug("Should be sended: " + send_today)
+				this.container.logger.debug('Should be sended: ' + send_today);
 				if (send_today && embeds.length > 0) {
 					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
 					await next_user.send({
@@ -93,7 +92,7 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
-			this.container.logger.info("*** Ended Routine")
+			this.container.logger.info('*** Ended Routine');
 		});
 	}
 

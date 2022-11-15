@@ -42,6 +42,6 @@ export class UserCommand extends Command {
 				}
 			});
 		}
-		return interaction.reply({content:'Neue Konfiguration gespeichert.', ephemeral: true});
+		return interaction.reply({ content: 'Neue Konfiguration gespeichert.', ephemeral: true });
 	}
 }

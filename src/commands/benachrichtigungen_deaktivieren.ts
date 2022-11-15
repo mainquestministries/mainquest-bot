@@ -22,9 +22,8 @@ export class UserCommand extends Command {
 			},
 			data: {
 				disabled: true
-								
 			}
-		})
+		});
 		this.container.logger.info('Messages deactivated for user: ' + interaction.user.id);
 		return await interaction.reply({
 			content: 'Du wirst nicht mehr benachrichtigt. Benutze /benachrichtigung_aktivieren, um dich wieder benachrichtigen zu lassen.',
