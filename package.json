@@ -56,7 +56,8 @@
     "studio": "prisma studio",
     "preconfigure": "tsc",
     "migrate": "prisma migrate dev",
-    "configure": "node dist/scripts/init.js"
+    "configure": "node dist/scripts/init.js",
+    "cleanup": "node src/scripts/cleanup.js"
   },
   "prettier": "@sapphire/prettier-config"
 }

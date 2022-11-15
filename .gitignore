@@ -3,7 +3,7 @@ node_modules/
 .vs/
 .idea/
 *.iml
-data/dev.db
+prisma/data/
 
 # Yarn files
 .yarn/install-state.gz
@@ -31,3 +31,5 @@ package-lock.json
 .env.test.local
 .env.production.local
 .env
+prisma/data/dev.db
+prisma/data/dev.db-journal
