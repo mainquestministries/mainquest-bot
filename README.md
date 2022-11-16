@@ -6,7 +6,7 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ### /ziel_initialisieren
 
-Initialisiert den aktuellen Kanal. Dieser wird nun beobachtet. Nur für admins verfügbar.
+Initialisiert den aktuellen Kanal als Gebetschannel. Nur für Admins verfügbar.
 
 ### /benachrichtigungen_aktivieren, /benachrichtigungen_deaktivieren
 
