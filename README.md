@@ -21,6 +21,8 @@ Stellt die Benachrichtigungen ein.
 ```sh
 npm install
 npm run configure
+# Bei nicht-SQLite:
+npm run migrate
 ```
 
 Folge den Anweisungen des Programms.
@@ -66,6 +68,8 @@ Migrieren:
 ```sh
 npm install
 npm run configure
+# Bei nicht SQLite:
+npm run migrate
 ```
 
 Container erstellen:
