@@ -1,13 +1,19 @@
 # Mainquest-Bot
 
 Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
+
 ## Kommandos
 
 ### /ziel_initialisieren
+
 Initialisiert den aktuellen Kanal. Dieser wird nun beobachtet. Nur für admins verfügbar.
+
 ### /benachrichtigungen_aktivieren, /benachrichtigungen_deaktivieren
+
 (De)aktiviert Benachrichtigungen.
+
 ### /benachrichtigungen_einstellen
+
 Stellt die Benachrichtigungen ein.
 
 ## Installieren / Aufsetzen
@@ -16,15 +22,19 @@ Stellt die Benachrichtigungen ein.
 npm install
 npm run configure
 ```
+
 Folge den Anweisungen des Programms.
 
 ## Ausführen
+
 ### Entwicklungsumgebungen
 
 ```sh
 npm run dev
 ```
-Mit `tsc-watch` 
+
+Mit `tsc-watch`
+
 ```sh
 npm run watch:start
 ```
@@ -32,6 +42,7 @@ npm run watch:start
 ### Produktionsumgebungen
 
 Erstellen:
+
 ```sh
 npm run build
 ```
@@ -54,11 +65,13 @@ Migrieren:
 npm install
 npm run configure
 ```
+
 Container erstellen:
 
 ```sh
 docker build -t mainquestbot:latest .
 ```
+
 Alternativ kann der Container auch heruntergeladen werden:
 
 ```sh
@@ -66,7 +79,6 @@ docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 ```
 
 Ausführen:
-
 
 ```sh
 docker run --network=host \ # wenn nicht SQLite verwendet wird
