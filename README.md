@@ -50,6 +50,8 @@ npm run build
 Und zum ausführen:
 
 ```sh
+export NODE_ENV=production # Linux, MAC
+set NODE_ENV=production
 npm run start
 ```
 
