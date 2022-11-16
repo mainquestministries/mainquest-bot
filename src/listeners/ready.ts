@@ -15,8 +15,8 @@ export class UserEvent extends Listener {
 		this.printStoreDebugInformation();
 		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
 
-		cron.schedule(cron_str, async () => {
-			const now = new Date()
+		cron.schedule(cron_str, async (now) => {
+			//onst now = new Date()
 			const msg = await prisma.message.findMany({
 				include: {
 					embeds: true
@@ -28,7 +28,7 @@ export class UserEvent extends Listener {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
 
-				//if (typeof now !== Date) return;
+				if (now ==="manual") return;
 				if (msg.disabled === false && (now.getDay() + 1) % msg.modulo === 0) {
 					send_today = true;
 				}
