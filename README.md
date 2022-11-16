@@ -1,10 +1,16 @@
 # Mainquest-Bot
 
 Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
+## Kommandos
 
-## Benutzung
+### /ziel_initialisieren
+Initialisiert den aktuellen Kanal. Dieser wird nun beobachtet. Nur für admins verfügbar.
+### /benachrichtigungen_aktivieren, /benachrichtigungen_deaktivieren
+(De)aktiviert Benachrichtigungen.
+### /benachrichtigungen_einstellen
+Stellt die Benachrichtigungen ein.
 
-### Vorbereitung
+## Installieren / Aufsetzen
 
 ```sh
 npm install
@@ -12,22 +18,20 @@ npm run configure
 ```
 Folge den Anweisungen des Programms.
 
+## Ausführen
 ### Entwicklungsumgebungen
-
-Mit `tsc-watch` lokal ausführen
-
-```sh
-npm run watch:start
-```
-
-oder, ohne `tsc-watch`:
 
 ```sh
 npm run dev
 ```
+Mit `tsc-watch` 
+```sh
+npm run watch:start
+```
 
 ### Produktionsumgebungen
 
+Erstellen:
 ```sh
 npm run build
 ```
@@ -63,11 +67,10 @@ docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 
 Ausführen:
 
-Die Datenbank-URL
 
 ```sh
 docker run --network=host \ # wenn nicht SQLite verwendet wird
-           --env DATABASE_URL="postgresql://YOUR_DATABASE_STRING" \ # wenn nicht SQLite verwendet wird
+           --env DATABASE_URL="dbschema://YOUR_DATABASE_STRING" \ # wenn nicht SQLite verwendet wird
            --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
      mainquestbot:latest
 ```
