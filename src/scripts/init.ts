@@ -1,6 +1,6 @@
 import type { PromptObject } from 'prompts';
 import { execa } from 'execa';
-import { copyFileSync, rmSync, writeFileSync } from 'fs';
+import { copyFileSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import prompts from 'prompts';
 import path, { join } from 'path';
 import { Spinner } from '@favware/colorette-spinner';
@@ -66,20 +66,19 @@ async function main() {
 
 	if (response.discord_token !== '(Reuse)') write_file('./src/.env', discord_token);
 
-	let npx_args = ['prisma', 'migrate', 'dev', '--name', 'init'];
+	const npx_args = ['prisma', 'migrate', 'deploy']
 	if (database_type !== 'sqlite') {
-		npx_args = ['prisma', 'migrate', 'deploy'];
+		console.log("Please run manually: npm run migrate")
+		rmSync(join(__dirname, "./prisma"), {
+			force: true, 
+			recursive: true
+		})
+		mkdirSync(join(__dirname, "./prisma"))
 		if (database_type === 'postgres') copy('./postgres.prisma', './prisma/schema.prisma');
 		else copy('./mysql.prisma', './prisma/schema.prisma');
 		write_file('./.env', database_string);
-	} else {
-		copy('./sqlite.prisma', './prisma/schema.prisma');
-		rmSync(join(__dirname, 'prisma/migrations'), {
-			force: true,
-			recursive: true
-		});
 	}
-
+	if(database_type==="sqlite"){
 	const spin = new Spinner();
 	spin.start({ text: 'Writing to Database. Please wait.' });
 	try {
@@ -97,5 +96,5 @@ async function main() {
 		text: 'Succeded',
 		mark: '✅'
 	});
-}
+}}
 main();
