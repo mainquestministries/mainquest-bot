@@ -25,6 +25,12 @@ export class UserCommand extends Command {
 					id: interaction.guildId as string
 				}
 			});
+			const member = await interaction.guild?.members.fetch(interaction.user.id)
+			if(!(member?.permissions.has("ADMINISTRATOR")))
+				return interaction.reply({
+					content: "Du hast nicht die benötigten Rechte.",
+					ephemeral: true
+				})
 
 			await prisma.guildconfig.update({
 				where: {
