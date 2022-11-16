@@ -68,7 +68,7 @@ async function main() {
 
 	const npx_args = ['prisma', 'migrate', 'deploy']
 	if (database_type !== 'sqlite') {
-		console.log("😸 Please run manually: npm run migrate")
+		console.log("Please run manually: npm run migrate 😸")
 		rmSync(join(__dirname, "./prisma"), {
 			force: true, 
 			recursive: true
