@@ -68,32 +68,32 @@ async function main() {
 
 	const npx_args = ['prisma', 'migrate', 'deploy']
 	if (database_type !== 'sqlite') {
-		console.log("Please run manually: npm run migrate")
+		console.log("😸 Please run manually: npm run migrate")
 		rmSync(join(__dirname, "./prisma"), {
 			force: true, 
 			recursive: true
 		})
 		mkdirSync(join(__dirname, "./prisma"))
-		if (database_type === 'postgres') copy('./postgres.prisma', './prisma/schema.prisma');
-		else copy('./mysql.prisma', './prisma/schema.prisma');
+		copy(join(__dirname, `./${database_type}.prisma`), './prisma/schema.prisma');
+		
 		write_file('./.env', database_string);
 	}
 	if(database_type==="sqlite"){
 	const spin = new Spinner();
-	spin.start({ text: 'Writing to Database. Please wait.' });
+	spin.start({ text: 'Writing to Database. Please wait. 🐈' });
 	try {
 		execa('npx', npx_args);
 		execa('npx', ['prisma', 'generate']);
 	} catch (e) {
 		spin.error({
-			text: 'Failed to write to the Database. Please rerun the program to enter a new connection string.',
+			text: 'Failed to write to the Database. 😿',
 			mark: '❌'
 		});
 		console.error(e);
 		process.exit(1);
 	}
 	spin.stop({
-		text: 'Succeded',
+		text: 'Succeded 😻',
 		mark: '✅'
 	});
 }}
