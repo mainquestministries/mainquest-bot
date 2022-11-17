@@ -2,15 +2,14 @@
 #    Base Stage    #
 # ================ #
 
-FROM node:16-buster-slim as base
+FROM node:16-alpine as base
 
 WORKDIR /opt/app
 
 ENV HUSKY=0
 ENV CI=true
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential python3 libfontconfig1 
+RUN apk add g++ make python3
 
 # ------------------------------------ #
 #   Conditional steps for end-users    #
