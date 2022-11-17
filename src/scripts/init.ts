@@ -1,6 +1,6 @@
 import type { PromptObject } from 'prompts';
 import { execa } from 'execa';
-import { copyFileSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import prompts from 'prompts';
 import path, { join } from 'path';
 import { Spinner } from '@favware/colorette-spinner';
@@ -17,34 +17,13 @@ function write_file(filename: string, data: any) {
 	});
 }
 
-function copy(src: string, dest: string) {
-	copyFileSync(join(__dirname, src), join(__dirname, dest));
-}
 const Prompt: PromptObject<PromptTypes>[] = [
+	
 	{
-		type: 'select',
-		name: 'database_type',
-		message: 'Which database do you want?',
-		choices: [
-			{
-				title: 'SQLite)',
-				value: 'sqlite'
-			},
-			{
-				title: 'MySQL',
-				value: 'mysql'
-			},
-			{
-				title: 'PostgreSQL',
-				value: 'postgres'
-			}
-		]
-	},
-	{
-		type: (prev) => (prev != 'sqlite' ? 'text' : null),
+		type: "text",
 		name: 'database_string',
 		message: 'Enter your Database string here.',
-		initial: 'dbschema://USERNAME:PASSWORD@hostname:port/DATABASE'
+		initial: 'mysql://USERNAME:PASSWORD@hostname:port/DATABASE'
 	},
 	{
 		type: 'text',
@@ -55,30 +34,18 @@ const Prompt: PromptObject<PromptTypes>[] = [
 	}
 ];
 
-type PromptTypes = 'database_type' | 'database_string' | 'discord_token';
+type PromptTypes =  'database_string' | 'discord_token';
 
 async function main() {
 	const response = await prompts<PromptTypes>(Prompt);
 
 	const discord_token = `DISCORD_TOKEN=\"${response.discord_token}\"`;
-	const database_type = response.database_type;
 	const database_string = `DATABASE_URL=\"${response.database_string}\"`;
+	write_file(".env", database_string)
 
 	if (response.discord_token !== '(Reuse)') write_file('./src/.env', discord_token);
 
 	const npx_args = ['prisma', 'migrate', 'deploy']
-	if (database_type !== 'sqlite') {
-		console.log("Please run manually: npm run migrate 😸")
-		rmSync(join(__dirname, "./prisma"), {
-			force: true, 
-			recursive: true
-		})
-		mkdirSync(join(__dirname, "./prisma"))
-		copy(join(__dirname, `./${database_type}.prisma`), './prisma/schema.prisma');
-		
-		write_file('./.env', database_string);
-	}
-	if(database_type==="sqlite"){
 	const spin = new Spinner();
 	spin.start({ text: 'Writing to Database. Please wait. 🐈' });
 	try {
@@ -96,5 +63,5 @@ async function main() {
 		text: 'Succeded 😻',
 		mark: '✅'
 	});
-}}
+}
 main();
