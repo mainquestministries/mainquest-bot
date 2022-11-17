@@ -49,6 +49,7 @@ RUN npm install
 
 COPY . /opt/app
 
+RUN rm /opt/app/prisma/schema.prisma
 RUN node /opt/app/dist/scripts/mod_container.js
 
 RUN npx prisma generate
