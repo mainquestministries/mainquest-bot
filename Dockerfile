@@ -49,8 +49,11 @@ RUN npm install
 
 COPY . /opt/app
 
+RUN node /opt/app/dist/scripts/mod_container.js
+
 RUN npx prisma generate
 RUN npm run build
+
 
 # ==================== #
 #   Production Stage   #
