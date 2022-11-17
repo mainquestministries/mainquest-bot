@@ -84,11 +84,18 @@ Alternativ kann der Container auch heruntergeladen werden:
 docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 ```
 
+Volume für SQLite erstellen:
+
+```sh
+docker volume create mq_bot
+```
+
 Ausführen:
 
 ```sh
 docker run --network=host \ # wenn nicht SQLite verwendet wird
            --env DATABASE_URL="dbschema://YOUR_DATABASE_STRING" \ # wenn nicht SQLite verwendet wird
            --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
+           -v mq_bot:/opt/app/prisma/data # wenn sqlite verwendet wird
      mainquestbot:latest
 ```
