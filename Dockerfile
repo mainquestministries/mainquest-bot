@@ -64,6 +64,7 @@ ENV NODE_ENV="production"
 COPY --from=build /opt/app/dist /opt/app/dist
 COPY --from=build /opt/app/node_modules /opt/app/node_modules
 COPY --from=build /opt/app/package.json /opt/app/package.json
+COPY --from=build /opt/app/prisma /opt/app/prisma
 COPY --from=build /opt/app/docker_scripts /opt/app/docker_scripts
 
 RUN chown node:node /opt/app/
