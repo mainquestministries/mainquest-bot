@@ -81,6 +81,7 @@ async function main() {
 	if(database_type==="sqlite"){
 	const spin = new Spinner();
 	spin.start({ text: 'Writing to Database. Please wait. 🐈' });
+	write_file("./.env", "DATABASE_URL=\"file:./data/dev.db\"")
 	try {
 		execa('npx', npx_args);
 		execa('npx', ['prisma', 'generate']);

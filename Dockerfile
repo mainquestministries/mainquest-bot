@@ -60,6 +60,7 @@ RUN npm run build
 FROM base as production
 
 ENV NODE_ENV="production"
+ENV DATABASE_URL="file:/data/dev.db"
 
 COPY --from=build /opt/app/dist /opt/app/dist
 COPY --from=build /opt/app/node_modules /opt/app/node_modules
