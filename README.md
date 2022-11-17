@@ -104,7 +104,7 @@ docker run --network=host \
 Ausführen mit SQLite:
 
 ```sh
-docker run -v mq_bot:/opt/app/prisma/data \
+docker run -v mq_bot:/data \
             --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
       mainquestbot:latest
 ```
