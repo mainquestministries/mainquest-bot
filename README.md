@@ -6,7 +6,7 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ### /ziel_initialisieren
 
-Initialisiert den aktuellen Kanal als Gebetschannel. Nur für Admins verfügbar.
+Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar.
 
 ### /benachrichtigungen_aktivieren, /benachrichtigungen_deaktivieren
 
@@ -61,14 +61,13 @@ npm run start
 
 Docker erfordert keine Vorbereitung.
 Du benötigst dennoch deine Datenbank und die Verbindungsdetails.
-Die Migration wird jedoch nicht automatisch ausgeführt.
+Die Migration wird jedoch bei PostgreSQL und MySQL NICHT automatisch ausgeführt.
 
 Migrieren:
 
 ```sh
 npm install
-npm run configure
-# Bei nicht SQLite:
+npm run configure # Du musst den Discord-Token nicht eingeben
 npm run migrate
 ```
 
@@ -90,12 +89,19 @@ Volume für SQLite erstellen:
 docker volume create mq_bot
 ```
 
-Ausführen:
+Ausführen mit einer dedizierten Datenbank:
 
 ```sh
-docker run --network=host \ # wenn nicht SQLite verwendet wird
-           --env DATABASE_URL="dbschema://YOUR_DATABASE_STRING" \ # wenn nicht SQLite verwendet wird
-           --env DISCORD_TOKEN="YOUR_TOKEN_HERE" \
-           -v mq_bot:/opt/app/prisma/data # wenn sqlite verwendet wird
+docker run --network=host \ 
+           --env DATABASE_URL="dbschema://YOUR_DATABASE_STRING" \ 
+           --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
      mainquestbot:latest
+```
+
+Ausführen mit SQLite:
+
+```sh
+docker run -v mq_bot:/opt/app/prisma/data \
+            --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
+      mainquestbot:latest
 ```

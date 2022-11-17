@@ -71,4 +71,5 @@ RUN chown node:node /opt/app/
 
 USER node
 
-CMD [ "npm", "run", "start"]
+#CMD [ "npm", "run", "start"]
+CMD [ "/bin/sh", "/opt/app/docker_scripts/entrypoint.sh" ]
