@@ -64,6 +64,7 @@ npm run start
 Docker erfordert keine Vorbereitung.
 Du benötigst dennoch deine Datenbank und die Verbindungsdetails.
 Die Migration wird jedoch bei PostgreSQL und MySQL NICHT automatisch ausgeführt.
+SQLite ist NICHT unterstützt!
 
 Migrieren (Dedizierte Datebank):
 
@@ -86,25 +87,11 @@ docker pull ghcr.io/mainquestministries/mainquest-bot:master
 docker tag ghcr.io/mainquestministries/mainquest-bot:master mainquestbot:latest
 ```
 
-Volume für SQLite erstellen:
-
-```sh
-docker volume create mq_bot
-```
-
 Ausführen mit einer dedizierten Datenbank:
 
 ```sh
 docker run --network=host \ 
-           --env DATABASE_URL="dbschema://YOUR_DATABASE_STRING" \ 
+           --env DATABASE_URL="dbschema://DEIN_DATENBANK_STRING" \ 
            --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
      mainquestbot:latest
-```
-
-Ausführen mit SQLite:
-
-```sh
-docker run -v mq_bot:/data \
-            --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
-      mainquestbot:latest
 ```
