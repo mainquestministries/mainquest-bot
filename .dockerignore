@@ -4,7 +4,6 @@ init.py
 startdb
 *.md
 database/
-prisma/migrations/
 .git/
 .prettierignore 
 .gitignore
