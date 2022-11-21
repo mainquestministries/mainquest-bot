@@ -49,8 +49,8 @@ async function main() {
 	const spin = new Spinner();
 	spin.start({ text: 'Writing to Database. Please wait. 🐈' });
 	try {
-		execa('npx', npx_args);
-		execa('npx', ['prisma', 'generate']);
+		await execa('npx', npx_args);
+		await execa('npx', ['prisma', 'generate']);
 	} catch (e) {
 		spin.error({
 			text: 'Failed to write to the Database. 😿',
