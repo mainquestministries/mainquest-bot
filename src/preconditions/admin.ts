@@ -4,7 +4,7 @@ import type { CommandInteraction, ContextMenuInteraction, Message } from 'discor
 export class UserPrecondition extends Precondition {
 	public override async messageRun(message: Message) {
 		if ( (await message.member?.fetch())?.permissions.has("ADMINISTRATOR")){
-			message.channel.send(`${message.member?.user}, du hast nicht genug Rechte für diese Aktion.`)
+			message.channel.send(`${message.author}, du hast nicht genug Rechte für diese Aktion.`)
 			return this.error({message: "Du hast nicht genug Rechte für diese Aktion."})}
 		return this.ok();
 	}
@@ -42,6 +42,6 @@ export class UserPrecondition extends Precondition {
 
 declare module '@sapphire/framework' {
 	interface Preconditions {
-		isAdmin: never;
+		admin: never;
 	}
 }

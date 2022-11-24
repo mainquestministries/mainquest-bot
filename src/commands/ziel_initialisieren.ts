@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export class UserCommand extends Command {
 	public constructor(context: Command.Context) {    
 		super(context, {      
-			preconditions: ["isAdmin"],
+			preconditions: ["admin"],
 			cooldownDelay : 10_000
 		    });  }
 	public override registerApplicationCommands(registry: Command.Registry) {
