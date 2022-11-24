@@ -7,6 +7,11 @@ const prisma = new PrismaClient();
 	description: 'Registriert aktuellen Kanal als Ziel'
 })
 export class UserCommand extends Command {
+	public constructor(context: Command.Context) {    
+		super(context, {      
+			preconditions: ["isAdmin"],
+			cooldownDelay : 10_000
+		    });  }
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder //
@@ -24,13 +29,7 @@ export class UserCommand extends Command {
 				where: {
 					id: interaction.guildId as string
 				}
-			});
-			const member = await interaction.guild?.members.fetch(interaction.user.id)
-			if(!(member?.permissions.has("ADMINISTRATOR")))
-				return interaction.reply({
-					content: "Du hast nicht die benötigten Rechte.",
-					ephemeral: true
-				})
+			});		
 
 			await prisma.guildconfig.update({
 				where: {
