@@ -26,7 +26,13 @@ export class UserCommand extends Command {
 		});
 		this.container.logger.info('Messages deactivated for user: ' + interaction.user.id);
 		return await interaction.reply({
-			content: 'Du wirst nicht mehr benachrichtigt. Benutze /benachrichtigung_aktivieren, um dich wieder benachrichtigen zu lassen.',
+			embeds: [
+				{
+					title: 'Du wirst nicht mehr benachrichtigt.',
+					color: 0x12d900,
+					description: 'Benutze /benachrichtigung_aktivieren, um dich wieder benachrichtigen zu lassen.'
+				}
+			],
 			ephemeral: true
 		});
 	}

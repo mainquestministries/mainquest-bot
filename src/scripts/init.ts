@@ -18,9 +18,8 @@ function write_file(filename: string, data: any) {
 }
 
 const Prompt: PromptObject<PromptTypes>[] = [
-	
 	{
-		type: "text",
+		type: 'text',
 		name: 'database_string',
 		message: 'Enter your Database string here.',
 		initial: 'mysql://USERNAME:PASSWORD@hostname:port/DATABASE'
@@ -34,18 +33,18 @@ const Prompt: PromptObject<PromptTypes>[] = [
 	}
 ];
 
-type PromptTypes =  'database_string' | 'discord_token';
+type PromptTypes = 'database_string' | 'discord_token';
 
 async function main() {
 	const response = await prompts<PromptTypes>(Prompt);
 
 	const discord_token = `DISCORD_TOKEN=\"${response.discord_token}\"`;
 	const database_string = `DATABASE_URL=\"${response.database_string}\"`;
-	write_file(".env", database_string)
+	write_file('.env', database_string);
 
 	if (response.discord_token !== '(Reuse)') write_file('./src/.env', discord_token);
 
-	const npx_args = ['prisma', 'migrate', 'deploy']
+	const npx_args = ['prisma', 'migrate', 'deploy'];
 	const spin = new Spinner();
 	spin.start({ text: 'Writing to Database. Please wait. 🐈' });
 	try {

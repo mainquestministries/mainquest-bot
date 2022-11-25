@@ -23,7 +23,7 @@ model Message {
   embeds          Embed[]
   repetitions     Int     @default(7)
   modulo          Int     @default(7)
-  disabled Boolean @default(false)
+  disabled        Boolean @default(false)
 }
 
 model Embed {

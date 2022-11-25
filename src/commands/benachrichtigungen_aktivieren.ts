@@ -26,7 +26,13 @@ export class UserCommand extends Command {
 		});
 		this.container.logger.info('Messages deactivated for user: ' + interaction.user.id);
 		return await interaction.reply({
-			content: 'Benachrichtigungen aktiviert.',
+			embeds: [
+				{
+					title: 'Benachrichtigungen aktiviert.',
+					description: 'Benutze /benachrichtigungen_deaktiveren, um sie wieder zu deaktivieren.',
+					color: 0x12d900
+				}
+			],
 			ephemeral: true
 		});
 	}

@@ -57,6 +57,21 @@ export class UserCommand extends Command {
 				}
 			}
 		});
-		return await interaction.reply({ content: 'Neue Einstellung übernommen', ephemeral: true });
+		const days_of_week: Record<number, string> = {
+			1: '7x',
+			2: '3x',
+			3: '2x',
+			4: '1x'
+		};
+		return await interaction.reply({
+			embeds: [
+				{
+					color: 0x12d900,
+					title: 'Neue Einstellung übernommen',
+					description: `Du wirst nun erinnert: ${days_of_week[modulo_]} pro Woche, ${weeks} lang.`
+				}
+			],
+			ephemeral: true
+		});
 	}
 }

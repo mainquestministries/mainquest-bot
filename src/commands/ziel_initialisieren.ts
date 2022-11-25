@@ -7,11 +7,12 @@ const prisma = new PrismaClient();
 	description: 'Registriert aktuellen Kanal als Ziel'
 })
 export class UserCommand extends Command {
-	public constructor(context: Command.Context) {    
-		super(context, {      
-			preconditions: ["admin"],
-			cooldownDelay : 10_000
-		    });  }
+	public constructor(context: Command.Context) {
+		super(context, {
+			preconditions: ['admin', 'guildchannel'],
+			cooldownDelay: 10_000
+		});
+	}
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder //
@@ -21,19 +22,16 @@ export class UserCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputInteraction) {
-		if (interaction.guildId === null) {
-			return interaction.reply('Es ist ein Fehler aufgetreten. Problemlösung: Funktionen nur dort nutzen, wo sie sinnvoll sind!');
-		}
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {
 					id: interaction.guildId as string
 				}
-			});		
+			});
 
 			await prisma.guildconfig.update({
 				where: {
-					id: interaction.guildId
+					id: interaction.guildId as string
 				},
 				data: {
 					p_channel: interaction.channelId
@@ -47,6 +45,15 @@ export class UserCommand extends Command {
 				}
 			});
 		}
-		return interaction.reply({ content: 'Neue Konfiguration gespeichert.', ephemeral: true });
+		return interaction.reply({
+			embeds: [
+				{
+					color: 0x12D900,
+					title: 'Konfiguration gespeichert',
+					description: 'Gebetschannel aktualisiert.'
+				}
+			],
+			ephemeral: true
+		});
 	}
 }
