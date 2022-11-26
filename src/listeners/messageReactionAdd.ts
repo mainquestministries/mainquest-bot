@@ -27,7 +27,6 @@ export class UserEvent extends Listener {
 		) {
 			await prisma.message.create({
 				data: {
-					message_content: 'Dein Abo für heute',
 					id: user.id
 				}
 			});
