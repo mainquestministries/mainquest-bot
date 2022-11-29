@@ -9,14 +9,13 @@ const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserEvent extends Listener {
 	private readonly style = dev ? yellow : blue;
-
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
-
 		cron.schedule(cron_str, async (now) => {
 			//onst now = new Date()
+			if (now === 'manual') return;
 			const msg = await prisma.message.findMany({
 				include: {
 					embeds: true
@@ -28,7 +27,7 @@ export class UserEvent extends Listener {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
 
-				if (now === 'manual') return;
+				
 				if (msg.disabled === false && (now.getDay() + 1) % msg.modulo === 0) {
 					send_today = true;
 				}
@@ -94,6 +93,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			this.container.logger.info('*** Ended Routine');
+
 		});
 	}
 
