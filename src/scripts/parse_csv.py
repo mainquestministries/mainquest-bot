@@ -1,9 +1,8 @@
-import csv
-file_data= ""
-while True:
-    try:
-        file_data += input()
-    except EOFError:
-        break
+import csv, sys, json
 
-reader = csv.reader(file_data)
+with open(sys.argv[1], "r") as f:
+    reader = csv.reader(f, delimiter="\t")
+    csv_list = list(reader)
+
+with open(sys.argv[2], "w") as f:
+    json.dump(csv_list, f)

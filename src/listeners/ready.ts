@@ -2,8 +2,12 @@ import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
+import { fstat, read, readFileSync } from 'fs';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { MessageEmbed } from 'discord.js';
+import { rootDir } from '#lib/constants';
+import { join } from 'path';
+import type { AnySrvRecord } from 'dns';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
@@ -94,6 +98,8 @@ export class UserEvent extends Listener {
 			});
 			this.container.logger.info('*** Ended Routine');
 
+			this.container.logger.info("*** Starting Parsing")
+			
 		});
 	}
 
