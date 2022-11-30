@@ -40,7 +40,6 @@ model Embed {
 }
 
 model Losungen {
-  id        String @id @default(uuid())
-  guildId   String
+  id   String @id
   channelId String
 }
