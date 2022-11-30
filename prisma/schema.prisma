@@ -12,7 +12,8 @@ datasource db {
 
 model guildconfig {
   id        String @id
-  p_channel String
+  p_channel String?
+  l_channel String?
 }
 
 model Message {
@@ -38,9 +39,4 @@ model Embed {
   source              String
   color               Int?
   sended              Int      @default(0)
-}
-
-model Losungen {
-  id        String @id
-  channelId String
 }

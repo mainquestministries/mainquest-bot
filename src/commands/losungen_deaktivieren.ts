@@ -20,11 +20,20 @@ export class UserCommand extends Command {
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputInteraction) {
-		await prisma.losungen.deleteMany({
+		await prisma.guildconfig.updateMany({
 			where: {
 				id: interaction.guildId as string
+			},
+			data: {
+				l_channel: null
 			}
 		});
+		await prisma.guildconfig.deleteMany({
+			where: {
+				l_channel: null,
+				p_channel: null
+			}
+		})
 		return interaction.reply({
 			embeds: [
 				{

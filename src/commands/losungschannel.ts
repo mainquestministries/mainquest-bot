@@ -22,25 +22,25 @@ export class UserCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputInteraction) {
 		try {
-			await prisma.losungen.findFirstOrThrow({
+			await prisma.guildconfig.findFirstOrThrow({
 				where: {
 					id: interaction.guildId as string
 				}
 			});
 
-			await prisma.losungen.update({
+			await prisma.guildconfig.update({
 				where: {
 					id: interaction.guildId as string
 				},
 				data: {
-					channelId: interaction.channelId
+					l_channel: interaction.channelId
 				}
 			});
 		} catch (e) {
-			await prisma.losungen.create({
+			await prisma.guildconfig.create({
 				data: {
 					id: interaction.guildId as string,
-					channelId: interaction.channelId
+					l_channel: interaction.channelId
 				}
 			});
 		}
