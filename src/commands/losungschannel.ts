@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 @ApplyOptions<Command.Options>({
 	description: 'Losungschannel hier platzieren.'
 })
@@ -17,7 +17,7 @@ export class UserCommand extends Command {
 		registry.registerChatInputCommand({
 			name: this.name,
 			description: this.description
-		})
+		});
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputInteraction) {
@@ -54,4 +54,5 @@ export class UserCommand extends Command {
 			],
 			ephemeral: true
 		});
-}}
+	}
+}
