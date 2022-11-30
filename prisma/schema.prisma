@@ -17,7 +17,7 @@ model guildconfig {
 
 model Message {
   id              String  @id //user to send this message to
-  message_content String @default("Dein Abo für heute")
+  message_content String  @default("Dein Abo für heute")
   hour            Int     @default(7)
   minute          Int     @default(0)
   embeds          Embed[]
@@ -40,7 +40,7 @@ model Embed {
 }
 
 model Losungen {
-  id String @id @default(uuid())
-  guildId String
+  id        String @id @default(uuid())
+  guildId   String
   channelId String
 }

@@ -1,5 +1,5 @@
 import '#lib/setup';
-import "#lib/read-csv"
+import '#lib/read-csv';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();

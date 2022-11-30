@@ -48,7 +48,7 @@ export class UserCommand extends Command {
 		return interaction.reply({
 			embeds: [
 				{
-					color: 0x12D900,
+					color: 0x12d900,
 					title: 'Konfiguration gespeichert',
 					description: 'Gebetschannel aktualisiert.'
 				}
