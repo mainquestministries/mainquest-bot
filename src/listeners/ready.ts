@@ -4,10 +4,11 @@ import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
 import { fstat, read, readFileSync } from 'fs';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, TextChannel } from 'discord.js';
 import { rootDir } from '#lib/constants';
 import { join } from 'path';
 import type { AnySrvRecord } from 'dns';
+import { date_string } from '#lib/date';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
@@ -99,7 +100,29 @@ export class UserEvent extends Listener {
 			this.container.logger.info('*** Ended Routine');
 
 			this.container.logger.info("*** Starting Parsing")
-			
+			const data : Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, "losungen.json")).toString())
+			const today = date_string(now)
+			const losungen = await prisma.losungen.findMany()
+			data.forEach((item) => {
+				if(item[0]===today)
+					{
+						losungen.forEach(async config => {
+							const channel = await (await this.container.client.guilds.fetch(config.guildId)).channels.fetch(config.channelId);
+							(channel as TextChannel).send({
+								embeds: [{
+									title: `Losungen für den ${today}`,
+									fields: [{
+										name: "Losungsvers",
+										value: `*${item[3]}:* ${item[4]}`
+									}, {
+										name: "Lehrvers",
+										value: `*${item[5]}:* ${item[6]}`
+									}]
+								}]
+							})
+						})
+					}
+			})
 		});
 	}
 

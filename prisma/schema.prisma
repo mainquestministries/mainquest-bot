@@ -38,3 +38,9 @@ model Embed {
   color               Int?
   sended              Int      @default(0)
 }
+
+model Losungen {
+  id String @id @default(uuid())
+  guildId String
+  channelId String
+}
