@@ -4,9 +4,13 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ## Kommandos
 
-### /ziel_initialisieren
+### /prayerchannel
 
 Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar.
+
+### /prayerchannel_deaktivieren
+
+Deaktiviert die prayerchannel-Funktion des Servers. HINWEIS: Löscht ALLE Benachrichtigungen des Gebetschannel.
 
 ### /benachrichtigungen_aktivieren, /benachrichtigungen_deaktivieren
 
@@ -16,6 +20,14 @@ Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar
 
 Stellt die Benachrichtigungen ein.
 
+### /losungschannel
+
+Initialisiert den aktuellen Kanal als Losungs-channel. Nur für Admins verfügbar.
+
+### /losungen_deaktivieren, 
+
+Deaktiviert die Losungsfunktion des Servers.
+
 ## Installieren / Aufsetzen
 
 Nur bei lokalen Systemen. Nicht nötig für Docker.
@@ -23,8 +35,6 @@ Nur bei lokalen Systemen. Nicht nötig für Docker.
 ```sh
 npm install
 npm run configure
-# Bei nicht-SQLite:
-npm run migrate
 ```
 
 Folge den Anweisungen des Programms.

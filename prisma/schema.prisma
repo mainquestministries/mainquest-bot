@@ -35,6 +35,7 @@ model Embed {
   author              String
   author_avatar_url   String
   title               String
+  source String
   color               Int?
   sended              Int      @default(0)
 }

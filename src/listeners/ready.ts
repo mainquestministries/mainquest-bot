@@ -104,7 +104,7 @@ export class UserEvent extends Listener {
 			data.forEach((item) => {
 				if (item[0] === today) {
 					losungen.forEach(async (config) => {
-						const channel = await (await this.container.client.guilds.fetch(config.guildId)).channels.fetch(config.channelId);
+						const channel = await (await this.container.client.guilds.fetch(config.id)).channels.fetch(config.channelId);
 						(channel as TextChannel).send({
 							embeds: [
 								{

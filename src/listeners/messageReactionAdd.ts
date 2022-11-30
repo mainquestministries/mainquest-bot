@@ -49,7 +49,8 @@ export class UserEvent extends Listener {
 						author: reaction.message.member?.displayName as string,
 						author_avatar_url: reaction.message.author?.displayAvatarURL() as string,
 						title: `Gebetsanliegen von ${reaction.message.member?.displayName}`,
-						color: color_
+						color: color_,
+						source: reaction.message.guildId as string
 					}
 				}
 			}
