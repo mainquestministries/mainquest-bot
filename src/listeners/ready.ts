@@ -123,7 +123,7 @@ export class UserEvent extends Listener {
 						new_msg.startThread({
 							name: `Vers für den ${today}`,
 						});
-						[":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"].forEach(emoji_ => 
+						["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "8️⃣", "🔟"].forEach(emoji_ => 
 						{new_msg.react(emoji_)});
 					});
 				}
