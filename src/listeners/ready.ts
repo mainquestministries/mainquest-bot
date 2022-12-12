@@ -111,7 +111,7 @@ export class UserEvent extends Listener {
 				if (item[0] === today) {
 					losungen.forEach(async (config) => {
 						const channel = await (await this.container.client.guilds.fetch(config.id)).channels.fetch(config.l_channel as string);
-						(channel as TextChannel).send({
+						let new_msg = (await (channel as TextChannel).send({
 							embeds: [
 								{
 									title: `Vers für den ${today}`,
@@ -119,7 +119,12 @@ export class UserEvent extends Listener {
 									color: 0x0055AA
 								}
 							]
+						}))
+						new_msg.startThread({
+							name: `Vers für den ${today}`,
 						});
+						[":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"].forEach(emoji_ => 
+						{new_msg.react(emoji_)});
 					});
 				}
 			});

@@ -4,6 +4,10 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ## Kommandos
 
+### /lehrtext
+
+Sendet den heutigen Lehrtext.
+
 ### /prayerchannel
 
 Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar.
