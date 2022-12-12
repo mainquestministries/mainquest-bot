@@ -114,17 +114,9 @@ export class UserEvent extends Listener {
 						(channel as TextChannel).send({
 							embeds: [
 								{
-									title: `Losungen für den ${today}`,
-									fields: [
-										{
-											name: 'Losungsvers',
-											value: `*${item[3]}:* ${item[4]}`
-										},
-										{
-											name: 'Lehrvers',
-											value: `*${item[5]}:* ${item[6]}`
-										}
-									]
+									title: `Vers für den ${today}`,
+									description: `*${item[3]}:* ${item[4]}`,
+									color: 0x0055AA
 								}
 							]
 						});
