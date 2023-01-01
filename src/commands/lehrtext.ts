@@ -5,7 +5,7 @@ import { Command } from '@sapphire/framework';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 @ApplyOptions<Command.Options>({
-	description: 'A basic slash command'
+	description: 'Gibt den heutigen Lehrtext aus.'
 })
 export class UserCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
