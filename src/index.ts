@@ -1,7 +1,7 @@
 import '#lib/setup';
-import '#lib/read-csv';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
+import { existsSync } from 'fs';
 const prisma = new PrismaClient();
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -28,6 +28,10 @@ const client = new SapphireClient({
 
 const main = async () => {
 	try {
+		if (!(existsSync("serverconfig.json"))) {
+			client.logger.fatal("Config file not found, exiting") 
+			throw new Error()
+		}
 		client.logger.info('Logging in');
 		//console.log("Token: "+process.env["DISCORD_TOKEN"])
 		await client.login();

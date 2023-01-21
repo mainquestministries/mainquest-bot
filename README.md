@@ -28,7 +28,7 @@ Stellt die Benachrichtigungen ein.
 
 Initialisiert den aktuellen Kanal als Losungs-channel. Nur für Admins verfügbar.
 
-### /losungen_deaktivieren, 
+### /losungen_deaktivieren
 
 Deaktiviert die Losungsfunktion des Servers.
 
@@ -42,6 +42,8 @@ npm run configure
 ```
 
 Folge den Anweisungen des Programms.
+
+Um einen welcome-channel zu konfigurieren, kopiere `serverconfig.template.json` und bennenne es zu `serverconfig.json` um. Fülle die Werte ein (natürlich kann alles 0 bzw. "" beim letztem sein, wenn du gewisse Funktionen deaktivieren willst). Die Werte erfährst du per Rechtsklick > "Copy ID" (Entwicklungsoptionen müssen im Discord-Client aktiviert sein!)
 
 ## Ausführen
 
