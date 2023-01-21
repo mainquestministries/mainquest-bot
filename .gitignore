@@ -14,6 +14,7 @@ prisma/data/
 
 dist/
 startcontainer
+serverconfig.json
 
 # Ignore the config file (contains sensitive information such as tokens)
 config.ts
