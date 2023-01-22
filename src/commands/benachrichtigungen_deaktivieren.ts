@@ -15,7 +15,7 @@ export class UserCommand extends Command {
 		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await prisma.message.updateMany({
 			where: {
 				id: interaction.user.id

@@ -19,7 +19,7 @@ export class UserCommand extends Command {
 		});
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputInteraction) {
+	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await prisma.guildconfig.updateMany({
 			where: {
 				id: interaction.guildId as string

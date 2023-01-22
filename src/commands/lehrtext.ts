@@ -15,7 +15,7 @@ export class UserCommand extends Command {
 		})
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputInteraction) {
+	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, 'losungen.json')).toString());
 			const today = date_string(new Date());
 			data.forEach((item) => {

@@ -20,7 +20,7 @@ export class UserCommand extends Command {
 		});
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputInteraction) {
+	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {

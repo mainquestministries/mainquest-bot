@@ -30,7 +30,7 @@ export class UserCommand extends Command {
 		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		let weeks = 1;
 		let possible_weeks = interaction.options.data[1].value;
 		if (typeof possible_weeks !== undefined) {
