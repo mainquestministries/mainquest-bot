@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 })
 export class UserCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand((builder) =>
+		registry.registerChatInputCommand((builder : any) =>
 			builder //
 				.setName(this.name)
 				.setDescription(this.description)

@@ -4,7 +4,7 @@ import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
 import { readFileSync } from 'fs';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { MessageEmbed, TextChannel } from 'discord.js';
+import { EmbedBuilder, TextChannel } from 'discord.js';
 import { rootDir } from '#lib/constants';
 import { join } from 'path';
 import { date_string } from '#lib/date';
@@ -65,7 +65,7 @@ export class UserEvent extends Listener {
 						}
 					}
 				});
-				let embeds: MessageEmbed[] = [];
+				let embeds: EmbedBuilder[] = [];
 				msg.embeds.forEach(async (embed) => {
 					let color_temp = 0;
 					if (embed.color === null) {
@@ -73,18 +73,18 @@ export class UserEvent extends Listener {
 					} else {
 						color_temp = embed.color;
 					}
-					embeds.push(
-						new MessageEmbed({
-							title: embed.title,
-							description: embed.content,
-							color: color_temp,
-							author: {
+						const temp_embed = new EmbedBuilder()
+							.setTitle(embed.title).
+							setDescription(embed.content).
+							setColor(color_temp).
+							setAuthor({
 								name: embed.author,
-								icon_url: embed.author_avatar_url,
-								proxyIconURL: embed.author_avatar_url
+								iconURL: embed.author_avatar_url
 							}
-						})
-					);
+						
+						)
+						embeds.push(temp_embed)
+					
 				});
 				this.container.logger.debug('Should be sended: ' + send_today);
 				if (send_today && embeds.length > 0) {
@@ -107,7 +107,9 @@ export class UserEvent extends Listener {
 					}
 				}
 			});
+			this.container.logger.debug(losungen.length)
 			data.forEach((item) => {
+				this.container.logger.debug(today)
 				if (item[0] === today) {
 					losungen.forEach(async (config) => {
 						const channel = await (await this.container.client.guilds.fetch(config.id)).channels.fetch(config.l_channel as string);
@@ -120,14 +122,15 @@ export class UserEvent extends Listener {
 								}
 							]
 						}))
-						new_msg.startThread({
+						await new_msg.startThread({
 							name: `Vers für den ${today}`,
 						});
-						["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].forEach(emoji_ => 
-						{new_msg.react(emoji_)});
+						["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].forEach(async emoji_ => 
+						{await new_msg.react(emoji_)});
 					});
 				}
 			});
+			this.container.logger.info("*** Ended Parsing")
 		});
 	}
 

@@ -1,18 +1,18 @@
-import { Precondition } from '@sapphire/framework';
-import type { CommandInteraction, ContextMenuInteraction, Message } from 'discord.js';
+import { Command, Precondition } from '@sapphire/framework';
+import type { CommandInteraction, Message } from 'discord.js';
 
 export class UserPrecondition extends Precondition {
 	public override async messageRun(message: Message) {
-		if ((await message.member?.fetch())?.permissions.has('ADMINISTRATOR')) {
-			message.channel.send(`${message.author}, du hast nicht genug Rechte für diese Aktion.`);
+		if (!((await message.member?.fetch())?.permissions.has('Administrator'))) {
+			await message.channel.send(`${message.author}, du hast nicht genug Rechte für diese Aktion.`);
 			return this.error({ message: 'Du hast nicht genug Rechte für diese Aktion.' });
 		}
-		return this.ok();
+		else {return this.ok();}
 	}
 
 	public override async chatInputRun(interaction: CommandInteraction) {
-		if (await interaction.memberPermissions?.has('ADMINISTRATOR')) {
-			interaction.reply({
+		if (!(await interaction.memberPermissions?.has('Administrator'))) {
+			await interaction.reply({
 				embeds: [
 					{
 						color: 0xff0000,
@@ -24,12 +24,12 @@ export class UserPrecondition extends Precondition {
 			});
 			return this.error({ message: `Command Abuse by ${interaction.user.id}` });
 		}
-		return this.ok();
+		else {return this.ok();}
 	}
 
-	public override async contextMenuRun(interaction: ContextMenuInteraction) {
-		if (await interaction.memberPermissions?.has('ADMINISTRATOR')) {
-			interaction.reply({
+	public override async contextMenuRun(interaction: Command.ContextMenuCommandInteraction) {
+		if (!(await interaction.memberPermissions?.has('Administrator'))) {
+			await interaction.reply({
 				embeds: [
 					{
 						color: 0xff0000,
@@ -41,7 +41,8 @@ export class UserPrecondition extends Precondition {
 			});
 			return this.error({ message: `Command Abuse by ${interaction.user.id}` });
 		}
-		return this.ok();
+		else {
+		return this.ok();}
 	}
 }
 

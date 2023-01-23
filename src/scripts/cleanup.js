@@ -1,14 +1,14 @@
-import { rmSync } from "fs";
-import path, {join} from "path"
+const { rmSync } = require("fs");
+const {join} = require("path");
+const path = require("path")
+const _dirname_ = path.resolve(path.dirname(''))
 
-const __dirname = path.resolve(path.dirname(''))
-
-rmSync(join(__dirname, "./node_modules"), {
+rmSync(join(_dirname_, "./node_modules"), {
     force: true,
     recursive: true
 })
-rmSync(join(__dirname, "./package-lock.json"))
-rmSync(join(__dirname, "./dist"), {
+rmSync(join(_dirname_, "./package-lock.json"))
+rmSync(join(_dirname_, "./dist"), {
     force: true,
     recursive: true
 })

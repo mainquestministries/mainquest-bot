@@ -2,6 +2,7 @@ import '#lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
 import { existsSync } from 'fs';
+import { Partials } from 'discord.js';
 const prisma = new PrismaClient();
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -12,17 +13,17 @@ const client = new SapphireClient({
 	},
 	shards: 'auto',
 	intents: [
-		'GUILDS',
-		'GUILD_MEMBERS',
-		'GUILD_BANS',
-		'GUILD_EMOJIS_AND_STICKERS',
-		'GUILD_VOICE_STATES',
-		'GUILD_MESSAGES',
-		'GUILD_MESSAGE_REACTIONS',
-		'DIRECT_MESSAGES',
-		'DIRECT_MESSAGE_REACTIONS'
+		'Guilds',
+		'GuildMembers',
+		'GuildBans',
+		'GuildEmojisAndStickers',
+		'GuildVoiceStates',
+		'GuildMessages',
+		'GuildMessageReactions',
+		'DirectMessages',
+		'DirectMessageReactions'
 	],
-	partials: ['CHANNEL'],
+	partials: [Partials.Channel],
 	loadMessageCommandListeners: true
 });
 

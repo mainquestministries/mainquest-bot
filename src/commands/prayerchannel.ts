@@ -1,11 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 const prisma = new PrismaClient();
 
-@ApplyOptions<Command.Options>({
-	description: 'Registriert aktuellen Kanal als Ziel'
-})
 export class UserCommand extends Command {
 	public constructor(context: Command.Context) {
 		super(context, {
@@ -17,7 +13,7 @@ export class UserCommand extends Command {
 		registry.registerChatInputCommand((builder) =>
 			builder //
 				.setName(this.name)
-				.setDescription(this.description)
+				.setDescription('Registriert aktuellen Kanal als Ziel')
 		);
 	}
 

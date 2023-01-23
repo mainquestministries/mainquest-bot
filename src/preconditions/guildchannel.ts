@@ -1,5 +1,5 @@
-import { Precondition } from '@sapphire/framework';
-import type { CommandInteraction, ContextMenuInteraction, Message } from 'discord.js';
+import { Command, Precondition } from '@sapphire/framework';
+import type { CommandInteraction, Message } from 'discord.js';
 
 export class UserPrecondition extends Precondition {
 	public override messageRun(message: Message) {
@@ -26,7 +26,7 @@ export class UserPrecondition extends Precondition {
 		return this.ok();
 	}
 
-	public override contextMenuRun(interaction: ContextMenuInteraction) {
+	public override contextMenuRun(interaction: Command.ContextMenuCommandInteraction) {
 		if (interaction.guildId === null) {
 			interaction.reply({
 				embeds: [
