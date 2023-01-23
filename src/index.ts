@@ -29,9 +29,9 @@ const client = new SapphireClient({
 
 const main = async () => {
 	try {
-		if (!(existsSync("serverconfig.json"))) {
-			client.logger.fatal("Config file not found, exiting") 
-			throw new Error()
+		if (!existsSync('serverconfig.json')) {
+			client.logger.fatal('Config file not found, exiting');
+			throw new Error();
 		}
 		client.logger.info('Logging in');
 		//console.log("Token: "+process.env["DISCORD_TOKEN"])

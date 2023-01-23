@@ -12,22 +12,24 @@ export class UserCommand extends Command {
 		registry.registerChatInputCommand({
 			name: this.name,
 			description: this.description
-		})
+		});
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, 'losungen.json')).toString());
-			const today = date_string(new Date());
-			data.forEach((item) => {
-				if (item[0] === today) {
-					interaction.reply({
-						embeds: [
-								{
-									title: `Lehrtext für den ${today}`,
-									description: `*${item[5]}:* ${item[6]}`,
-									color: 0x0055AA
-								}
-							]
-					})
+		const today = date_string(new Date());
+		data.forEach((item) => {
+			if (item[0] === today) {
+				interaction.reply({
+					embeds: [
+						{
+							title: `Lehrtext für den ${today}`,
+							description: `*${item[5]}:* ${item[6]}`,
+							color: 0x0055aa
+						}
+					]
+				});
+			}
+		});
 	}
-})}}
+}

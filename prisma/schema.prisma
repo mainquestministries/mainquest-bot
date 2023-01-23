@@ -11,7 +11,7 @@ datasource db {
 }
 
 model guildconfig {
-  id        String @id
+  id        String  @id
   p_channel String?
   l_channel String?
 }

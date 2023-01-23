@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
 		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
 		cron.schedule(cron_str, async (now) => {
 			//onst now = new Date()
-			if (now === 'manual' || now === "init") return;
+			if (now === 'manual' || now === 'init') return;
 			const msg = await prisma.message.findMany({
 				include: {
 					embeds: true
@@ -73,18 +73,11 @@ export class UserEvent extends Listener {
 					} else {
 						color_temp = embed.color;
 					}
-						const temp_embed = new EmbedBuilder()
-							.setTitle(embed.title).
-							setDescription(embed.content).
-							setColor(color_temp).
-							setAuthor({
-								name: embed.author,
-								iconURL: embed.author_avatar_url
-							}
-						
-						)
-						embeds.push(temp_embed)
-					
+					const temp_embed = new EmbedBuilder().setTitle(embed.title).setDescription(embed.content).setColor(color_temp).setAuthor({
+						name: embed.author,
+						iconURL: embed.author_avatar_url
+					});
+					embeds.push(temp_embed);
 				});
 				this.container.logger.debug('Should be sended: ' + send_today);
 				if (send_today && embeds.length > 0) {
@@ -107,30 +100,31 @@ export class UserEvent extends Listener {
 					}
 				}
 			});
-			this.container.logger.debug(losungen.length)
+			this.container.logger.debug('Lchannels: ' + losungen.length);
 			data.forEach((item) => {
-				this.container.logger.debug(today)
+				//this.container.logger.debug(today)
 				if (item[0] === today) {
 					losungen.forEach(async (config) => {
 						const channel = await (await this.container.client.guilds.fetch(config.id)).channels.fetch(config.l_channel as string);
-						let new_msg = (await (channel as TextChannel).send({
+						let new_msg = await (channel as TextChannel).send({
 							embeds: [
 								{
 									title: `Vers für den ${today}`,
 									description: `*${item[3]}:* ${item[4]}`,
-									color: 0x0055AA
+									color: 0x0055aa
 								}
 							]
-						}))
-						await new_msg.startThread({
-							name: `Vers für den ${today}`,
 						});
-						["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].forEach(async emoji_ => 
-						{await new_msg.react(emoji_)});
+						await new_msg.startThread({
+							name: `Vers für den ${today}`
+						});
+						['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'].forEach(async (emoji_) => {
+							await new_msg.react(emoji_);
+						});
 					});
 				}
 			});
-			this.container.logger.info("*** Ended Parsing")
+			this.container.logger.info('*** Ended Parsing');
 		});
 	}
 

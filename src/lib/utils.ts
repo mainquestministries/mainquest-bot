@@ -3,7 +3,7 @@ import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { cyan } from 'colorette';
 import type { APIUser } from 'discord-api-types/v9';
-import { EmbedBuilder, Guild, Message,  User } from 'discord.js';
+import { EmbedBuilder, Guild, Message, User } from 'discord.js';
 import { RandomLoadingMessage } from '#lib/constants';
 
 /**

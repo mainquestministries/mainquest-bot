@@ -30,7 +30,7 @@ export class UserCommand extends Command {
 				l_channel: null,
 				p_channel: null
 			}
-		})
+		});
 		return interaction.reply({
 			embeds: [
 				{

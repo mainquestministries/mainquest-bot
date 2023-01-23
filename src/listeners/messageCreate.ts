@@ -23,9 +23,9 @@ export class UserEvent extends Listener {
 		}
 		await message.react('🔔');
 
-		const json_data = JSON.parse(readFileSync(join(rootDir, "../serverconfig.json")).toString())
-		if ((json_data["welcome_channel"]) === message.channelId) {
-			message.author.send(json_data["welcome_text"])
+		const json_data = JSON.parse(readFileSync(join(rootDir, '../serverconfig.json')).toString());
+		if (json_data['welcome_channel'] === message.channelId) {
+			message.author.send(json_data['welcome_text']);
 		}
-	}	
+	}
 }

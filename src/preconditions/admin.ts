@@ -3,11 +3,12 @@ import type { CommandInteraction, Message } from 'discord.js';
 
 export class UserPrecondition extends Precondition {
 	public override async messageRun(message: Message) {
-		if (!((await message.member?.fetch())?.permissions.has('Administrator'))) {
+		if (!(await message.member?.fetch())?.permissions.has('Administrator')) {
 			await message.channel.send(`${message.author}, du hast nicht genug Rechte für diese Aktion.`);
 			return this.error({ message: 'Du hast nicht genug Rechte für diese Aktion.' });
+		} else {
+			return this.ok();
 		}
-		else {return this.ok();}
 	}
 
 	public override async chatInputRun(interaction: CommandInteraction) {
@@ -23,8 +24,9 @@ export class UserPrecondition extends Precondition {
 				ephemeral: true
 			});
 			return this.error({ message: `Command Abuse by ${interaction.user.id}` });
+		} else {
+			return this.ok();
 		}
-		else {return this.ok();}
 	}
 
 	public override async contextMenuRun(interaction: Command.ContextMenuCommandInteraction) {
@@ -40,9 +42,9 @@ export class UserPrecondition extends Precondition {
 				ephemeral: true
 			});
 			return this.error({ message: `Command Abuse by ${interaction.user.id}` });
+		} else {
+			return this.ok();
 		}
-		else {
-		return this.ok();}
 	}
 }
 
