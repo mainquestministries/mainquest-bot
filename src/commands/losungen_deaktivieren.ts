@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Command } from '@sapphire/framework';
 const prisma = new PrismaClient();
 
+
 export class UserCommand extends Command {
 	public constructor(context: Command.Context) {
 		super(context, {
@@ -28,7 +29,8 @@ export class UserCommand extends Command {
 		await prisma.guildconfig.deleteMany({
 			where: {
 				l_channel: null,
-				p_channel: null
+				p_channel: null,
+				w_channel: null
 			}
 		});
 		return interaction.reply({

@@ -26,7 +26,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			let next_user = null;
-			this.container.logger.info('*** Starting Routine');
+			this.container.logger.info('*** Running from User to User...');
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
@@ -88,9 +88,9 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
-			this.container.logger.info('*** Ended Routine');
+			this.container.logger.info('*** Coming home...');
 
-			this.container.logger.info('*** Starting Parsing');
+			this.container.logger.info('*** Biblebomber: ACTIVE');
 			const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, 'losungen.json')).toString());
 			const today = date_string(now);
 			const losungen = await prisma.guildconfig.findMany({
@@ -124,7 +124,7 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
-			this.container.logger.info('*** Ended Parsing');
+			this.container.logger.info('*** Disabling Biblebomber mode');
 		});
 	}
 

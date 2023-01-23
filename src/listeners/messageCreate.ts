@@ -1,10 +1,7 @@
-import { rootDir } from '#lib/constants';
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { Message } from 'discord.js';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
@@ -18,14 +15,25 @@ export class UserEvent extends Listener {
 					id: `${message.guildId}`
 				}
 			});
+			
+			await message.react('🔔');
 		} catch {
-			return;
 		}
-		await message.react('🔔');
-
-		const json_data = JSON.parse(readFileSync(join(rootDir, '../serverconfig.json')).toString());
-		if (json_data['welcome_channel'] === message.channelId) {
-			message.author.send(json_data['welcome_text']);
+		
+		try {
+		const g_config = await prisma.guildconfig.findFirstOrThrow({
+			where: {
+				w_channel: message.channelId
+			}
+		})
+		if ( !(g_config.w_dm_text===null || g_config.w_dm_text.length < 2)){
+			message.author.send(
+				g_config.w_dm_text
+			)
+		}
+	}
+		catch {
+			return
 		}
 	}
 }
