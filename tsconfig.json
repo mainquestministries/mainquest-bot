@@ -9,6 +9,7 @@
 		"esModuleInterop": true,
 		"module": "CommonJS", // CommonJS
         "moduleResolution": "Node",
+		"suppressImplicitAnyIndexErrors": true,
 		"baseUrl": "./",
 		"paths": {
 			"#lib/*": ["src/lib/*.ts"]

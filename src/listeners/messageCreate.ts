@@ -22,7 +22,8 @@ export class UserEvent extends Listener {
 		try {
 			const g_config = await prisma.guildconfig.findFirstOrThrow({
 				where: {
-					w_channel: message.channelId
+					w_channel: message.channelId,
+					id: `${message.guildId}`
 				}
 			});
 			if (!(g_config.w_dm_text === null || g_config.w_dm_text.length < 2)) {

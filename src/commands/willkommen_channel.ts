@@ -14,20 +14,23 @@ export class UserCommand extends Command {
 			builder //
 				.setName(this.name)
 				.setDescription(this.description)
-				.addIntegerOption((option) =>
+				.addRoleOption((option) =>
 					option
-						.setName('Rollen-ID')
+						.setName('rolle')
 						.setRequired(false)
-						.setDescription('Die ID, die zugewiesen werden soll, nachdem der User in dem Channel postet.')
+						.setDescription('Die Rolle, die zugewiesen werden soll, nachdem der User in dem Channel postet.')
 				)
 				.addStringOption((option) =>
-					option.setDescription('Text, der dem Nutzer geschickt wird.').setName('Willkommenstext').setRequired(false)
+			
+					option.setName("welcome_text").
+					setDescription('Text, der dem Nutzer geschickt wird.').setRequired(false)
 				)
 		);
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if ((interaction.options.data[0] === interaction.options.data[1]) === null)
+		//this.container.logger.debug(interaction.options.data[0])
+		if (interaction.options.data.length === 0)
 			return await interaction.reply({
 				embeds: [
 					{
@@ -38,6 +41,10 @@ export class UserCommand extends Command {
 				],
 				ephemeral: true
 			});
+
+		const v_role = interaction.options.getRole("rolle")
+		const w_text = interaction.options.getString("welcome_text")
+
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {
@@ -51,8 +58,8 @@ export class UserCommand extends Command {
 				},
 				data: {
 					w_channel: interaction.channelId,
-					verified_role: interaction.options.data[0].value?.toString(),
-					w_dm_text: interaction.options.data[1].value?.toString()
+					verified_role: v_role?.id,
+					w_dm_text: w_text
 				}
 			});
 		} catch (e) {
@@ -60,8 +67,8 @@ export class UserCommand extends Command {
 				data: {
 					id: interaction.guildId as string,
 					w_channel: interaction.channelId,
-					verified_role: interaction.options.data[0].value?.toString(),
-					w_dm_text: interaction.options.data[1].value?.toString()
+					verified_role: v_role?.id,
+					w_dm_text: w_text
 				}
 			});
 		}

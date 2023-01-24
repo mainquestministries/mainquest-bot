@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
 		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
 		cron.schedule(cron_str, async (now) => {
 			//onst now = new Date()
-			if (now === 'manual' || now === 'init') return;
+			if (now === 'manual' || now === 'init' || process.env.SKIP_CRONJOB !== undefined) return;
 			const msg = await prisma.message.findMany({
 				include: {
 					embeds: true

@@ -1,7 +1,6 @@
 import '#lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
-import { existsSync } from 'fs';
 import { Partials } from 'discord.js';
 const prisma = new PrismaClient();
 const client = new SapphireClient({
@@ -29,12 +28,10 @@ const client = new SapphireClient({
 
 const main = async () => {
 	try {
-		if (!existsSync('serverconfig.json')) {
-			client.logger.fatal('Config file not found, exiting');
-			throw new Error();
-		}
 		client.logger.info('Logging in');
 		//console.log("Token: "+process.env["DISCORD_TOKEN"])
+		if (process.env["SKIP_CRONJOB"])
+			client.logger.info("Skipping Cronjobs permanently")
 		await client.login();
 		await prisma.$connect();
 		client.logger.info('logged in');
