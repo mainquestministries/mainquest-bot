@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { Command } from '@sapphire/framework';
 const prisma = new PrismaClient();
 
-
 export class UserCommand extends Command {
 	public constructor(context: Command.Context) {
 		super(context, {

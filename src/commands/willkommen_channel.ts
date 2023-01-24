@@ -14,19 +14,30 @@ export class UserCommand extends Command {
 			builder //
 				.setName(this.name)
 				.setDescription(this.description)
-				.addIntegerOption(
-					(option) => 
-					option.setName("Rollen-ID")
-					.setRequired(false)
-					.setDescription("Die ID, die zugewiesen werden soll, nachdem der User in dem Channel postet.")
+				.addIntegerOption((option) =>
+					option
+						.setName('Rollen-ID')
+						.setRequired(false)
+						.setDescription('Die ID, die zugewiesen werden soll, nachdem der User in dem Channel postet.')
 				)
-				.addStringOption( (option)=> 
-				option.setDescription("Text, der dem Nutzer geschickt wird.").
-				setName("Willkommenstext").setRequired(false))
+				.addStringOption((option) =>
+					option.setDescription('Text, der dem Nutzer geschickt wird.').setName('Willkommenstext').setRequired(false)
+				)
 		);
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+		if ((interaction.options.data[0] === interaction.options.data[1]) === null)
+			return await interaction.reply({
+				embeds: [
+					{
+						color: 0xff0000,
+						title: 'Befehl verweigert',
+						description: 'Du musst mindestens eine Option angeben.'
+					}
+				],
+				ephemeral: true
+			});
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {
@@ -54,5 +65,15 @@ export class UserCommand extends Command {
 				}
 			});
 		}
+		return await interaction.reply({
+			embeds: [
+				{
+					color: 0x12d900,
+					title: 'Neue Einstellung übernommen',
+					description: 'Willkommens-channel eingerichtet.'
+				}
+			],
+			ephemeral: true
+		});
 	}
 }
