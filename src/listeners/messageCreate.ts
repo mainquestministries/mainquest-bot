@@ -27,7 +27,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			if (!(g_config.w_dm_text === null || g_config.w_dm_text.length < 2)) {
-				message.author.send(g_config.w_dm_text);
+				await message.author.send(g_config.w_dm_text);
 			}
 			if (g_config.verified_role !== null) {
 				const { client } = this.container;

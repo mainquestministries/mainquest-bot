@@ -91,7 +91,7 @@ export class UserEvent extends Listener {
 			this.container.logger.info('*** Coming home...');
 
 			this.container.logger.info('*** Biblebomber: ACTIVE');
-			const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, 'losungen.json')).toString());
+			const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, `losungen_${now.getFullYear()}.json`)).toString());
 			const today = date_string(now);
 			const losungen = await prisma.guildconfig.findMany({
 				where: {
@@ -109,14 +109,14 @@ export class UserEvent extends Listener {
 						let new_msg = await (channel as TextChannel).send({
 							embeds: [
 								{
-									title: `Vers für den ${today}`,
+									title: `Tageslosung vom ${today}`,
 									description: `*${item[3]}:* ${item[4]}`,
 									color: 0x0055aa
 								}
 							]
 						});
 						await new_msg.startThread({
-							name: `Vers für den ${today}`
+							name: `Tageslosung vom ${today}`
 						});
 						['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'].forEach(async (emoji_) => {
 							await new_msg.react(emoji_);

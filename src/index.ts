@@ -30,8 +30,7 @@ const main = async () => {
 	try {
 		client.logger.info('Logging in');
 		//console.log("Token: "+process.env["DISCORD_TOKEN"])
-		if (process.env["SKIP_CRONJOB"])
-			client.logger.info("Skipping Cronjobs permanently")
+		if (process.env['SKIP_CRONJOB']) client.logger.info('Skipping Cronjobs permanently');
 		await client.login();
 		await prisma.$connect();
 		client.logger.info('logged in');
