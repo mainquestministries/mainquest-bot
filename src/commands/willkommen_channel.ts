@@ -30,21 +30,22 @@ export class UserCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		//this.container.logger.debug(interaction.options.data[0])
-		if (interaction.options.data.length === 0)
-			return await interaction.reply({
-				embeds: [
-					{
-						color: 0xff0000,
-						title: 'Befehl verweigert',
-						description: 'Du musst mindestens eine Option angeben.'
-					}
-				],
-				ephemeral: true
-			});
+		
 
 		const v_role = interaction.options.getRole("rolle")
 		const w_text = interaction.options.getString("welcome_text")
-
+		
+		if (v_role === w_text === null)
+				return await interaction.reply({
+					embeds: [
+						{
+							color: 0xff0000,
+							title: 'Befehl verweigert',
+							description: 'Du musst mindestens eine Option angeben.'
+						}
+					],
+					ephemeral: true
+				});
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {
