@@ -2,12 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
-import { readFileSync } from 'fs';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { EmbedBuilder, TextChannel } from 'discord.js';
-import { rootDir } from '#lib/constants';
-import { join } from 'path';
-import { date_string } from '#lib/date';
+import { EmbedBuilder } from 'discord.js';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
@@ -89,7 +85,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			this.container.logger.info('*** Coming home...');
-
+			/*
 			this.container.logger.info('*** Biblebomber: ACTIVE');
 			const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, `losungen_${now.getFullYear()}.json`)).toString());
 			const today = date_string(now);
@@ -124,7 +120,7 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
-			this.container.logger.info('*** Disabling Biblebomber mode');
+			this.container.logger.info('*** Disabling Biblebomber mode');*/ 
 		});
 	}
 
