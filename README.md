@@ -4,10 +4,6 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ## Kommandos
 
-### /lehrtext
-
-Sendet den heutigen Lehrtext.
-
 ### /prayerchannel
 
 Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar.
@@ -24,14 +20,6 @@ Deaktiviert die prayerchannel-Funktion des Servers. HINWEIS: Löscht ALLE Benach
 
 Stellt die Benachrichtigungen ein.
 
-### /losungschannel
-
-Initialisiert den aktuellen Kanal als Losungs-channel. Nur für Admins verfügbar.
-
-### /losungen_deaktivieren
-
-Deaktiviert die Losungsfunktion des Servers.
-
 ### willkommen_channel
 
 Aktiviert einen Willkommmens-channel, der eine DM auslöst oder eine Rolle gibt (oder beides).
@@ -40,6 +28,10 @@ Es muss mindestens eine Option angegeb werden.
 ### willkommenchannel_deaktivieren
 
 Deaktiviert dein Willkommens-channel.
+
+### Hinweis zu Losungen
+
+Losungen wurden verschoben: [Losungsbot](https://github.com/mainquestministries/losungsbot)
 
 ## Installieren / Aufsetzen
 
