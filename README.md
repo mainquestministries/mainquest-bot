@@ -32,6 +32,15 @@ Initialisiert den aktuellen Kanal als Losungs-channel. Nur für Admins verfügba
 
 Deaktiviert die Losungsfunktion des Servers.
 
+### willkommen_channel
+
+Aktiviert einen Willkommmens-channel, der eine DM auslöst oder eine Rolle gibt (oder beides).
+Es muss mindestens eine Option angegeb werden.
+
+### willkommenchannel_deaktivieren
+
+Deaktiviert dein Willkommens-channel.
+
 ## Installieren / Aufsetzen
 
 Nur bei lokalen Systemen. Nicht nötig für Docker.
@@ -42,8 +51,6 @@ npm run configure
 ```
 
 Folge den Anweisungen des Programms.
-
-Um einen welcome-channel zu konfigurieren, kopiere `serverconfig.template.json` und bennenne es zu `serverconfig.json` um. Fülle die Werte ein (natürlich kann alles 0 bzw. "" beim letztem sein, wenn du gewisse Funktionen deaktivieren willst). Die Werte erfährst du per Rechtsklick > "Copy ID" (Entwicklungsoptionen müssen im Discord-Client aktiviert sein!)
 
 ## Ausführen
 
@@ -79,8 +86,7 @@ npm run start
 
 Docker erfordert keine Vorbereitung.
 Du benötigst dennoch deine Datenbank und die Verbindungsdetails.
-Die Migration wird jedoch bei PostgreSQL und MySQL NICHT automatisch ausgeführt.
-SQLite ist NICHT unterstützt!
+Die Migration wird jedoch MySQL NICHT automatisch ausgeführt.
 
 - Migrieren (Dedizierte Datebank):
 
@@ -93,17 +99,17 @@ npm run migrate
 Die Datenbank kann auch in einem CI/CD/CD-Prozess mittels `npx prisma migrate deploy` migriert werden.
 
 - Container erstellen:
-      - $DATENBANK_TYP kann entweder "postgres" oder "mysql" sein.
+      - $DATENBANK_TYP muss "mysql" sein.
 
 ```sh
-docker build -t mainquestbot:latest -e DB_TYPE=$DATENBANK_TYP .
+docker build -t mainquestbot:latest .
 ```
 
 - Ausführen mit einer dedizierten Datenbank:
 
 ```sh
 docker run --network=host \ 
-           --env DATABASE_URL="dbschema://DEIN_DATENBANK_STRING" \ 
+           --env DATABASE_URL="mysql://DEIN_DATENBANK_STRING" \ 
            --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
      mainquestbot:latest
 ```
