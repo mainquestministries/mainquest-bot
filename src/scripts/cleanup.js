@@ -7,7 +7,7 @@ rmSync(join(_dirname_, "./node_modules"), {
     force: true,
     recursive: true
 })
-rmSync(join(_dirname_, "./package-lock.json"))
+//rmSync(join(_dirname_, "./package-lock.json"))
 rmSync(join(_dirname_, "./dist"), {
     force: true,
     recursive: true
