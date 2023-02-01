@@ -90,9 +90,6 @@ npm run migrate
 
 Die Datenbank kann auch in einem CI/CD/CD-Prozess mittels `npx prisma migrate deploy` migriert werden.
 
-- Container erstellen:
-      - $DATENBANK_TYP muss "mysql" sein.
-
 ```sh
 docker build -t mainquestbot:latest .
 ```
