@@ -18,31 +18,5 @@ export class UserEvent extends Listener {
 
 			await message.react('🔔');
 		} catch {}
-
-		try {
-			const g_config = await prisma.guildconfig.findFirstOrThrow({
-				where: {
-					w_channel: message.channelId,
-					id: `${message.guildId}`
-				}
-			});
-			if (!(g_config.w_dm_text === null || g_config.w_dm_text.length < 2)) {
-				await message.author.send(g_config.w_dm_text);
-			}
-			if (g_config.verified_role !== null) {
-				const { client } = this.container;
-				const server = await client.guilds.fetch(g_config.id);
-				const role = await server.roles.fetch(g_config.verified_role, {
-					force: true
-				});
-				if (role == null) {
-					return this.container.logger.error(`Role with the ID ${g_config.verified_role} not found.`);
-				} else {
-					return await message.member?.roles.add(role);
-				}
-			}
-		} catch {
-			return;
-		}
 	}
 }

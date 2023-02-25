@@ -15,8 +15,6 @@ model guildconfig {
   p_channel     String?
   l_channel     String?
   w_channel     String?
-  verified_role String?
-  w_dm_text     String?
 }
 
 model Message {
