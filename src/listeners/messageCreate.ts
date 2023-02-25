@@ -16,7 +16,7 @@ export class UserEvent extends Listener {
 				}
 			});
 
-			await message.react('🔔');
+			//await message.react('🔔');
 		} catch {}
 	}
 }
