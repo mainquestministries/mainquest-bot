@@ -17,6 +17,8 @@ export class UserEvent extends Listener {
 			});
 
 			//await message.react('🔔');
-		} catch {}
+		} catch {
+			
+		}
 	}
 }
