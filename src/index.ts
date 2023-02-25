@@ -18,6 +18,7 @@ const client = new SapphireClient({
 		'GuildEmojisAndStickers',
 		'GuildVoiceStates',
 		'GuildMessages',
+		'MessageContent',
 		'GuildMessageReactions',
 		'DirectMessages',
 		'DirectMessageReactions'

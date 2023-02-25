@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 @ApplyOptions<Command.Options>({
 	preconditions: ['admin', 'guildchannel'],
 	cooldownDelay: 1_000,
-	description: 'Registriert aktuellen Kanal als Ziel',
+	description: 'Registriert aktuellen Kanal als Ziel'
 })
 export class UserCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {

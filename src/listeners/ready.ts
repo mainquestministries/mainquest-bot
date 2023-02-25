@@ -120,7 +120,7 @@ export class UserEvent extends Listener {
 					});
 				}
 			});
-			this.container.logger.info('*** Disabling Biblebomber mode');*/ 
+			this.container.logger.info('*** Disabling Biblebomber mode');*/
 		});
 	}
 

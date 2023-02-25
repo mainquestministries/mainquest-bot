@@ -4,11 +4,9 @@ import type { Interaction } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
-	public run(interaction : Interaction) {
-		if (!(interaction.isButton())) {
+	public run(interaction: Interaction) {
+		if (!interaction.isButton()) {
 			return;
 		}
-
-		
 	}
 }
