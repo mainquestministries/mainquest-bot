@@ -17,8 +17,6 @@ export class UserEvent extends Listener {
 			});
 
 			this.container.logger.info('New valid Message...');
-			this.container.logger.debug(message);
-			//await message.react('🔔');
 
 			let thumbnail_: APIEmbedThumbnail | undefined = undefined;
 			let avatar: string | null = null;
