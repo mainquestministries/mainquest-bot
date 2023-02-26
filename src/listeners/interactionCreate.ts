@@ -1,15 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import type { Interaction, TextChannel } from 'discord.js';
+import { ActionRowBuilder, Attachment, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public async run(interaction: Interaction) {
-		if (!interaction.isButton()) {
-			return;
-		}
+		if (interaction.isButton()) {
+			
 		if (interaction.customId.startsWith("abo_")) {
 			// Abo
 			if (
@@ -166,5 +165,108 @@ export class UserEvent extends Listener {
 				this.container.logger.error(e)
 			}
 		}
+		if (interaction.customId.startsWith("edit_")) {
+			const id = interaction.customId.substring(5)
+			try {
+			const swallowed = await prisma.swallowed.findFirstOrThrow({
+				where: {
+					id: id
+				}
+			})
+			this.container.logger.debug(id)
+			if (interaction.user.id == swallowed.author_id) {
+				this.container.logger.debug("Start Editing...")
+				const modal = new ModalBuilder().setTitle("Nachricht bearbeiten").setCustomId(`modal_edit_${swallowed.id}`)
+				const input = new TextInputBuilder().setCustomId(`new_text`)
+					.setLabel("Text bearbeiten")
+					.setPlaceholder("Neuer Text")
+					.setValue(swallowed.message_content)
+					.setStyle(TextInputStyle.Paragraph)
+					.setRequired(true)
+				const actRow = new ActionRowBuilder<TextInputBuilder>().addComponents(input);
+				modal.addComponents(actRow)
+				this.container.logger.debug(swallowed)
+				this.container.logger.debug("Showing Modal...")
+				await interaction.showModal(modal)
+			} else {
+				await interaction.reply({
+					embeds: [
+						{
+							color: 0xff0000,
+							title: 'Befehl verweigert',
+							description: 'Du hast die Nachricht nicht geschrieben.'
+						}
+					],
+					ephemeral: true
+				});
+				return
+			}
+		} catch (e) {
+			this.container.logger.error(e)
+			return
+		}
 	}
-}
+}	
+	if (interaction.isModalSubmit()) {
+		if (interaction.customId.startsWith("modal_edit_")) {
+			const new_text = interaction.fields.getTextInputValue("new_text")
+			const id = interaction.customId.substring(11)
+			this.container.logger.debug(id)
+			this.container.logger.debug(new_text)
+			await prisma.embed.updateMany({
+				where: {
+					original_message_id: id
+				},
+				data :{
+					content: new_text
+				}
+			})
+			try {
+			const swallowed = await prisma.swallowed.findFirstOrThrow( {
+				where: {
+					id: id
+				}
+			})
+			this.container.logger.debug(swallowed)
+			const channel = await (await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch())?.get(swallowed.channel_id);
+			const msg = (await (channel as TextChannel).messages.fetch()).get(id)
+			this.container.logger.debug(msg) // ist undefined. TODO
+			if (msg===undefined)
+				return
+			let attachments: Attachment[] = [];
+			if (msg.attachments) {
+				let attachments_ = msg.attachments;
+				attachments_.forEach((attach) => {
+					attachments.push(attach);
+				});
+			}
+			let embed = msg.embeds[0]
+			
+			await msg?.edit({
+				files: attachments,
+				components: msg.components,
+				embeds: [{
+					title: embed.title ?? "",
+					description: new_text,
+					color: embed.color ?? undefined,
+					thumbnail: embed.thumbnail ?? undefined,
+					author: embed.author ?? undefined
+				}]
+			})
+			await prisma.swallowed.updateMany({
+				where: {
+					id: id
+				}, data: {
+					message_content: new_text
+				}
+			})
+			await interaction.reply("Updated!")
+			return
+		} catch (e) {
+				this.container.logger.error(e)
+				return
+			}
+		}
+	}
+
+}}
