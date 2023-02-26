@@ -18,8 +18,6 @@ model guildconfig {
 model Message {
   id              String  @id //user to send this message to
   message_content String  @default("Dein Abo für heute")
-  hour            Int     @default(7)
-  minute          Int     @default(0)
   embeds          Embed[]
   repetitions     Int     @default(7)
   modulo          Int     @default(7)
@@ -38,4 +36,12 @@ model Embed {
   source              String
   color               Int?
   sended              Int      @default(0)
+}
+
+model Swallowed {
+  id String @id
+  channel_id String
+  message_content String
+  author_id String
+  guild String
 }

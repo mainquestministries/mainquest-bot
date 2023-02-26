@@ -48,7 +48,7 @@ export class UserEvent extends Listener {
 							{
 								style: 1,
 								label: `Abonnieren`,
-								custom_id: `row_0_button_0`,
+								custom_id: `abo_${message.id}`,
 								disabled: false,
 								emoji: {
 									id: undefined,
@@ -59,13 +59,24 @@ export class UserEvent extends Listener {
 							{
 								style: 4,
 								label: `Deabonnieren / löschen`,
-								custom_id: `row_0_button_1`,
+								custom_id: `delete_${message.id}`,
 								disabled: false,
 								emoji: {
 									id: undefined,
-									name: `🚫`
+									name: `✖️`
 								},
 								type: 2
+							},
+							{
+							  style: 2,
+							  label: "",
+							  custom_id: `edit_${message.id}`,
+							  disabled: false,
+							  emoji: {
+								id: undefined,
+								name: `📝`
+							  },
+							  type: 2
 							}
 						]
 					}
@@ -83,6 +94,15 @@ export class UserEvent extends Listener {
 					}
 				]
 			});
+			await prisma.swallowed.create({
+				data: {
+					author_id: message.author.id,
+					guild: message.guildId ?? "",
+					id: message.id,
+					channel_id: message.channelId,
+					message_content: message.content
+				}
+			})
 			await message.delete();
 		} catch (e) {
 			this.container.logger.error(e);

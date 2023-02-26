@@ -31,13 +31,9 @@ export class UserCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		let weeks = 1;
-		let possible_weeks = interaction.options.data[1].value;
-		if (typeof possible_weeks !== undefined) {
-			weeks = interaction.options.data[1].value as number;
-		}
+		let weeks = interaction.options.getInteger("wochen") ?? 1
 
-		const modulo_ = interaction.options.data[0].value as number;
+		const modulo_ = interaction.options.getInteger("wochentage", true);
 		await prisma.message.update({
 			where: {
 				id: interaction.user.id
