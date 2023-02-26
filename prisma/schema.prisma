@@ -39,10 +39,10 @@ model Embed {
 }
 
 model Swallowed {
-  id String @id
-  channel_id String
+  id              String @id
+  channel_id      String
   message_content String
-  author_id String
-  guild String
-  new_id String
+  author_id       String
+  guild           String
+  new_id          String
 }

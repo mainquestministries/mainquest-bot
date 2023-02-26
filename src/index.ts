@@ -21,8 +21,7 @@ const client = new SapphireClient({
 		'MessageContent',
 		'GuildMessageReactions',
 		'DirectMessages',
-		'DirectMessageReactions',
-		
+		'DirectMessageReactions'
 	],
 	partials: [Partials.Channel],
 	loadMessageCommandListeners: true

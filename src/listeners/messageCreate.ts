@@ -68,15 +68,25 @@ export class UserEvent extends Listener {
 								type: 2
 							},
 							{
-							  style: 2,
-							  label: "",
-							  custom_id: `edit_${message.id}`,
-							  disabled: false,
-							  emoji: {
-								id: undefined,
-								name: `📝`
-							  },
-							  type: 2
+								style: 2,
+								label: '',
+								custom_id: `edit_${message.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `📝`
+								},
+								type: 2
+							},
+							{
+								style: 3,
+								custom_id: `check_${message.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `✔`
+								},
+								type: 2
 							}
 						]
 					}
@@ -97,13 +107,13 @@ export class UserEvent extends Listener {
 			await prisma.swallowed.create({
 				data: {
 					author_id: message.author.id,
-					guild: message.guildId ?? "",
+					guild: message.guildId ?? '',
 					id: message.id,
 					new_id: new_msg.id,
 					channel_id: message.channelId,
 					message_content: message.content
 				}
-			})
+			});
 			await message.delete();
 		} catch (e) {
 			this.container.logger.error(e);
