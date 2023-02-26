@@ -112,7 +112,7 @@ export class UserEvent extends Listener {
 				})
 				if (interaction.user.id == swallowed.author_id) {
 					const channel = await (await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch())?.get(swallowed.channel_id);
-					(await (channel as TextChannel).messages.fetch()).get(id)?.delete()
+					(await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)?.delete()
 					await prisma.swallowed.deleteMany({
 						where: {
 							id: id
@@ -229,7 +229,7 @@ export class UserEvent extends Listener {
 			})
 			this.container.logger.debug(swallowed)
 			const channel = await (await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch())?.get(swallowed.channel_id);
-			const msg = (await (channel as TextChannel).messages.fetch()).get(id)
+			const msg = (await (channel as TextChannel).messages.fetch(swallowed.new_id))
 			this.container.logger.debug(msg) // ist undefined. TODO
 			if (msg===undefined)
 				return
@@ -260,7 +260,16 @@ export class UserEvent extends Listener {
 					message_content: new_text
 				}
 			})
-			await interaction.reply("Updated!")
+			await interaction.reply({
+				embeds: [
+					{
+						color: 0x12d900,
+						title: 'Aktualisiert',
+						description: `Neue Nachricht übernommen`
+					}
+				],
+				ephemeral: true
+			})
 			return
 		} catch (e) {
 				this.container.logger.error(e)

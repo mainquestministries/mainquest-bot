@@ -39,7 +39,7 @@ export class UserEvent extends Listener {
 				});
 			}
 
-			await message.channel.send({
+			const new_msg = await message.channel.send({
 				files: attachments,
 				components: [
 					{
@@ -99,6 +99,7 @@ export class UserEvent extends Listener {
 					author_id: message.author.id,
 					guild: message.guildId ?? "",
 					id: message.id,
+					new_id: new_msg.id,
 					channel_id: message.channelId,
 					message_content: message.content
 				}

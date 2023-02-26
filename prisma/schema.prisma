@@ -44,4 +44,5 @@ model Swallowed {
   message_content String
   author_id String
   guild String
+  new_id String
 }
