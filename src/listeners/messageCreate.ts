@@ -1,13 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import type { APIEmbedThumbnail, Attachment, Message } from 'discord.js';
+import { APIEmbedThumbnail, Attachment, Message, MessageType } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public async run(message: Message) {
 		if (message.author.bot) return;
+		if (message.channel.isThread()) return;
+		if (message.type === MessageType.Reply) return;
 		try {
 			await prisma.guildconfig.findFirstOrThrow({
 				where: {

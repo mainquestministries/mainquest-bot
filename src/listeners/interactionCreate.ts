@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ActionRowBuilder, Attachment, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { ActionRowBuilder, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
@@ -218,8 +218,9 @@ export class UserEvent extends Listener {
 				} catch (e) {
 					this.container.logger.error(e);
 					return;
-				}
+				}}
 				if (interaction.customId.startsWith('check_')) {
+					this.container.logger.debug("Checkmark set...")
 					const id = interaction.customId.substring(6);
 					try {
 						const swallowed = await prisma.swallowed.findFirstOrThrow({
@@ -227,31 +228,23 @@ export class UserEvent extends Listener {
 								id: id
 							}
 						});
-						const channel = await (
-							await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch()
-						)?.get(swallowed.channel_id);
+						const channel = await this.container.client.channels.fetch(swallowed.channel_id);
+						if (channel == null ) {this.container.logger.error("No Channel!"); return}
 						const msg = await (channel as TextChannel).messages.fetch(swallowed.new_id);
+						this.container.logger.debug(msg)
 						if (interaction.user.id == swallowed.author_id) {
-							let attachments: Attachment[] = [];
-							if (msg.attachments) {
-								let attachments_ = msg.attachments;
-								attachments_.forEach((attach) => {
-									attachments.push(attach);
-								});
-							}
-							// TODO: Sende allen eine Nachricht, das sich das Anliegen erledigt hat
-							// TODO: Funktioniert ned
+							
+							
+							
 							await msg?.edit({
-								components: [],
-								files: attachments,
-								embeds: msg.embeds
+								components: []
 							});
 							await interaction.reply({
 								embeds: [
 									{
 										color: 0x12d900,
 										title: 'Fertig',
-										description: `Schön, dass dieses Anliegen erledigt ist!`
+										description: `Schön, dass dieses Anliegen erledigt ist!\nWillst du kurz etwas dazu erzählen?`
 									}
 								],
 								ephemeral: true
@@ -272,7 +265,7 @@ export class UserEvent extends Listener {
 						return;
 					}
 				}
-			}
+			
 		}
 		if (interaction.isModalSubmit()) {
 			if (interaction.customId.startsWith('modal_edit_')) {
@@ -295,24 +288,16 @@ export class UserEvent extends Listener {
 						}
 					});
 					this.container.logger.debug(swallowed);
-					const channel = await (
-						await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch()
-					)?.get(swallowed.channel_id);
+					
+					const channel = await this.container.client.channels.fetch(swallowed.channel_id);
+					if (channel == null ) return
 					const msg = await (channel as TextChannel).messages.fetch(swallowed.new_id);
 					this.container.logger.debug(msg); // ist undefined. TODO
 					if (msg === undefined) return;
-					let attachments: Attachment[] = [];
-					if (msg.attachments) {
-						let attachments_ = msg.attachments;
-						attachments_.forEach((attach) => {
-							attachments.push(attach);
-						});
-					}
+					
 					let embed = msg.embeds[0];
 
 					await msg?.edit({
-						files: attachments,
-						components: msg.components,
 						embeds: [
 							{
 								title: embed.title ?? '',
