@@ -4,6 +4,7 @@ import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { EmbedBuilder } from 'discord.js';
+import { days_of_week } from '#lib/constants';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
@@ -42,7 +43,32 @@ export class UserEvent extends Listener {
 						}
 					}
 				});
-				await prisma.message.update({
+				
+				let embeds: EmbedBuilder[] = [];
+				msg.embeds.forEach(async (embed) => {
+					let color_temp = 0;
+					if (embed.color === null) {
+						color_temp = 0;
+					} else {
+						color_temp = embed.color;
+					}
+					let footer = ""
+					if (embed.sended==0) {
+						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt.
+						Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern.
+						Gerne klopfe ich für dieses Gebetsanliegen bei dir an.
+						Ich werde dich die nächsten ${msg.repetitions / days_of_week[msg.modulo]} Wochen, ${days_of_week[msg.modulo]}x pro Woche wieder auftauchen.`
+					}
+					const temp_embed = new EmbedBuilder().setTitle(embed.title).setDescription(embed.content).setColor(color_temp).setAuthor({
+						name: embed.author,
+						iconURL: embed.author_avatar_url
+					}).setFooter(footer);
+					embeds.push(temp_embed);
+				});
+				this.container.logger.debug('Should be sended: ' + send_today);
+				if (send_today && embeds.length > 0) {
+					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
+					await prisma.message.update({
 					where: {
 						id: msg.id
 					},
@@ -61,23 +87,6 @@ export class UserEvent extends Listener {
 						}
 					}
 				});
-				let embeds: EmbedBuilder[] = [];
-				msg.embeds.forEach(async (embed) => {
-					let color_temp = 0;
-					if (embed.color === null) {
-						color_temp = 0;
-					} else {
-						color_temp = embed.color;
-					}
-					const temp_embed = new EmbedBuilder().setTitle(embed.title).setDescription(embed.content).setColor(color_temp).setAuthor({
-						name: embed.author,
-						iconURL: embed.author_avatar_url
-					});
-					embeds.push(temp_embed);
-				});
-				this.container.logger.debug('Should be sended: ' + send_today);
-				if (send_today && embeds.length > 0) {
-					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
 					await next_user.send({
 						content: msg.message_content,
 						embeds: embeds

@@ -20,6 +20,25 @@ export class UserEvent extends Listener {
 							id: interaction.user.id
 						}
 					});
+					await interaction.user.send({ content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. 
+					Falls du häufiger Erinnerungen erhalten möchtest. 
+					Oder bin ich dir zu nervig? Dann halt weniger von mir haben möchtest. 
+					Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
+						embeds: [{
+							title: "Kurzanleitung",
+							description: "Du kannst jederzeit die Benachrichtigungen mithilfe von Slashcommands deaktivieren oder reduzieren.",
+							fields: [{
+								name: "/Benachrichtigungen_aktivieren",
+								value: "Aktiviert deine Benachrichtigungen (falls du diese deaktiviert hast)"
+							}, {
+								name: "/Benachrichtigungen_deaktivieren",
+								value: "Deaktiviert deine Benachrichtigungen dauerhaft bis zum Einschalten."
+							}, {
+								name: "/Benachrichtigungen_einstellen",
+								value: "Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst."
+							}]
+						}]
+				})
 				}
 				const id = interaction.customId.substring(4);
 				try {

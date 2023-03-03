@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import { days_of_week } from '#lib/constants';
 const prisma = new PrismaClient();
 @ApplyOptions<Command.Options>({
 	description: 'Benachrichtigungen einstellen'
@@ -34,13 +35,14 @@ export class UserCommand extends Command {
 		let weeks = interaction.options.getInteger('wochen') ?? 1;
 
 		const modulo_ = interaction.options.getInteger('wochentage', true);
+		
 		await prisma.message.update({
 			where: {
 				id: interaction.user.id
 			},
 			data: {
 				modulo: modulo_,
-				repetitions: 7 * weeks,
+				repetitions: days_of_week[modulo_] * weeks,
 				embeds: {
 					updateMany: {
 						where: {
@@ -53,18 +55,13 @@ export class UserCommand extends Command {
 				}
 			}
 		});
-		const days_of_week: Record<number, string> = {
-			1: '7x',
-			2: '3x',
-			3: '2x',
-			4: '1x'
-		};
+		
 		return await interaction.reply({
 			embeds: [
 				{
 					color: 0x12d900,
 					title: 'Neue Einstellung übernommen',
-					description: `Du wirst nun erinnert: ${days_of_week[modulo_]} pro Woche, ${weeks} lang.`
+					description: `Du wirst nun erinnert: ${days_of_week[modulo_]}x pro Woche, ${weeks} lang.`
 				}
 			],
 			ephemeral: true
