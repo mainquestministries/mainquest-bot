@@ -43,7 +43,7 @@ export class UserEvent extends Listener {
 						}
 					}
 				});
-				
+
 				let embeds: EmbedBuilder[] = [];
 				msg.embeds.forEach(async (embed) => {
 					let color_temp = 0;
@@ -52,41 +52,46 @@ export class UserEvent extends Listener {
 					} else {
 						color_temp = embed.color;
 					}
-					let footer = ""
-					if (embed.sended==0) {
+					let footer = '';
+					if (embed.sended == 0) {
 						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt.
 						Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern.
 						Gerne klopfe ich für dieses Gebetsanliegen bei dir an.
-						Ich werde dich die nächsten ${msg.repetitions / days_of_week[msg.modulo]} Wochen, ${days_of_week[msg.modulo]}x pro Woche wieder auftauchen.`
+						Ich werde dich die nächsten ${msg.repetitions / days_of_week[msg.modulo]} Wochen, ${days_of_week[msg.modulo]}x pro Woche wieder auftauchen.`;
 					}
-					const temp_embed = new EmbedBuilder().setTitle(embed.title).setDescription(embed.content).setColor(color_temp).setAuthor({
-						name: embed.author,
-						iconURL: embed.author_avatar_url
-					}).setFooter(footer);
+					const temp_embed = new EmbedBuilder()
+						.setTitle(embed.title)
+						.setDescription(embed.content)
+						.setColor(color_temp)
+						.setAuthor({
+							name: embed.author,
+							iconURL: embed.author_avatar_url
+						})
+						.setFooter({text: footer});
 					embeds.push(temp_embed);
 				});
 				this.container.logger.debug('Should be sended: ' + send_today);
 				if (send_today && embeds.length > 0) {
 					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
 					await prisma.message.update({
-					where: {
-						id: msg.id
-					},
-					data: {
-						embeds: {
-							updateMany: {
-								where: {
-									messageId: msg.id
-								},
-								data: {
-									sended: {
-										increment: 1
+						where: {
+							id: msg.id
+						},
+						data: {
+							embeds: {
+								updateMany: {
+									where: {
+										messageId: msg.id
+									},
+									data: {
+										sended: {
+											increment: 1
+										}
 									}
 								}
 							}
 						}
-					}
-				});
+					});
 					await next_user.send({
 						content: msg.message_content,
 						embeds: embeds
