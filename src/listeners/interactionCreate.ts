@@ -20,25 +20,32 @@ export class UserEvent extends Listener {
 							id: interaction.user.id
 						}
 					});
-					await interaction.user.send({ content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. 
+					await interaction.user.send({
+						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. 
 					Falls du häufiger Erinnerungen erhalten möchtest. 
 					Oder bin ich dir zu nervig? Dann halt weniger von mir haben möchtest. 
 					Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
-						embeds: [{
-							title: "Kurzanleitung",
-							description: "Du kannst jederzeit die Benachrichtigungen mithilfe von Slashcommands deaktivieren oder reduzieren.",
-							fields: [{
-								name: "/Benachrichtigungen_aktivieren",
-								value: "Aktiviert deine Benachrichtigungen (falls du diese deaktiviert hast)"
-							}, {
-								name: "/Benachrichtigungen_deaktivieren",
-								value: "Deaktiviert deine Benachrichtigungen dauerhaft bis zum Einschalten."
-							}, {
-								name: "/Benachrichtigungen_einstellen",
-								value: "Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst."
-							}]
-						}]
-				})
+						embeds: [
+							{
+								title: 'Kurzanleitung',
+								description: 'Du kannst jederzeit die Benachrichtigungen mithilfe von Slashcommands deaktivieren oder reduzieren.',
+								fields: [
+									{
+										name: '/Benachrichtigungen_aktivieren',
+										value: 'Aktiviert deine Benachrichtigungen (falls du diese deaktiviert hast)'
+									},
+									{
+										name: '/Benachrichtigungen_deaktivieren',
+										value: 'Deaktiviert deine Benachrichtigungen dauerhaft bis zum Einschalten.'
+									},
+									{
+										name: '/Benachrichtigungen_einstellen',
+										value: 'Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst.'
+									}
+								]
+							}
+						]
+					});
 				}
 				const id = interaction.customId.substring(4);
 				try {
@@ -237,54 +244,54 @@ export class UserEvent extends Listener {
 				} catch (e) {
 					this.container.logger.error(e);
 					return;
-				}}
-				if (interaction.customId.startsWith('check_')) {
-					this.container.logger.debug("Checkmark set...")
-					const id = interaction.customId.substring(6);
-					try {
-						const swallowed = await prisma.swallowed.findFirstOrThrow({
+				}
+			}
+			if (interaction.customId.startsWith('check_')) {
+				this.container.logger.debug('Checkmark set...');
+				const id = interaction.customId.substring(6);
+				try {
+					const swallowed = await prisma.swallowed.findFirstOrThrow({
+						where: {
+							id: id
+						}
+					});
+					const channel = await this.container.client.channels.fetch(swallowed.channel_id);
+					if (channel == null) {
+						this.container.logger.error('No Channel!');
+						return;
+					}
+					const msg = await (channel as TextChannel).messages.fetch(swallowed.new_id);
+					this.container.logger.debug(msg);
+					if (interaction.user.id == swallowed.author_id) {
+						await msg?.edit({
+							components: []
+						});
+						await interaction.reply({
+							embeds: [
+								{
+									color: 0x12d900,
+									title: 'Fertig',
+									description: `Schön, dass dieses Anliegen erledigt ist!\nWillst du kurz etwas dazu erzählen?`
+								}
+							],
+							ephemeral: true
+						});
+						await prisma.swallowed.deleteMany({
 							where: {
 								id: id
 							}
 						});
-						const channel = await this.container.client.channels.fetch(swallowed.channel_id);
-						if (channel == null ) {this.container.logger.error("No Channel!"); return}
-						const msg = await (channel as TextChannel).messages.fetch(swallowed.new_id);
-						this.container.logger.debug(msg)
-						if (interaction.user.id == swallowed.author_id) {
-							
-							
-							
-							await msg?.edit({
-								components: []
-							});
-							await interaction.reply({
-								embeds: [
-									{
-										color: 0x12d900,
-										title: 'Fertig',
-										description: `Schön, dass dieses Anliegen erledigt ist!\nWillst du kurz etwas dazu erzählen?`
-									}
-								],
-								ephemeral: true
-							});
-							await prisma.swallowed.deleteMany({
-								where: {
-									id: id
-								}
-							});
-							await prisma.embed.deleteMany({
-								where: {
-									original_message_id: id
-								}
-							});
-						}
-					} catch (e) {
-						this.container.logger.error(e);
-						return;
+						await prisma.embed.deleteMany({
+							where: {
+								original_message_id: id
+							}
+						});
 					}
+				} catch (e) {
+					this.container.logger.error(e);
+					return;
 				}
-			
+			}
 		}
 		if (interaction.isModalSubmit()) {
 			if (interaction.customId.startsWith('modal_edit_')) {
@@ -307,13 +314,13 @@ export class UserEvent extends Listener {
 						}
 					});
 					this.container.logger.debug(swallowed);
-					
+
 					const channel = await this.container.client.channels.fetch(swallowed.channel_id);
-					if (channel == null ) return
+					if (channel == null) return;
 					const msg = await (channel as TextChannel).messages.fetch(swallowed.new_id);
 					this.container.logger.debug(msg); // ist undefined. TODO
 					if (msg === undefined) return;
-					
+
 					let embed = msg.embeds[0];
 
 					await msg?.edit({

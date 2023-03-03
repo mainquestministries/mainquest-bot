@@ -35,7 +35,7 @@ export class UserCommand extends Command {
 		let weeks = interaction.options.getInteger('wochen') ?? 1;
 
 		const modulo_ = interaction.options.getInteger('wochentage', true);
-		
+
 		await prisma.message.update({
 			where: {
 				id: interaction.user.id
@@ -55,7 +55,7 @@ export class UserCommand extends Command {
 				}
 			}
 		});
-		
+
 		return await interaction.reply({
 			embeds: [
 				{
