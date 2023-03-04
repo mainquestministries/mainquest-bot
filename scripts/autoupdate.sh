@@ -102,7 +102,7 @@ fi
 echo "Alle Abhängigkeiten aktualisiert"
 
 echo "Versuche, die Datenbank zu migrieren..."
-npx prisma migrate deploy
+npx prisma migrate deploy || echo "Die Datenbank konnte nicht migriert werden."
 echo "Starte Bot neu..."
 sudo supervisorctl restart mqbot
 echo "Neustart erfolgt."

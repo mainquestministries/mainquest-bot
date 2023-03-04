@@ -12,6 +12,8 @@ function yes_or_no {
 
 echo "Leerlassen zum überspringen"
 read -p "Discord-Token>" D_TOKEN 
+echo "Leerlassen zum überspringen"
+read -p "Datenbank-URL" DB_URL
 
 if [ -n $D_TOKEN ]; then
     echo "DISCORD_TOKEN=$D_TOKEN" > .env
@@ -19,22 +21,16 @@ else
     echo "Token unverändert"
 fi
 
-read -p "Guild-ID>" G_ID
-read -p "Channel-ID>" C_ID
-
-if [ -n "$G_ID" ] && [ -n "$C_ID"]; then
-    echo {"guild_id":"$G_ID", "channel_id":"$C_ID"} > guildconfig.json
-else 
-    echo "IDs unverändet"
+if [ -n $D_TOKEN ]; then
+    echo "DATABASe_URL=$D_TOKEN" > .env
+else
+    echo "Token unverändert"
 fi
 
-if ! command -v npm &> /dev/null
-then
-    echo "npm wurde nicht gefunden."
-    exit
-else
-    if ! command -v nvm &> /dev/null; then
-        echo "NVM wurde nicht gefunden, Pakete können nicht installiert werden."
+
+if ! command -v nvm &> /dev/null; then
+        echo "NVM wurde nicht gefunden, Pakete können nicht installiert werden. Suche nach NPM..."
+        npm ci --omit=dev || echo "NPM konnte entweder nicht gefunden hatte oder ist inkompatibel."
     else
         echo "NVM wurde aktiviert."
         echo "Ausgewählt: `nvm run node --version`"
@@ -47,3 +43,6 @@ else
     echo "Pakete werden installiert, bitte warten..."
     npm ci --omit=dev
 fi
+
+echo "Versuche, die Datenbank zu migrieren..."
+npx prisma migrate deploy || echo "Die Datenbank konnte nicht migriert werden."
