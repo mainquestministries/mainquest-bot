@@ -13,6 +13,10 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
+    - name: Setup Python
+      uses: actions/setup-python@v4.5.0
+      with:
+       python-version: 3.7
     - name: Install Clean
       run: npm ci
     - name: Build
