@@ -3,7 +3,7 @@ echo "WICHTIG: Der Bot muss nach dem Update neugestartet werden, da es sonst zu 
 echo "mainquestbot wird aktualisiert, bitte warten..."
 echo -e "\n"
 echo "Stoppe Bot..."
-sudo supervisorctl stop mqbot
+sudo supervisorctl stop bots:mqbot
 
 function yes_or_no {
     while true; do
@@ -103,7 +103,8 @@ echo "Alle Abhängigkeiten aktualisiert"
 
 echo "Versuche, die Datenbank zu migrieren..."
 npx prisma migrate deploy || echo "Die Datenbank konnte nicht migriert werden."
+npx prisma generate || echo "Der Generator hat versagt."
 echo "Starte Bot neu..."
-sudo supervisorctl restart mqbot
+sudo supervisorctl restart bots:mqbot
 echo "Neustart erfolgt."
 
