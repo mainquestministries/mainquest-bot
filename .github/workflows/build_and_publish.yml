@@ -1,4 +1,4 @@
-name: Node.js PAckage and Release
+name: Node.js Package and Release
 
 on:
   push:
