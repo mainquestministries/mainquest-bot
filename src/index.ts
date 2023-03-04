@@ -5,6 +5,12 @@ import { Partials } from 'discord.js';
 const prisma = new PrismaClient();
 const client = new SapphireClient({
 	defaultPrefix: '!',
+	api: {
+		automaticallyConnect: false,
+		listenOptions: {
+			port: 4001
+		}
+	},
 	regexPrefix: /^(hey +)?bot[,! ]/i,
 	caseInsensitiveCommands: true,
 	logger: {

@@ -13,7 +13,7 @@ function yes_or_no {
 echo "Leerlassen zum überspringen"
 read -p "Discord-Token>" D_TOKEN 
 echo "Leerlassen zum überspringen"
-read -p "Datenbank-URL" DB_URL
+read -p "Datenbank-URL>" DB_URL
 
 if [ -n $D_TOKEN ]; then
     echo "DISCORD_TOKEN=$D_TOKEN" > .env
@@ -21,8 +21,8 @@ else
     echo "Token unverändert"
 fi
 
-if [ -n $D_TOKEN ]; then
-    echo "DATABASe_URL=$D_TOKEN" > .env
+if [ -n $DB_URL ]; then
+    echo "DATABASE_URL=$DB_URL" >> .env
 else
     echo "Token unverändert"
 fi
