@@ -40,7 +40,7 @@ export class UserEvent extends Listener {
 					attachments.push(attach);
 				});
 			}
-
+			if (message.channel.isVoiceBased()) return
 			const new_msg = await message.channel.send({
 				files: attachments,
 				components: [

@@ -4,6 +4,7 @@ import type { CommandInteraction, Message } from 'discord.js';
 export class UserPrecondition extends Precondition {
 	public override async messageRun(message: Message) {
 		if (!(await message.member?.fetch())?.permissions.has('Administrator')) {
+			if (message.channel.isVoiceBased()) return this.error({ message: "GAU: Jemand hat etwas in nem VoiceChannel geschrieben."})
 			await message.channel.send(`${message.author}, du hast nicht genug Rechte für diese Aktion.`);
 			return this.error({ message: 'Du hast nicht genug Rechte für diese Aktion.' });
 		} else {

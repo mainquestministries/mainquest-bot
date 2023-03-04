@@ -29,5 +29,6 @@ config.ts
 .env.test.local
 .env.production.local
 .env
+.db.env
 prisma/data/dev.db
 prisma/data/dev.db-journal

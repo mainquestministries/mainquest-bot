@@ -9,10 +9,10 @@ import * as colorette from 'colorette';
 import { config } from 'dotenv-cra';
 import { join } from 'path';
 import { inspect } from 'util';
-import { srcDir } from '#lib/constants';
+import { rootDir } from './constants';
 
 // Read env var
-if (process.env['DISCORD_TOKEN'] === undefined) config({ path: join(srcDir, '.env') });
+if (process.env['DISCORD_TOKEN'] === undefined) config({ path: join(rootDir, '.env') });
 
 // Set default inspection depth
 inspect.defaultOptions.depth = 1;
