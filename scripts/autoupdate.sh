@@ -1,7 +1,9 @@
 #! /bin/bash
 echo "WICHTIG: Der Bot muss nach dem Update neugestartet werden, da es sonst zu unvorhersehbaren Ereignissen kommen kann."
-echo "losungsbot wird aktualisiert, bitte warten..."
+echo "mainquestbot wird aktualisiert, bitte warten..."
 echo -e "\n"
+echo "Stoppe Bot..."
+sudo supervisorctl stop mqbot
 
 function yes_or_no {
     while true; do
@@ -14,7 +16,7 @@ function yes_or_no {
 }
 
 
-read TAG <<< $( curl -s https://api.github.com/repos/mainquestministries/losungsbot/releases  | jq ".[0].tag_name" | sed 's/\"//g' )
+read TAG <<< $( curl -s https://api.github.com/repos/mainquestministries/mainquest-bot/releases  | jq ".[0].tag_name" | sed 's/\"//g' )
 
 if test -f "./install_log.txt"; then
     source "./install_log.txt"
@@ -40,33 +42,31 @@ else
     fi
 fi
 
-if  test -f "./guildconfig.json"  &&  test -f "./.env" ; then
-    echo "./guildconfig.json und env-Datei existiert."
-    cp ./guildconfig.json $HOME/guildconfig.bak.json
+if  test -f "./.env" ; then
+    echo "env-Datei existiert."
     cp ./.env $HOME/env_var.bak.txt
 
     echo "Backup fertig."
 else
-    echo "Dateien nicht gefunden. Update wird feige verweigert."
+    echo "Datei nicht gefunden. Update wird feige verweigert."
     exit 127
 fi
 
 mkdir -p .cache
 
-if wget -q --show-progress -O .cache/losungsbot-latest.zip github.com/mainquestministries/losungsbot/releases/download/$TAG/losungsbot-release-$TAG.zip; then
+if wget -q --show-progress -O .cache/mqbot-latest.zip github.com/mainquestministries/mainquest-bot/releases/download/$TAG/mainquest-bot-release-$TAG.zip; then
     rm -r dist/
 else
     echo "Download-Fehler"
     exit 1
 fi
 
-unzip -o .cache/losungsbot-latest.zip -d .
+unzip -o .cache/mqbot-latest.zip -d .
 
 rm -r .cache
 
-if  test -f "./guildconfig.json"  &&  test -f "./.env" ; then
+if  test -f "./.env" ; then
     echo "./guildconfig.json und env-Datei existieren bereits. Backups werden zerstört."
-    rm $HOME/guildconfig.bak.json
     rm $HOME/env_var.bak.txt
 
 else
@@ -82,13 +82,10 @@ echo "LAST_UPDATE=`date +%F`" >> install_log.txt
 
 echo "Abhängigkeiten werden behoben..."
 
-if ! command -v npm &> /dev/null
-then
-    echo "npm wurde nicht gefunden."
-    exit
-else
-    if ! command -v nvm &> /dev/null; then
-        echo "NVM wurde nicht gefunden, Pakete können nicht installiert werden."
+
+if ! command -v nvm &> /dev/null; then
+        echo "NVM wurde nicht gefunden, Pakete können nicht installiert werden. Suche nach NPM..."
+        npm ci --omit=dev || echo "NPM konnte entweder nicht gefunden hatte oder ist inkompatibel."
     else
         echo "NVM wurde aktiviert."
         echo "Ausgewählt: `nvm run node --version`"
@@ -100,13 +97,13 @@ else
         fi
     echo "Pakete werden installiert, bitte warten..."
     npm ci --omit=dev
-fi
 
+fi
 echo "Alle Abhängigkeiten aktualisiert"
 
-if yes_or_no "Soll der Bot via supervisorctl neugestartet werden?"; then
-    sudo supervisorctl restart losungsbot
-    echo "Neustart erfolgt."
-else 
-    echo "Bitte zeitnah neustarten!"
-fi
+echo "Versuche, die Datenbank zu migrieren..."
+npx prisma migrate deploy
+echo "Starte Bot neu..."
+sudo supervisorctl restart mqbot
+echo "Neustart erfolgt."
+

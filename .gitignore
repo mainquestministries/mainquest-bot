@@ -32,3 +32,4 @@ config.ts
 .db.env
 prisma/data/dev.db
 prisma/data/dev.db-journal
+scripts/.autoupdate.sh.kate-swp
