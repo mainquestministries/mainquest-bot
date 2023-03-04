@@ -19,6 +19,8 @@ jobs:
        python-version: 3.7
     - name: Install Clean
       run: npm ci
+    - name: Check Version
+      run: python3 scripts/check_version.py  >> $GITHUB_ENV
     - name: Build
       run: npm run build:production
     - name: Bundle
