@@ -26,13 +26,6 @@ export class UserCommand extends Command {
 			}
 		});
 
-		await prisma.guildconfig.deleteMany({
-			where: {
-				l_channel: null,
-				p_channel: null,
-				w_channel: null
-			}
-		});
 		await prisma.embed.deleteMany({
 			where: {
 				source: interaction.guildId as string
