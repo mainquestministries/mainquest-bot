@@ -52,12 +52,11 @@ export class UserEvent extends Listener {
 					} else {
 						color_temp = embed.color;
 					}
-					let footer = '';
+					let footer = null;
 					if (embed.sended == 0) {
-						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt.
-						Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern.
-						Gerne klopfe ich für dieses Gebetsanliegen bei dir an.
-						Ich werde dich die nächsten ${msg.repetitions / days_of_week[msg.modulo]} Wochen, ${days_of_week[msg.modulo]}x pro Woche wieder auftauchen.`;
+						const weeks_ = msg.repetitions / days_of_week[msg.modulo]
+						const wochen_string = weeks_ == 1 ? "nächste Woche" : `nächsten ${weeks_} Wochen`
+						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${wochen_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
 					}
 					const temp_embed = new EmbedBuilder()
 						.setTitle(embed.title)
@@ -67,7 +66,7 @@ export class UserEvent extends Listener {
 							name: embed.author,
 							iconURL: embed.author_avatar_url
 						})
-						.setFooter({text: footer});
+						.setFooter(footer === null ? null : {text: footer});
 					embeds.push(temp_embed);
 				});
 				this.container.logger.debug('Should be sended: ' + send_today);

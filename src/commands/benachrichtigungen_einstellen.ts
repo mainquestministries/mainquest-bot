@@ -32,7 +32,7 @@ export class UserCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		let weeks = interaction.options.getInteger('wochen') ?? 1;
+		let weeks = interaction.options.getInteger('wochen') ?? 2;
 
 		const modulo_ = interaction.options.getInteger('wochentage', true);
 
@@ -61,7 +61,7 @@ export class UserCommand extends Command {
 				{
 					color: 0x12d900,
 					title: 'Neue Einstellung übernommen',
-					description: `Du wirst nun erinnert: ${days_of_week[modulo_]}x pro Woche, ${weeks} lang.`
+					description: `Du wirst nun erinnert: ${days_of_week[modulo_]}x pro Woche, ${weeks} Wochen lang.`
 				}
 			],
 			ephemeral: true

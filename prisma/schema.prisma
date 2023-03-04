@@ -19,8 +19,8 @@ model Message {
   id              String  @id //user to send this message to
   message_content String  @default("Klopf, Klopf\nIn deiner heutigen Gebetszeit, denk doch auch kurz an diese Anliegen.")
   embeds          Embed[]
-  repetitions     Int     @default(7)
-  modulo          Int     @default(7)
+  repetitions     Int     @default(2) //2 Wochen lang
+  modulo          Int     @default(4) //Einmal pro Woche
   disabled        Boolean @default(false)
 }
 
