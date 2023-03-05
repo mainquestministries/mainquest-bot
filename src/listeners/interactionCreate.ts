@@ -185,13 +185,16 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							});
 							return;
 						}
-						await prisma.embed.deleteMany({
+						await prisma.message.update({
 							where: {
-								Message: {
 									id: interaction.user.id
-								},
-								Swallowed: {
-									id: id
+
+							},
+							data: {
+								embeds: {
+									deleteMany: {
+										swallowedId: id
+									}
 								}
 							}
 						});
