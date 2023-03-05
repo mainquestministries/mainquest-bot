@@ -11,9 +11,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model guildconfig {
-  id        String  @id
-  p_channel String?
+model Guild {
+  id                 String      @id
+  p_channel          String?
+  swallowed_messages Swallowed[]
 }
 
 model Message {
@@ -25,12 +26,12 @@ model Message {
 }
 
 model Embed {
-  id               Int       @id @default(autoincrement())
-  Message          Message?  @relation(fields: [messageId], references: [id])
-  messageId        String?
-  original_message Swallowed @relation(fields: [swallowedId], references: [id])
-  swallowedId      String
-  sended           Int       @default(0)
+  id          Int       @id @default(autoincrement())
+  Message     Message?  @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messageId   String?
+  Swallowed   Swallowed @relation(fields: [swallowedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  swallowedId String
+  sended      Int       @default(0)
 }
 
 model Swallowed {
@@ -38,10 +39,11 @@ model Swallowed {
   channel_id        String
   message_content   String
   author            String
-  author_avatar_url String
-  color             Int     @default(0)
+  author_avatar_url String?
+  color             Int     @default(14180644)
   author_id         String
-  guild             String
   new_id            String  @unique
   Embed             Embed[]
+  Guild             Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  guildId           String
 }

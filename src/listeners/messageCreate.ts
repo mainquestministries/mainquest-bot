@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { APIEmbedThumbnail, Attachment, Message, MessageType } from 'discord.js';
+import { APIEmbed, APIEmbedThumbnail, Attachment, Message, MessageType } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
@@ -9,9 +9,10 @@ export class UserEvent extends Listener {
 	public async run(message: Message) {
 		if (message.author.bot) return;
 		if (message.channel.isThread()) return;
+		if (message.channel.isDMBased()) return;
 		if (message.type === MessageType.Reply) return;
 		try {
-			await prisma.guildconfig.findFirstOrThrow({
+			await prisma.guild.findFirstOrThrow({
 				where: {
 					p_channel: message.channelId,
 					id: `${message.guildId}`
@@ -33,11 +34,32 @@ export class UserEvent extends Listener {
 					width: 40
 				};
 			}
+			let embeds : APIEmbed[] = [];
+			embeds.push({
+				title: `Gebetsanliegen von ${message.member?.nickname ?? message.author.username}`,
+				description: message.content,
+				color: (await message.author.fetch(true)).accentColor ?? 0xd86124,
+				thumbnail: thumbnail_,
+				author: {
+					name: message.member?.nickname ?? message.author.username,
+					icon_url: avatar ?? undefined
+				}
+			});
 			let attachments: Attachment[] = [];
 			if (message.attachments) {
 				let attachments_ = message.attachments;
-				attachments_.forEach((attach) => {
-					attachments.push(attach);
+				attachments_.forEach(async (attach) => {
+					if (attach.height !== null && attach.width !== null) {
+					embeds.push(
+						{
+							color: (await message.author.fetch(true)).accentColor ?? 0xd86124,
+							image: {
+								url: attach.url,
+								height: attach.height,
+								width: attach.width
+							}
+						}
+					);}
 				});
 			}
 			if (message.channel.isVoiceBased()) return
@@ -93,27 +115,23 @@ export class UserEvent extends Listener {
 						]
 					}
 				],
-				embeds: [
-					{
-						title: `Gebetsanliegen von ${message.member?.nickname ?? message.author.username}`,
-						description: message.content,
-						color: (await message.author.fetch(true)).accentColor ?? 0xd86124,
-						thumbnail: thumbnail_,
-						author: {
-							name: message.member?.nickname ?? message.author.username,
-							icon_url: avatar ?? undefined
-						}
-					}
-				]
+				embeds: embeds
 			});
 			await prisma.swallowed.create({
 				data: {
 					author_id: message.author.id,
-					guild: message.guildId ?? '',
+					Guild: {
+						connect: {
+							id: message.guildId ?? undefined
+						}
+					},
 					id: message.id,
 					new_id: new_msg.id,
 					channel_id: message.channelId,
-					message_content: message.content
+					message_content: message.content,
+					author: message.member?.nickname ?? message.author.username,
+					author_avatar_url: avatar,
+					color: (await message.author.fetch(true)).accentColor ?? undefined
 				}
 			});
 			await message.delete();

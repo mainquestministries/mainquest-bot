@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ActionRowBuilder, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { ActionRowBuilder, APIEmbed, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
@@ -52,10 +52,13 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					const swallowed = await prisma.swallowed.findFirstOrThrow({
 						where: {
 							id: id
+						}, include: {
+							Embed: true,
+							Guild: true
 						}
 					});
 					let fetched_user = (
-						await this.container.client.guilds.cache.get(swallowed.guild)?.members.fetch({
+						await this.container.client.guilds.cache.get(swallowed.Guild?.id)?.members.fetch({
 							force: true
 						})
 					)?.get(swallowed.author_id);
@@ -72,22 +75,20 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 						});
 						return;
 					}
-					let color_ = 0;
-					if (fetched_user?.user.accentColor) {
-						color_ = fetched_user?.user.accentColor;
-					}
-					if (
-						(await prisma.message.count({
+					
+						const embeds = (await prisma.embed.findMany({
 							where: {
-								id: interaction.user.id,
-								embeds: {
-									some: {
-										original_message_id: swallowed.id as string
-									}
+								Message: {
+									id: interaction.user.id
+								},
+								Swallowed: {
+									id: id
 								}
+								
 							}
-						})) == 1
-					) {
+						}))
+					if (embeds.length > 0)	
+					 {
 						await interaction.reply({
 							ephemeral: true,
 							embeds: [
@@ -108,13 +109,11 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 						data: {
 							embeds: {
 								create: {
-									original_message_id: swallowed.id as string,
-									content: swallowed.message_content as string,
-									author: fetched_user.nickname ?? fetched_user.displayName,
-									author_avatar_url: fetched_user.displayAvatarURL() as string,
-									title: `Gebetsanliegen von ${fetched_user.nickname ?? fetched_user.displayName}`,
-									color: color_,
-									source: swallowed.guild
+									Swallowed: {
+										connect: {
+											id: swallowed.id
+										}
+									}							
 								}
 							}
 						}
@@ -141,61 +140,61 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					const swallowed = await prisma.swallowed.findFirstOrThrow({
 						where: {
 							id: id
+						},  include: {
+							Embed: true,
+							Guild: true
 						}
 					});
 					if (interaction.user.id == swallowed.author_id) {
 						const channel = await (
-							await this.container.client.guilds.cache.get(swallowed.guild)?.channels.fetch()
+							await this.container.client.guilds.cache.get(swallowed.Guild.id)?.channels.fetch()
 						)?.get(swallowed.channel_id);
 						(await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)?.delete();
 						await prisma.swallowed.deleteMany({
 							where: {
 								id: id
 							}
-						});
-						await prisma.embed.deleteMany({
-							where: {
-								original_message_id: id
-							}
-						});
+						})
 					} else {
-						if (
-							(await prisma.message.count({
+						
+							if ((await prisma.embed.count({
 								where: {
-									id: interaction.user.id,
-									embeds: {
-										some: {
-											original_message_id: swallowed.id as string
-										}
+									Message: {
+										id: interaction.user.id
+									},
+									Swallowed: {
+										id: id
 									}
 								}
-							})) == 1
-						) {
-							prisma.embed.deleteMany({
-								where: {
-									original_message_id: id
-								}
-							});
-						} else {
+							}))>0) {
 							await interaction.reply({
 								ephemeral: true,
 								embeds: [
 									{
-										title: 'Bereits abonniert',
+										title: 'Bereits abonniert', // Nonsens.
 										description: 'Hat deine Katze etwa deine Maus gefangen?',
 										color: 0x12d900
 									}
 								]
 							});
-							return;
+							return;}
+							await prisma.embed.deleteMany({
+								where: {
+									Message: {
+										id: interaction.user.id
+									},
+									Swallowed: {
+										id: id
+									}
+								}
+							})
 						}
-					}
+					
 					await interaction.reply({
 						ephemeral: true,
 						embeds: [
 							{
 								title: interaction.user.id == swallowed.author_id ? 'Gelöscht' : 'Deabonniert',
-								description: 'Schade!',
 								color: 0x12d900
 							}
 						]
@@ -281,11 +280,19 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 								id: id
 							}
 						});
-						await prisma.embed.deleteMany({
-							where: {
-								original_message_id: id
-							}
+						
+					} else {
+						await interaction.reply({
+							embeds: [
+								{
+									color: 0xff0000,
+									title: 'Befehl verweigert',
+									description: 'Du hast die Nachricht nicht geschrieben.'
+								}
+							],
+							ephemeral: true
 						});
+						return;
 					}
 				} catch (e) {
 					this.container.logger.error(e);
@@ -299,12 +306,12 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 				const id = interaction.customId.substring(11);
 				this.container.logger.debug(id);
 				this.container.logger.debug(new_text);
-				await prisma.embed.updateMany({
+				await prisma.swallowed.updateMany({
 					where: {
-						original_message_id: id
+						id: id
 					},
 					data: {
-						content: new_text
+						message_content: new_text
 					}
 				});
 				try {
@@ -321,18 +328,22 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					this.container.logger.debug(msg); // ist undefined. TODO
 					if (msg === undefined) return;
 
-					let embed = msg.embeds[0];
-
+					let first_embed = msg.embeds[0];
+					let embeds : APIEmbed[] = []
+					embeds.push({
+						title: first_embed.title ?? '',
+						description: new_text,
+						color: first_embed.color ?? undefined,
+						thumbnail: first_embed.thumbnail ?? undefined,
+						author: first_embed.author ?? undefined
+					})
+					if (msg.embeds.length > 1) {
+						msg.embeds.splice(0, 1).forEach(embed_ => {
+							embeds.push(embed_)
+						})
+					}
 					await msg?.edit({
-						embeds: [
-							{
-								title: embed.title ?? '',
-								description: new_text,
-								color: embed.color ?? undefined,
-								thumbnail: embed.thumbnail ?? undefined,
-								author: embed.author ?? undefined
-							}
-						]
+						embeds: embeds
 					});
 					await prisma.swallowed.updateMany({
 						where: {

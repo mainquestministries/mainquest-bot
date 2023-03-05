@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
 			if (now === 'manual' || now === 'init' || process.env.SKIP_CRONJOB !== undefined) return;
 			const msg = await prisma.message.findMany({
 				include: {
-					embeds: true
+					embeds: true,
 				}
 			});
 			let next_user = null;
@@ -45,12 +45,19 @@ export class UserEvent extends Listener {
 				});
 
 				let embeds: EmbedBuilder[] = [];
-				msg.embeds.forEach(async (embed) => {
+				msg.embeds.forEach(async (embed_) => {
+					const embed = await prisma.embed.findUniqueOrThrow({
+						where: {
+							id: embed_.id
+						}, include: {
+							Swallowed: true
+						}
+					});
 					let color_temp = 0;
-					if (embed.color === null) {
+					if (embed.Swallowed.color === null) {
 						color_temp = 0;
 					} else {
-						color_temp = embed.color;
+						color_temp = embed.Swallowed.color;
 					}
 					let footer = null;
 					if (embed.sended == 0) {
@@ -59,12 +66,12 @@ export class UserEvent extends Listener {
 						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${wochen_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
 					}
 					const temp_embed = new EmbedBuilder()
-						.setTitle(embed.title)
-						.setDescription(embed.content)
+						.setTitle(`Gebetsanliegen von ${embed.Swallowed.author}`)
+						.setDescription(embed.Swallowed.message_content)
 						.setColor(color_temp)
 						.setAuthor({
-							name: embed.author,
-							iconURL: embed.author_avatar_url
+							name: embed.Swallowed.author,
+							iconURL: embed.Swallowed.author_avatar_url ?? undefined
 						})
 						.setFooter(footer === null ? null : {text: footer});
 					embeds.push(temp_embed);
@@ -92,7 +99,7 @@ export class UserEvent extends Listener {
 						}
 					});
 					await next_user.send({
-						content: msg.message_content,
+						content: "Klopf, Klopf\nIn deiner heutigen Gebetszeit, denk doch auch kurz an diese Anliegen.",
 						embeds: embeds
 					});
 				}

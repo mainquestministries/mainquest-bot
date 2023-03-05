@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `guildconfig` (
+CREATE TABLE `Guild` (
     `id` VARCHAR(191) NOT NULL,
     `p_channel` VARCHAR(191) NULL,
 
@@ -32,11 +32,11 @@ CREATE TABLE `Swallowed` (
     `channel_id` VARCHAR(191) NOT NULL,
     `message_content` VARCHAR(191) NOT NULL,
     `author` VARCHAR(191) NOT NULL,
-    `author_avatar_url` VARCHAR(191) NOT NULL,
-    `color` INTEGER NOT NULL DEFAULT 0,
+    `author_avatar_url` VARCHAR(191) NULL,
+    `color` INTEGER NOT NULL DEFAULT 14180644,
     `author_id` VARCHAR(191) NOT NULL,
-    `guild` VARCHAR(191) NOT NULL,
     `new_id` VARCHAR(191) NOT NULL,
+    `guildId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Swallowed_new_id_key`(`new_id`),
     PRIMARY KEY (`id`)
@@ -46,4 +46,7 @@ CREATE TABLE `Swallowed` (
 ALTER TABLE `Embed` ADD CONSTRAINT `Embed_messageId_fkey` FOREIGN KEY (`messageId`) REFERENCES `Message`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Embed` ADD CONSTRAINT `Embed_swallowedId_fkey` FOREIGN KEY (`swallowedId`) REFERENCES `Swallowed`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Embed` ADD CONSTRAINT `Embed_swallowedId_fkey` FOREIGN KEY (`swallowedId`) REFERENCES `Swallowed`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Swallowed` ADD CONSTRAINT `Swallowed_guildId_fkey` FOREIGN KEY (`guildId`) REFERENCES `Guild`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

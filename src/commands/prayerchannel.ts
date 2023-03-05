@@ -19,13 +19,13 @@ export class UserCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		try {
-			await prisma.guildconfig.findFirstOrThrow({
+			await prisma.guild.findFirstOrThrow({
 				where: {
 					id: interaction.guildId as string
 				}
 			});
 
-			await prisma.guildconfig.update({
+			await prisma.guild.update({
 				where: {
 					id: interaction.guildId as string
 				},
@@ -34,7 +34,7 @@ export class UserCommand extends Command {
 				}
 			});
 		} catch (e) {
-			await prisma.guildconfig.create({
+			await prisma.guild.create({
 				data: {
 					id: interaction.guildId as string,
 					p_channel: interaction.channelId
