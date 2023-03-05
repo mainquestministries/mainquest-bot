@@ -77,20 +77,13 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 						return;
 					}
 
-					try {
-						await prisma.message.findFirstOrThrow({
-							where: {
-								id: interaction.user.id,
-								embeds: {
-									none: {
-										Swallowed: {
-											id: id
-										}
-									}
-								}
-							}
-						});
-					} catch {
+					const embed = await prisma.embed.findFirst({
+						where: {
+							messageId: interaction.user.id,
+							swallowedId: id
+						}
+					})
+					if (embed===null) {
 						await interaction.reply({
 							ephemeral: true,
 							embeds: [
@@ -159,7 +152,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							}
 						});
 					} else {
-						try {
+						/*try {
 							await prisma.message.findFirstOrThrow({
 								where: {
 									id: interaction.user.id,
@@ -184,18 +177,11 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 								]
 							});
 							return;
-						}
-						await prisma.message.update({
+						}*/
+						await prisma.embed.deleteMany({
 							where: {
-									id: interaction.user.id
-
-							},
-							data: {
-								embeds: {
-									deleteMany: {
-										swallowedId: id
-									}
-								}
+									swallowedId: id,
+									messageId: interaction.user.id
 							}
 						});
 					}
