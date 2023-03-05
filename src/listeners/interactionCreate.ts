@@ -99,7 +99,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 
 					await prisma.message.update({
 						where: {
-							id: fetched_user.id
+							id: interaction.user.id
 						},
 						data: {
 							embeds: {
