@@ -83,7 +83,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							swallowedId: id
 						}
 					})
-					if (embed===null) {
+					if (embed) {
 						await interaction.reply({
 							ephemeral: true,
 							embeds: [
@@ -152,32 +152,25 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							}
 						});
 					} else {
-						/*try {
-							await prisma.message.findFirstOrThrow({
-								where: {
-									id: interaction.user.id,
-									embeds: {
-										some: {
-											Swallowed: {
-												id: id
-											}
-										}
-									}
-								}
-							});
-						} catch {
+						const embed = await prisma.embed.findFirst({
+							where: {
+								messageId: interaction.user.id,
+								swallowedId: id
+							}
+						})
+						if (embed===null) {
 							await interaction.reply({
 								ephemeral: true,
 								embeds: [
 									{
-										title: 'Bereits Deabonniert / Nicht registriert',
+										title: 'Bereits abonniert / Nutzer nicht registriert',
 										description: 'Hat deine Katze etwa deine Maus gefangen?',
 										color: 0x12d900
 									}
 								]
 							});
 							return;
-						}*/
+						}
 						await prisma.embed.deleteMany({
 							where: {
 									swallowedId: id,
