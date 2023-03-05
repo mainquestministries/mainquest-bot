@@ -338,8 +338,15 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 						author: first_embed.author ?? undefined
 					})
 					if (msg.embeds.length > 1) {
-						msg.embeds.splice(0, 1).forEach(embed_ => {
-							embeds.push(embed_)
+						msg.embeds.slice(1).forEach(embed_ => {
+							if (embed_.image?.url !== undefined){ embeds.push({
+								color: embed_.color ?? 0xd86124,
+								image: {
+									url: embed_.image?.url,
+									height: embed_.image?.height,
+									width: embed_.image?.width
+								}
+							})};
 						})
 					}
 					await msg?.edit({
