@@ -105,6 +105,6 @@ echo "Versuche, die Datenbank zu migrieren..."
 npx prisma migrate deploy || echo "Die Datenbank konnte nicht migriert werden."
 npx prisma generate || echo "Der Generator hat versagt."
 echo "Starte Bot neu..."
-sudo supervisorctl restart bots:mqbot
+sudo supervisorctl start bots:mqbot
 echo "Neustart erfolgt."
 
