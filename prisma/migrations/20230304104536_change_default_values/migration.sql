@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `Message` MODIFY `repetitions` INTEGER NOT NULL DEFAULT 2,
-    MODIFY `modulo` INTEGER NOT NULL DEFAULT 4;

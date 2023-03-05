@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
 
@@ -17,33 +17,31 @@ model guildconfig {
 }
 
 model Message {
-  id              String  @id //user to send this message to
-  message_content String  @default("Klopf, Klopf\nIn deiner heutigen Gebetszeit, denk doch auch kurz an diese Anliegen.")
-  embeds          Embed[]
-  repetitions     Int     @default(2) //2 Wochen lang
-  modulo          Int     @default(4) //Einmal pro Woche
-  disabled        Boolean @default(false)
+  id          String  @id //user to send this message to
+  embeds      Embed[]
+  repetitions Int     @default(2) //2 Wochen lang
+  modulo      Int     @default(4) //Einmal pro Woche
+  disabled    Boolean @default(false)
 }
 
 model Embed {
-  id                  Int      @id @default(autoincrement())
-  Message             Message? @relation(fields: [messageId], references: [id])
-  messageId           String?
-  original_message_id String
-  content             String
-  author              String
-  author_avatar_url   String
-  title               String
-  source              String
-  color               Int?
-  sended              Int      @default(0)
+  id               Int       @id @default(autoincrement())
+  Message          Message?  @relation(fields: [messageId], references: [id])
+  messageId        String?
+  original_message Swallowed @relation(fields: [swallowedId], references: [id])
+  swallowedId      String
+  sended           Int       @default(0)
 }
 
 model Swallowed {
-  id              String @id
-  channel_id      String
-  message_content String
-  author_id       String
-  guild           String
-  new_id          String
+  id                String  @id //Id of the deleted Message
+  channel_id        String
+  message_content   String
+  author            String
+  author_avatar_url String
+  color             Int     @default(0)
+  author_id         String
+  guild             String
+  new_id            String  @unique
+  Embed             Embed[]
 }
