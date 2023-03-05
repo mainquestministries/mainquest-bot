@@ -20,7 +20,7 @@ export class UserEvent extends Listener {
 							id: interaction.user.id
 						}
 					});
-					await interaction.user.send({
+					const introduction = await interaction.user.send({
 						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. 
 Falls du häufiger Erinnerungen erhalten möchtest. 
 Oder bin ich dir zu nervig? Dann halt weniger von mir haben möchtest. 
@@ -46,6 +46,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							}
 						]
 					});
+					await introduction.pin("Anleitung")
 				}
 				const id = interaction.customId.substring(4);
 				try {
