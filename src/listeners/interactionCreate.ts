@@ -52,7 +52,8 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					const swallowed = await prisma.swallowed.findFirstOrThrow({
 						where: {
 							id: id
-						}, include: {
+						},
+						include: {
 							Embed: true,
 							Guild: true
 						}
@@ -75,20 +76,21 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 						});
 						return;
 					}
-					
-						const embeds = (await prisma.embed.findMany({
+
+					try {
+						await prisma.message.findFirstOrThrow({
 							where: {
-								Message: {
-									id: interaction.user.id
-								},
-								Swallowed: {
-									id: id
+								id: interaction.user.id,
+								embeds: {
+									some: {
+										Swallowed: {
+											id: id
+										}
+									}
 								}
-								
 							}
-						}))
-					if (embeds.length > 0)	
-					 {
+						});
+					} catch {
 						await interaction.reply({
 							ephemeral: true,
 							embeds: [
@@ -113,7 +115,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 										connect: {
 											id: swallowed.id
 										}
-									}							
+									}
 								}
 							}
 						}
@@ -140,7 +142,8 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					const swallowed = await prisma.swallowed.findFirstOrThrow({
 						where: {
 							id: id
-						},  include: {
+						},
+						include: {
 							Embed: true,
 							Guild: true
 						}
@@ -154,42 +157,46 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							where: {
 								id: id
 							}
-						})
+						});
 					} else {
-						
-							if ((await prisma.embed.count({
+						try {
+							await prisma.message.findFirstOrThrow({
 								where: {
-									Message: {
-										id: interaction.user.id
-									},
-									Swallowed: {
-										id: id
+									id: interaction.user.id,
+									embeds: {
+										none: {
+											Swallowed: {
+												id: id
+											}
+										}
 									}
 								}
-							}))>0) {
+							});
+						} catch {
 							await interaction.reply({
 								ephemeral: true,
 								embeds: [
 									{
-										title: 'Bereits abonniert', // Nonsens.
+										title: 'Bereits Deabonniert / Nicht registriert',
 										description: 'Hat deine Katze etwa deine Maus gefangen?',
 										color: 0x12d900
 									}
 								]
 							});
-							return;}
-							await prisma.embed.deleteMany({
-								where: {
-									Message: {
-										id: interaction.user.id
-									},
-									Swallowed: {
-										id: id
-									}
-								}
-							})
+							return;
 						}
-					
+						await prisma.embed.deleteMany({
+							where: {
+								Message: {
+									id: interaction.user.id
+								},
+								Swallowed: {
+									id: id
+								}
+							}
+						});
+					}
+
 					await interaction.reply({
 						ephemeral: true,
 						embeds: [
@@ -280,7 +287,6 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 								id: id
 							}
 						});
-						
 					} else {
 						await interaction.reply({
 							embeds: [
@@ -329,25 +335,27 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 					if (msg === undefined) return;
 
 					let first_embed = msg.embeds[0];
-					let embeds : APIEmbed[] = []
+					let embeds: APIEmbed[] = [];
 					embeds.push({
 						title: first_embed.title ?? '',
 						description: new_text,
 						color: first_embed.color ?? undefined,
 						thumbnail: first_embed.thumbnail ?? undefined,
 						author: first_embed.author ?? undefined
-					})
+					});
 					if (msg.embeds.length > 1) {
-						msg.embeds.slice(1).forEach(embed_ => {
-							if (embed_.image?.url !== undefined){ embeds.push({
-								color: embed_.color ?? 0xd86124,
-								image: {
-									url: embed_.image?.url,
-									height: embed_.image?.height,
-									width: embed_.image?.width
-								}
-							})};
-						})
+						msg.embeds.slice(1).forEach((embed_) => {
+							if (embed_.image?.url !== undefined) {
+								embeds.push({
+									color: embed_.color ?? 0xd86124,
+									image: {
+										url: embed_.image?.url,
+										height: embed_.image?.height,
+										width: embed_.image?.width
+									}
+								});
+							}
+						});
 					}
 					await msg?.edit({
 						embeds: embeds

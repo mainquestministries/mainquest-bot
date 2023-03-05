@@ -44,6 +44,6 @@ model Swallowed {
   author_id         String
   new_id            String  @unique
   Embed             Embed[]
-  Guild             Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Guild             Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   guildId           String
 }

@@ -23,7 +23,6 @@ export class UserCommand extends Command {
 			}
 		});
 
-		
 		return interaction.reply({
 			embeds: [
 				{

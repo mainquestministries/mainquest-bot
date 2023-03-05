@@ -5,7 +5,7 @@ import type { Message } from 'discord.js';
 export class UserEvent extends Listener<typeof Events.MentionPrefixOnly> {
 	public async run(message: Message) {
 		const prefix = this.container.client.options.defaultPrefix;
-		if (message.channel.isVoiceBased()) return
+		if (message.channel.isVoiceBased()) return;
 		return message.channel.send(prefix ? `My prefix in this guild is: \`${prefix}\`` : 'Cannot find any Prefix for Message Commands.');
 	}
 }

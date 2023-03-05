@@ -34,7 +34,7 @@ export class UserEvent extends Listener {
 					width: 40
 				};
 			}
-			let embeds : APIEmbed[] = [];
+			let embeds: APIEmbed[] = [];
 			embeds.push({
 				title: `Gebetsanliegen von ${message.member?.nickname ?? message.author.username}`,
 				description: message.content,
@@ -50,19 +50,18 @@ export class UserEvent extends Listener {
 				let attachments_ = message.attachments;
 				attachments_.forEach(async (attach) => {
 					if (attach.height !== null && attach.width !== null) {
-					embeds.push(
-						{
+						embeds.push({
 							color: (await message.author.fetch(true)).accentColor ?? 0xd86124,
 							image: {
 								url: attach.url,
 								height: attach.height,
 								width: attach.width
 							}
-						}
-					);}
+						});
+					}
 				});
 			}
-			if (message.channel.isVoiceBased()) return
+			if (message.channel.isVoiceBased()) return;
 			const new_msg = await message.channel.send({
 				files: attachments,
 				components: [
