@@ -82,7 +82,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 							where: {
 								id: interaction.user.id,
 								embeds: {
-									some: {
+									none: {
 										Swallowed: {
 											id: id
 										}
@@ -164,7 +164,7 @@ Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstell
 								where: {
 									id: interaction.user.id,
 									embeds: {
-										none: {
+										some: {
 											Swallowed: {
 												id: id
 											}
