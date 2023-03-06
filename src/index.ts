@@ -2,6 +2,7 @@ import '#lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { PrismaClient } from '@prisma/client';
 import { Partials } from 'discord.js';
+const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -14,7 +15,7 @@ const client = new SapphireClient({
 	regexPrefix: /^(hey +)?bot[,! ]/i,
 	caseInsensitiveCommands: true,
 	logger: {
-		level: LogLevel.Debug
+		level: dev ? LogLevel.Debug : LogLevel.Info
 	},
 	shards: 'auto',
 	intents: [
@@ -30,7 +31,7 @@ const client = new SapphireClient({
 		'DirectMessageReactions'
 	],
 	partials: [Partials.Channel],
-	loadMessageCommandListeners: true
+	loadMessageCommandListeners: true,
 });
 
 const main = async () => {
