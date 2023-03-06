@@ -63,10 +63,9 @@ export class UserEvent extends Listener {
 					let footer = null;
 					if (embed.sended == 0) {
 						const weeks_ = msg.repetitions / days_of_week[msg.modulo];
-						const wochen_string = weeks_ == 1 ? 'nächste Woche' : `nächsten ${weeks_} Wochen`;
-						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${wochen_string}, ${
-							days_of_week[msg.modulo]
-						}x pro Woche wieder bei dir auftauchen.`;
+						const week_string = weeks_ == 1 ? 'nächste Woche' : `nächsten ${weeks_} Wochen`;
+						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. ` +
+						 `Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${week_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
 					}
 					const temp_embed = new EmbedBuilder()
 						.setTitle(`Gebetsanliegen von ${embed.Swallowed.author}`)
@@ -108,42 +107,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			this.container.logger.info('*** Coming home...');
-			/*
-			this.container.logger.info('*** Biblebomber: ACTIVE');
-			const data: Array<Array<string>> = JSON.parse(readFileSync(join(rootDir, `losungen_${now.getFullYear()}.json`)).toString());
-			const today = date_string(now);
-			const losungen = await prisma.guildconfig.findMany({
-				where: {
-					l_channel: {
-						not: null
-					}
-				}
-			});
-			this.container.logger.debug('Lchannels: ' + losungen.length);
-			data.forEach((item) => {
-				//this.container.logger.debug(today)
-				if (item[0] === today) {
-					losungen.forEach(async (config) => {
-						const channel = await (await this.container.client.guilds.fetch(config.id)).channels.fetch(config.l_channel as string);
-						let new_msg = await (channel as TextChannel).send({
-							embeds: [
-								{
-									title: `Tageslosung vom ${today}`,
-									description: `*${item[3]}:* ${item[4]}`,
-									color: 0x0055aa
-								}
-							]
-						});
-						await new_msg.startThread({
-							name: `Tageslosung vom ${today}`
-						});
-						['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'].forEach(async (emoji_) => {
-							await new_msg.react(emoji_);
-						});
-					});
-				}
-			});
-			this.container.logger.info('*** Disabling Biblebomber mode');*/
+			
 		});
 	}
 

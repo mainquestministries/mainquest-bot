@@ -1,3 +1,4 @@
+import { days_of_week } from '#lib/constants';
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -15,16 +16,17 @@ export class UserEvent extends Listener {
 						where: { id: interaction.user.id }
 					})) === 0
 				) {
-					await prisma.message.create({
+					const userconfig = await prisma.message.create({
 						data: {
 							id: interaction.user.id
 						}
 					});
+					const weeks_ = userconfig.repetitions / days_of_week[userconfig.modulo];
+					const week_string = weeks_ == 1 ? 'eine Woche' : `${weeks_} Wochen`;
 					const introduction = await interaction.user.send({
-						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. 
-Falls du häufiger Erinnerungen erhalten möchtest. 
-Oder bin ich dir zu nervig? Dann halt weniger von mir haben möchtest. 
-Dann folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
+						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich ${days_of_week[userconfig.modulo]}x pro Woche an die Gebetsanliegen zu erinnern, und dies pro Anliegen ${week_string} lang.
+Falls du häufiger Erinnerungen erhalten möchtest, oder wenn ich dir zu nervig bin:
+Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
 						embeds: [
 							{
 								title: 'Kurzanleitung',
