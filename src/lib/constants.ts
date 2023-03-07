@@ -6,7 +6,7 @@ export const days_of_week: Record<number, number> = {
 	1: 7,
 	2: 3,
 	3: 2,
-	4: 1
+	7: 1
 };
 export const days_of_week_from_modulo: Record<number, number> = {
 	7: 1,

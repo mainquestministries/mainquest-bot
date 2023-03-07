@@ -23,12 +23,12 @@ export class UserEvent extends Listener {
 				}
 			});
 			let next_user = null;
-			this.container.logger.info('*** Running from User to User...');
+			this.container.logger.info("*** Running from User to User...");
 			msg.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
 
-				if (msg.disabled === false && (now.getDay() + 1) % msg.modulo === 0) {
+				if (msg.disabled === false && ((now.getDay() + 1) % msg.modulo === 0 || (now.getDay() == 1 && msg.modulo === 7))) {
 					send_today = true;
 				}
 				await prisma.message.update({
@@ -78,9 +78,9 @@ export class UserEvent extends Listener {
 						.setFooter(footer === null ? null : { text: footer });
 					embeds.push(temp_embed);
 				});
-				this.container.logger.debug('Should be sended: ' + send_today);
+				
 				if (send_today && embeds.length > 0) {
-					this.container.logger.info(`Sending Embeds: ${embeds.length}`);
+					this.container.logger.info(`Sending Message with ${embeds.length} to ${next_user.username}(${next_user.id})`);
 					await prisma.message.update({
 						where: {
 							id: msg.id

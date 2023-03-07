@@ -21,7 +21,7 @@ model Message {
   id          String  @id //user to send this message to
   embeds      Embed[]
   repetitions Int     @default(2) //2 Wochen lang
-  modulo      Int     @default(4) //Einmal pro Woche
+  modulo      Int     @default(7) //Einmal pro Woche, Sonntag
   disabled    Boolean @default(false)
 }
 

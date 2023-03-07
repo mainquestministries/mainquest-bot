@@ -20,9 +20,9 @@ export class UserCommand extends Command {
 							.setRequired(true)
 							.setChoices(
 								{ name: 'Jeder Tag', value: 1 },
-								{ name: '3x pro Woche', value: 2 }, // 7 - 1, 3 - 2, 2- 3, 1 - 4
+								{ name: '3x pro Woche', value: 2 }, // 7 - 1, 3 - 2, 2- 3, 1 - 7
 								{ name: '2x pro Woche', value: 3 },
-								{ name: '1x pro Woche', value: 4 }
+								{ name: '1x pro Woche', value: 7 }
 							) // range: 1-7
 				)
 				.addIntegerOption((option) =>
