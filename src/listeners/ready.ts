@@ -3,7 +3,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import cron from 'node-cron';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { EmbedBuilder } from 'discord.js';
+import type { APIEmbed } from 'discord.js';
 import { days_of_week } from '#lib/constants';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
@@ -17,17 +17,21 @@ export class UserEvent extends Listener {
 		cron.schedule(cron_str, async (now) => {
 			//onst now = new Date()
 			if (now === 'manual' || now === 'init' || process.env.SKIP_CRONJOB !== undefined) return;
-			const msg = await prisma.message.findMany({
+			const msg_ = await prisma.message.findMany({
 				include: {
-					embeds: true
+					embeds: {
+						include: {
+							Swallowed: true
+						}
+					}
+					
 				}
 			});
 			let next_user = null;
 			this.container.logger.info("*** Running from User to User...");
-			msg.forEach(async (msg) => {
+			msg_.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
 				let send_today = false;
-
 				if (msg.disabled === false && ((now.getDay() + 1) % msg.modulo === 0 || (now.getDay() == 1 && msg.modulo === 7))) {
 					send_today = true;
 				}
@@ -38,22 +42,17 @@ export class UserEvent extends Listener {
 					data: {
 						embeds: {
 							deleteMany: {
-								sended: msg.repetitions
+								sended: {
+									gte: msg.repetitions
+								}
 							}
 						}
 					}
 				});
 
-				let embeds: EmbedBuilder[] = [];
-				msg.embeds.forEach(async (embed_) => {
-					const embed = await prisma.embed.findUniqueOrThrow({
-						where: {
-							id: embed_.id
-						},
-						include: {
-							Swallowed: true
-						}
-					});
+				const embeds: APIEmbed[] = [];
+				msg.embeds.forEach((embed) => {
+
 					let color_temp = 0;
 					if (embed.Swallowed.color === null) {
 						color_temp = 0;
@@ -65,20 +64,20 @@ export class UserEvent extends Listener {
 						const weeks_ = msg.repetitions / days_of_week[msg.modulo];
 						const week_string = weeks_ == 1 ? 'nächste Woche' : `nächsten ${weeks_} Wochen`;
 						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. ` +
-						 `Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${week_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
+							`Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${week_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
 					}
-					const temp_embed = new EmbedBuilder()
-						.setTitle(`Gebetsanliegen von ${embed.Swallowed.author}`)
-						.setDescription(embed.Swallowed.message_content)
-						.setColor(color_temp)
-						.setAuthor({
+					const temp_embed = {
+						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
+						description: embed.Swallowed.message_content,
+						color: color_temp,
+						author: {
 							name: embed.Swallowed.author,
-							iconURL: embed.Swallowed.author_avatar_url ?? undefined
-						})
-						.setFooter(footer === null ? null : { text: footer });
+							icon_url: embed.Swallowed.author_avatar_url ?? undefined
+						},
+						footer: footer === null ? undefined : { text: footer }
+					};
 					embeds.push(temp_embed);
 				});
-				
 				if (send_today && embeds.length > 0) {
 					this.container.logger.info(`Sending Message with ${embeds.length} to ${next_user.username}(${next_user.id})`);
 					await prisma.message.update({

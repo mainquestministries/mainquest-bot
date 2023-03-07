@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { EmbedBuilder } from 'discord.js';
+import type { APIEmbed } from 'discord.js';
 const prisma = new PrismaClient();
 @ApplyOptions<Command.Options>({
 	description: 'Erhalte deine abonnierten Gebetsanliegen sofort'
@@ -21,37 +21,34 @@ export class UserCommand extends Command {
 				where: {
 					id: interaction.user.id
 				}, include: {
-					embeds: true
+					embeds: {
+						include: {
+							Swallowed: true
+						}
+					}
 				}
 			})
 			if (msg.embeds.length==0) {
 				throw Error;
 			}
-			let embeds: EmbedBuilder[] = [];
-				msg.embeds.forEach(async (embed_) => {
-					const embed = await prisma.embed.findUniqueOrThrow({
-						where: {
-							id: embed_.id
-						},
-						include: {
-							Swallowed: true
-						}
-					});
+			let embeds: APIEmbed[] = [];
+				msg.embeds.forEach(async (embed) => {
 					let color_temp = 0;
 					if (embed.Swallowed.color === null) {
 						color_temp = 0;
 					} else {
 						color_temp = embed.Swallowed.color;
 					}
-					const temp_embed = new EmbedBuilder()
-						.setTitle(`Gebetsanliegen von ${embed.Swallowed.author}`)
-						.setDescription(embed.Swallowed.message_content)
-						.setColor(color_temp)
-						.setAuthor({
+					const temp_embed = {
+						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
+						description: embed.Swallowed.message_content,
+						color: color_temp,
+						author: {
 							name: embed.Swallowed.author,
-							iconURL: embed.Swallowed.author_avatar_url ?? undefined
-						})
-						
+							icon_url: embed.Swallowed.author_avatar_url ?? undefined
+						}
+					};
+					this.container.logger.debug(temp_embed);
 					embeds.push(temp_embed);
 				});
 			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: true })
