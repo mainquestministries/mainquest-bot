@@ -32,7 +32,7 @@ export class UserCommand extends Command {
 				throw Error;
 			}
 			let embeds: APIEmbed[] = [];
-				msg.embeds.forEach(async (embed) => {
+				msg.embeds.forEach((embed) => {
 					let color_temp = 0;
 					if (embed.Swallowed.color === null) {
 						color_temp = 0;
