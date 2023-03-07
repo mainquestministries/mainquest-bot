@@ -57,12 +57,11 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							id: id
 						},
 						include: {
-							Embed: true,
-							Guild: true
+							Embed: true
 						}
 					});
 					let fetched_user = (
-						await this.container.client.guilds.cache.get(swallowed.Guild?.id)?.members.fetch({
+						await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch({
 							force: true
 						})
 					)?.get(swallowed.author_id);
@@ -140,13 +139,12 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							id: id
 						},
 						include: {
-							Embed: true,
-							Guild: true
+							Embed: true
 						}
 					});
 					if (interaction.user.id == swallowed.author_id) {
 						const channel = await (
-							await this.container.client.guilds.cache.get(swallowed.Guild.id)?.channels.fetch()
+							await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
 						)?.get(swallowed.channel_id);
 						(await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)?.delete();
 						await prisma.swallowed.deleteMany({

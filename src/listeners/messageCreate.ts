@@ -10,6 +10,7 @@ export class UserEvent extends Listener {
 		if (message.author.bot) return;
 		if (message.channel.isThread()) return;
 		if (message.channel.isDMBased()) return;
+		if (message.guildId === null) return;
 		if (message.type === MessageType.Reply) return;
 		try {
 			await prisma.guild.findFirstOrThrow({
@@ -121,7 +122,7 @@ export class UserEvent extends Listener {
 					author_id: message.author.id,
 					Guild: {
 						connect: {
-							id: message.guildId ?? undefined
+							id: message.guildId
 						}
 					},
 					id: message.id,
