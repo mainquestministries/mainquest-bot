@@ -43,6 +43,10 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 									{
 										name: '/Benachrichtigungen_einstellen',
 										value: 'Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst.'
+									},
+									{
+										name: "/Benachrichtigungs_feed",
+										value: "Erhalte deine ganzen Gebetsanliegen SOFORT. Ohne Lieferzeit und Versandkosten."
 									}
 								]
 							}
