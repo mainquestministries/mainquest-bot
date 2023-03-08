@@ -136,7 +136,7 @@ export class UserEvent extends Listener {
 			});
 			await message.delete();
 		} catch (e) {
-			this.container.logger.error(e);
+			
 		}
 	}
 }

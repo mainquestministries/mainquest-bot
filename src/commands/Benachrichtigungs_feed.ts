@@ -51,7 +51,7 @@ export class UserCommand extends Command {
 					this.container.logger.debug(temp_embed);
 					embeds.push(temp_embed);
 				});
-			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: true })
+			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: !(interaction.channel?.isDMBased()) })
 		} catch {
 			return interaction.reply({
 				embeds: [
