@@ -131,7 +131,7 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 					});
 					return;
 				} catch (e) {
-					this.container.logger.error(e);
+					
 					return;
 				}
 			}
@@ -194,7 +194,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 						]
 					});
 				} catch (e) {
-					this.container.logger.error(e);
 				}
 			}
 			if (interaction.customId.startsWith('edit_')) {
@@ -235,7 +234,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 						return;
 					}
 				} catch (e) {
-					this.container.logger.error(e);
 					return;
 				}
 			}
@@ -288,7 +286,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 						return;
 					}
 				} catch (e) {
-					this.container.logger.error(e);
 					return;
 				}
 			}
@@ -367,7 +364,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 					});
 					return;
 				} catch (e) {
-					this.container.logger.error(e);
 					return;
 				}
 			}
