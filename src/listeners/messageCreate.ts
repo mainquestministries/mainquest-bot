@@ -47,12 +47,13 @@ export class UserEvent extends Listener {
 				}
 			});
 			let attachments: Attachment[] = [];
+			let temp_color = (await message.author.fetch(true)).accentColor ?? 0xd86124
 			if (message.attachments) {
 				let attachments_ = message.attachments;
-				attachments_.forEach(async (attach) => {
+				attachments_.forEach((attach) => {
 					if (attach.height !== null && attach.width !== null) {
 						embeds.push({
-							color: (await message.author.fetch(true)).accentColor ?? 0xd86124,
+							color: temp_color,
 							image: {
 								url: attach.url,
 								height: attach.height,

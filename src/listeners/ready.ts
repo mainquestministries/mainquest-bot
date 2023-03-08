@@ -79,7 +79,7 @@ export class UserEvent extends Listener {
 					embeds.push(temp_embed);
 				});
 				if (send_today && embeds.length > 0) {
-					this.container.logger.info(`Sending Message with ${embeds.length} to ${next_user.username}(${next_user.id})`);
+					this.container.logger.info(`Sending Message with ${embeds.length} Embeds to ${next_user.username}(${next_user.id})`);
 					await prisma.message.update({
 						where: {
 							id: msg.id
