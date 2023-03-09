@@ -73,8 +73,8 @@ jobs:
       run: npx prisma generate
     - name: Remove Unused Files
       run: |
-            rm -rf src/ scripts/ 
-            rm .gitignore .sapphirerc.json *.md tsconfig.json
+            rm -rf src/ scripts/ .git/ .github/
+            rm .gitignore .sapphirerc.json *.md tsconfig.json .dockerignore .prettierignore
     - name: Download Artifact
       uses: actions/download-artifact@v2.1.1
       with:
