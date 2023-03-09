@@ -84,7 +84,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        username: deployer
         key: ${{ secrets.KEY }}
         script: |
                  sudo supervisorctl stop bots:mqbot
@@ -105,7 +105,7 @@ jobs:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
       with:
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        username: deployer
         key: ${{ secrets.KEY }}
         envs: DISCORD_TOKEN, DATABASE_URL
         script: | 
