@@ -94,7 +94,7 @@ jobs:
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        username: deployer
         key: ${{ secrets.KEY }}
         source: .
         target: /var/www/mqbot
@@ -112,8 +112,8 @@ jobs:
                 cd /var/www/mqbot
                 echo "DATABASE_URL=$DATABASE_URL" > .env
                 echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
-                /home/mqadmin/.nvm/versions/node/v18.13.0/bin/npx prisma migrate deploy
                 sudo /home/deployer/chown_mqbot_mqadmin.sh
+                sudo -u mqadmin /home/deployer/migrate_database.sh
                 sudo supervisorctl start bots:mqbot
            
     
