@@ -80,14 +80,16 @@ jobs:
       with:
         name: target_commonjs
         path: dist
-    - name: Stop Bot
+    - name: Pre Transaction
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
-        script: sudo supervisorctl stop bots:mqbot
-    - name: Push Files To Droplet
+        script: |
+                 sudo supervisorctl stop bots:mqbot
+                 sudo /home/deployer/chown_mqbot_deployer.sh
+    - name: Transaction
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
@@ -110,6 +112,7 @@ jobs:
                 echo "DATABASE_URL=$DATABASE_URL" > .env
                 echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
                 npx prisma migrate deploy
+                sudo /home/deployer/chown_mqbot_mqadmin.sh
                 sudo supervisorctl start bots:mqbot
            
     
