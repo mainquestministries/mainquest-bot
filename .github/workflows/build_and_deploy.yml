@@ -74,7 +74,7 @@ jobs:
     - name: Remove Unused Files
       run: |
             rm -rf src/ scripts/ .git/ .github/
-            rm .gitignore .sapphirerc.json *.md tsconfig.json .dockerignore .prettierignore
+            rm .gitignore .sapphirerc.json *.md tsconfig.json .prettierignore
     - name: Download Artifact
       uses: actions/download-artifact@v2.1.1
       with:
