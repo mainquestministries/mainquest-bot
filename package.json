@@ -42,7 +42,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:production": "tsc --declarationDir typings",
+    "build:production": "tsc --sourceMap false --declaration false --declarationMap false",
     "watch": "tsc -w",
     "start": "node dist/index.js",
     "dev": "run-s build start",
