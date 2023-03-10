@@ -112,8 +112,8 @@ jobs:
                 cd /var/www/mqbot
                 echo "DATABASE_URL=$DATABASE_URL" > .env
                 echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
-                /opt/deploy/migrate_database.sh
                 sudo /opt/deploy_scripts/chown_mqbot_mqadmin.sh
+                sudo -u mqadmin /opt/deploy_scripts/migrate_database.sh
                 sudo supervisorctl start bots:mqbot
            
     
