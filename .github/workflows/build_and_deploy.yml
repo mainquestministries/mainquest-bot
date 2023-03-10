@@ -88,8 +88,8 @@ jobs:
         key: ${{ secrets.KEY }}
         script: |
                  sudo supervisorctl stop bots:mqbot
-                 sudo /home/deployer/chown_mqbot_deployer.sh
-                 sudo /home/deployer/cleanup_logs.sh
+                 sudo /opt/deploy_scripts/chown_mqbot_deployer.sh
+                 sudo /opt/deploy_scripts/cleanup_logs.sh
     - name: Transaction
       uses: appleboy/scp-action@master
       with:
@@ -112,8 +112,8 @@ jobs:
                 cd /var/www/mqbot
                 echo "DATABASE_URL=$DATABASE_URL" > .env
                 echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
-                /home/mqadmin/.nvm/versions/node/v18.13.0/bin/npx prisma migrate deploy
-                sudo /home/deployer/chown_mqbot_mqadmin.sh
+                /opt/deploy/migrate_database.sh
+                sudo /opt/deploy_scripts/chown_mqbot_mqadmin.sh
                 sudo supervisorctl start bots:mqbot
            
     
