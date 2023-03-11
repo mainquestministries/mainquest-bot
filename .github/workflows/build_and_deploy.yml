@@ -97,7 +97,7 @@ jobs:
         USER: deployer
         KEY: ${{ secrets.KEY }}
         TARGET: /var/www/mqbot
-        ARGS: -avz --delete --update
+        ARGS: -avz --delete
         VERBOSE: true
     - name: Post Transaction
       uses: appleboy/ssh-action@master
