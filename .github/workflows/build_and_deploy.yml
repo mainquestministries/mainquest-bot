@@ -40,7 +40,7 @@ jobs:
     - name: Check Version
       run: python3 scripts/check_version.py  >> $GITHUB_ENV
     - name: Download Artifact
-      uses: actions/download-artifact@v2.1.1
+      uses: actions/download-artifact@v3
       with: 
         name: target_commonjs
         path: dist
@@ -76,7 +76,7 @@ jobs:
             rm -rf src/ scripts/ .git/ .github/
             rm .gitignore .sapphirerc.json *.md tsconfig.json .prettierignore
     - name: Download Artifact
-      uses: actions/download-artifact@v2.1.1
+      uses: actions/download-artifact@v3
       with:
         name: target_commonjs
         path: dist
