@@ -91,13 +91,14 @@ jobs:
                  sudo /opt/deploy_scripts/chown_mqbot_deployer.sh
                  sudo /opt/deploy_scripts/cleanup_mqbot.sh
     - name: Transaction
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: deployer
-        key: ${{ secrets.KEY }}
-        source: .
-        target: /var/www/mqbot
+      uses: up9cloud/action-rsync@master
+      env:
+        HOST: ${{ secrets.HOST }}
+        USER: deployer
+        KEY: ${{ secrets.KEY }}
+        TARGET: /var/www/mqbot
+        ARGS: -avz --delete --update
+        VERBOSE: true
     - name: Post Transaction
       uses: appleboy/ssh-action@master
       env: 
