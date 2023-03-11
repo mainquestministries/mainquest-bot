@@ -47,7 +47,7 @@ export class UserEvent extends Listener {
 				}
 			});
 			let attachments: Attachment[] = [];
-			let temp_color = (await message.author.fetch(true)).accentColor ?? 0xd86124
+			let temp_color = (await message.author.fetch(true)).accentColor ?? 0xd86124;
 			if (message.attachments) {
 				let attachments_ = message.attachments;
 				attachments_.forEach((attach) => {
@@ -136,8 +136,6 @@ export class UserEvent extends Listener {
 				}
 			});
 			await message.delete();
-		} catch (e) {
-			
-		}
+		} catch (e) {}
 	}
 }

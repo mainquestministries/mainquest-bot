@@ -5,6 +5,7 @@ import cron from 'node-cron';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import type { APIEmbed } from 'discord.js';
 import { days_of_week } from '#lib/constants';
+import { should_be_sended } from '#lib/utils';
 const dev = process.env.NODE_ENV !== 'production';
 const prisma = new PrismaClient();
 @ApplyOptions<Listener.Options>({ once: true })
@@ -24,16 +25,15 @@ export class UserEvent extends Listener {
 							Swallowed: true
 						}
 					}
-					
 				}
 			});
 			let next_user = null;
-			this.container.logger.info("*** Running from User to User...");
+			this.container.logger.info('*** Running from User to User...');
 			msg_.forEach(async (msg) => {
 				next_user = await this.container.client.users.fetch(msg.id, { force: true });
-				let send_today = false;
-				if (msg.disabled === false && ((now.getDay() + 1) % msg.modulo === 0 || (now.getDay() == 1 && msg.modulo === 7))) {
-					send_today = true;
+				if (msg.disabled === true) return;
+				if (!should_be_sended(now.getDay(), msg.modulo)) {
+					return;
 				}
 				await prisma.message.update({
 					where: {
@@ -52,7 +52,6 @@ export class UserEvent extends Listener {
 
 				const embeds: APIEmbed[] = [];
 				msg.embeds.forEach((embed) => {
-
 					let color_temp = 0;
 					if (embed.Swallowed.color === null) {
 						color_temp = 0;
@@ -63,8 +62,11 @@ export class UserEvent extends Listener {
 					if (embed.sended == 0) {
 						const weeks_ = msg.repetitions / days_of_week[msg.modulo];
 						const week_string = weeks_ == 1 ? 'nächste Woche' : `nächsten ${weeks_} Wochen`;
-						footer = `Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. ` +
-							`Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${week_string}, ${days_of_week[msg.modulo]}x pro Woche wieder bei dir auftauchen.`;
+						footer =
+							`Huh… Wie bin ich hier gelandet? Du hast wohl auf Abonnieren geklickt. Es ist mir eine Freude deinem Geistlichen Level zu verhelfen und deine Gehirnzellen an deine Jahresvorhaben zu erinnern. ` +
+							`Gerne klopfe ich für dieses Gebetsanliegen bei dir an. Ich werde die ${week_string}, ${
+								days_of_week[msg.modulo]
+							}x pro Woche wieder bei dir auftauchen.`;
 					}
 					const temp_embed = {
 						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
@@ -78,7 +80,7 @@ export class UserEvent extends Listener {
 					};
 					embeds.push(temp_embed);
 				});
-				if (send_today && embeds.length > 0) {
+				if (embeds.length > 0) {
 					this.container.logger.info(`Sending Message with ${embeds.length} Embeds to ${next_user.username}(${next_user.id})`);
 					await prisma.message.update({
 						where: {
@@ -106,7 +108,6 @@ export class UserEvent extends Listener {
 				}
 			});
 			this.container.logger.info('*** Coming home...');
-			
 		});
 	}
 

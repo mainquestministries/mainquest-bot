@@ -20,38 +20,39 @@ export class UserCommand extends Command {
 			const msg = await prisma.message.findFirstOrThrow({
 				where: {
 					id: interaction.user.id
-				}, include: {
+				},
+				include: {
 					embeds: {
 						include: {
 							Swallowed: true
 						}
 					}
 				}
-			})
-			if (msg.embeds.length==0) {
+			});
+			if (msg.embeds.length == 0) {
 				throw Error;
 			}
 			let embeds: APIEmbed[] = [];
-				msg.embeds.forEach((embed) => {
-					let color_temp = 0;
-					if (embed.Swallowed.color === null) {
-						color_temp = 0;
-					} else {
-						color_temp = embed.Swallowed.color;
+			msg.embeds.forEach((embed) => {
+				let color_temp = 0;
+				if (embed.Swallowed.color === null) {
+					color_temp = 0;
+				} else {
+					color_temp = embed.Swallowed.color;
+				}
+				const temp_embed = {
+					title: `Gebetsanliegen von ${embed.Swallowed.author}`,
+					description: embed.Swallowed.message_content,
+					color: color_temp,
+					author: {
+						name: embed.Swallowed.author,
+						icon_url: embed.Swallowed.author_avatar_url ?? undefined
 					}
-					const temp_embed = {
-						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
-						description: embed.Swallowed.message_content,
-						color: color_temp,
-						author: {
-							name: embed.Swallowed.author,
-							icon_url: embed.Swallowed.author_avatar_url ?? undefined
-						}
-					};
-					this.container.logger.debug(temp_embed);
-					embeds.push(temp_embed);
-				});
-			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: !(interaction.channel?.isDMBased()) })
+				};
+				this.container.logger.debug(temp_embed);
+				embeds.push(temp_embed);
+			});
+			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: !interaction.channel?.isDMBased() });
 		} catch {
 			return interaction.reply({
 				embeds: [
@@ -62,8 +63,7 @@ export class UserCommand extends Command {
 					}
 				],
 				ephemeral: true
-			})
+			});
 		}
-		;
 	}
 }

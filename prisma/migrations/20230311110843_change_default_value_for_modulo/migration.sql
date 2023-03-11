@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Message` MODIFY `modulo` INTEGER NOT NULL DEFAULT 4;

@@ -24,7 +24,9 @@ export class UserEvent extends Listener {
 					const weeks_ = userconfig.repetitions / days_of_week[userconfig.modulo];
 					const week_string = weeks_ == 1 ? 'eine Woche' : `${weeks_} Wochen`;
 					const introduction = await interaction.user.send({
-						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich ${days_of_week[userconfig.modulo]}x pro Woche an die Gebetsanliegen zu erinnern, und dies pro Anliegen ${week_string} lang.
+						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich ${
+							days_of_week[userconfig.modulo]
+						}x pro Woche an die Gebetsanliegen zu erinnern, und dies pro Anliegen ${week_string} lang.
 Falls du häufiger Erinnerungen erhalten möchtest, oder wenn ich dir zu nervig bin:
 Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
 						embeds: [
@@ -45,14 +47,14 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 										value: 'Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst.'
 									},
 									{
-										name: "/Benachrichtigungs_feed",
-										value: "Erhalte deine ganzen Gebetsanliegen SOFORT. Ohne Lieferzeit und Versandkosten."
+										name: '/Benachrichtigungs_feed',
+										value: 'Erhalte deine ganzen Gebetsanliegen SOFORT. Ohne Lieferzeit und Versandkosten.'
 									}
 								]
 							}
 						]
 					});
-					await introduction.pin("Anleitung")
+					await introduction.pin('Anleitung');
 				}
 				const id = interaction.customId.substring(4);
 				try {
@@ -88,7 +90,7 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							messageId: interaction.user.id,
 							swallowedId: id
 						}
-					})
+					});
 					if (embed) {
 						await interaction.reply({
 							ephemeral: true,
@@ -131,7 +133,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 					});
 					return;
 				} catch (e) {
-					
 					return;
 				}
 			}
@@ -162,8 +163,8 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 								messageId: interaction.user.id,
 								swallowedId: id
 							}
-						})
-						if (embed===null) {
+						});
+						if (embed === null) {
 							await interaction.reply({
 								ephemeral: true,
 								embeds: [
@@ -178,8 +179,8 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 						}
 						await prisma.embed.deleteMany({
 							where: {
-									swallowedId: id,
-									messageId: interaction.user.id
+								swallowedId: id,
+								messageId: interaction.user.id
 							}
 						});
 					}
@@ -193,8 +194,7 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							}
 						]
 					});
-				} catch (e) {
-				}
+				} catch (e) {}
 			}
 			if (interaction.customId.startsWith('edit_')) {
 				const id = interaction.customId.substring(5);

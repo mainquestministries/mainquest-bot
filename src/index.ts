@@ -31,7 +31,7 @@ const client = new SapphireClient({
 		'DirectMessageReactions'
 	],
 	partials: [Partials.Channel],
-	loadMessageCommandListeners: true,
+	loadMessageCommandListeners: true
 });
 
 const main = async () => {

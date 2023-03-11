@@ -17,6 +17,22 @@ export function pickRandom<T>(array: readonly T[]): T {
 	return array[Math.floor(Math.random() * length)];
 }
 
+export function should_be_sended(today: number, M: number): boolean {
+	if (M === 1) {
+		return true;
+	} else if (M === 2) {
+		// Run on three days in the week, not consecutive
+		return today === 1 || today === 3 || today === 5;
+	} else if (M === 3) {
+		// Run on Tuesday and Saturday
+		return today === 2 || today === 6;
+	} else if (M === 4) {
+		return today === 0; // Run only on Sunday
+	} else {
+		throw new Error('Invalid value for M');
+	}
+}
+
 /**
  * Sends a loading message to the current channel
  * @param message The message data for which to send the loading message
