@@ -1,5 +1,7 @@
 # Mainquest-Bot
 
+[![CI/CD Pipeline](https://github.com/mainquestministries/mainquest-bot/actions/workflows/build_and_deploy.yml/badge.svg)](https://github.com/mainquestministries/mainquest-bot/actions/workflows/build_and_deploy.yml) [![CodeQL](https://github.com/mainquestministries/mainquest-bot/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/mainquestministries/mainquest-bot/actions/workflows/github-code-scanning/codeql)
+
 Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ## Kommandos
