@@ -35,7 +35,53 @@ export class UserCommand extends Command {
 		let weeks = interaction.options.getInteger('wochen') ?? 2;
 
 		const modulo_ = interaction.options.getInteger('wochentage', true);
-
+		if (
+			(await prisma.message.count({
+				where: { id: interaction.user.id }
+			})) === 0
+		) {
+			const userconfig = await prisma.message.create({
+				data: {
+					id: interaction.user.id,
+					modulo: modulo_,
+					repetitions: days_of_week[modulo_] * weeks,
+				}
+			});
+			const weeks_ = userconfig.repetitions / days_of_week[userconfig.modulo];
+			const week_string = weeks_ == 1 ? 'eine Woche' : `${weeks_} Wochen`;
+			const introduction = await interaction.user.send({
+				content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich ${
+					days_of_week[userconfig.modulo]
+				}x pro Woche an die Gebetsanliegen zu erinnern, und dies pro Anliegen ${week_string} lang.
+Falls du häufiger Erinnerungen erhalten möchtest, oder wenn ich dir zu nervig bin:
+Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
+				embeds: [
+					{
+						title: 'Kurzanleitung',
+						description: 'Du kannst jederzeit die Benachrichtigungen mithilfe von Slashcommands deaktivieren oder reduzieren.',
+						fields: [
+							{
+								name: '/Benachrichtigungen_aktivieren',
+								value: 'Aktiviert deine Benachrichtigungen (falls du diese deaktiviert hast)'
+							},
+							{
+								name: '/Benachrichtigungen_deaktivieren',
+								value: 'Deaktiviert deine Benachrichtigungen dauerhaft bis zum Einschalten.'
+							},
+							{
+								name: '/Benachrichtigungen_einstellen',
+								value: 'Stelle ein, wie häufig und wie viele Wochen du Benachrichtigungen erhalten willst.'
+							},
+							{
+								name: '/Benachrichtigungs_feed',
+								value: 'Erhalte deine ganzen Gebetsanliegen SOFORT. Ohne Lieferzeit und Versandkosten.'
+							}
+						]
+					}
+				]
+			});
+			await introduction.pin('Anleitung');
+		} else {
 		await prisma.message.update({
 			where: {
 				id: interaction.user.id
@@ -54,7 +100,7 @@ export class UserCommand extends Command {
 					}
 				}
 			}
-		});
+		})};
 
 		return await interaction.reply({
 			embeds: [
