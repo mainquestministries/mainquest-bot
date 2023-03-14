@@ -33,3 +33,4 @@ config.ts
 prisma/data/dev.db
 prisma/data/dev.db-journal
 scripts/.autoupdate.sh.kate-swp
+mysql-database/
