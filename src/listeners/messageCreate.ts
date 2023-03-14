@@ -83,8 +83,8 @@ export class UserEvent extends Listener {
 							},
 							{
 								style: 4,
-								label: `Deabonnieren / löschen`,
-								custom_id: `delete_${message.id}`,
+								label: `Deabonnieren`,
+								custom_id: `deabo_${message.id}`,
 								disabled: false,
 								emoji: {
 									id: undefined,
@@ -110,6 +110,15 @@ export class UserEvent extends Listener {
 								emoji: {
 									id: undefined,
 									name: `✔`
+								},
+								type: 2
+							}, {
+								style: 4,
+								custom_id: `delete_${message.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: "🗑️"
 								},
 								type: 2
 							}

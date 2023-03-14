@@ -14,7 +14,7 @@ export class UserEvent extends Listener {
 	public run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		const cron_str = dev ? '*/20 * * * * *' : '0 0 8 * * * *';
+		const cron_str = dev ? '*/20 * * * * *' : '0 0 7 * * * *';
 		cron.schedule(cron_str, async (now) => {
 			//onst now = new Date()
 			if (now === 'manual' || now === 'init' || process.env.SKIP_CRONJOB !== undefined) return;

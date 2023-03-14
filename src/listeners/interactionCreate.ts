@@ -1,4 +1,3 @@
-import { days_of_week } from '#lib/constants';
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -16,19 +15,14 @@ export class UserEvent extends Listener {
 						where: { id: interaction.user.id }
 					})) === 0
 				) {
-					const userconfig = await prisma.message.create({
+					await prisma.message.create({
 						data: {
 							id: interaction.user.id
 						}
 					});
-					const weeks_ = userconfig.repetitions / days_of_week[userconfig.modulo];
-					const week_string = weeks_ == 1 ? 'eine Woche' : `${weeks_} Wochen`;
 					const introduction = await interaction.user.send({
-						content: `Hi. Es ist meine Ehre an deinem Gedächtnis anzuklopfen und dich ${
-							days_of_week[userconfig.modulo]
-						}x pro Woche an die Gebetsanliegen zu erinnern, und dies pro Anliegen ${week_string} lang.
-Falls du häufiger Erinnerungen erhalten möchtest, oder wenn ich dir zu nervig bin:
-Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen.`,
+						content: `Hallo.\n Dein Gebets-Erinnerungsbot grüßt dich hiermit herzlichst. Es ist mir eine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern.
+In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtest, kannst du durch Befehle im Chat meine Frequenz bearbeiten. `,
 						embeds: [
 							{
 								title: 'Kurzanleitung',
@@ -97,7 +91,6 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							embeds: [
 								{
 									title: 'Bereits abonniert',
-									description: 'Hat deine Katze etwa deine Maus gefangen?',
 									color: 0x12d900
 								}
 							]
@@ -158,44 +151,50 @@ Folge den Folgenden Anweisungen und ich erscheine dann nach deinen Einstellungen
 							}
 						});
 					} else {
-						const embed = await prisma.embed.findFirst({
-							where: {
-								messageId: interaction.user.id,
-								swallowedId: id
-							}
+						await interaction.reply({
+							ephemeral: true,
+							embeds: [
+								{
+									title: 'Keine Rechte',
+									description: 'Du hast das nicht gepostet!',
+									color: 0x12d900
+								}
+							]
 						});
-						if (embed === null) {
-							await interaction.reply({
-								ephemeral: true,
-								embeds: [
-									{
-										title: 'Bereits abonniert / Nutzer nicht registriert',
-										description: 'Hat deine Katze etwa deine Maus gefangen?',
-										color: 0x12d900
-									}
-								]
-							});
-							return;
-						}
-						await prisma.embed.deleteMany({
-							where: {
-								swallowedId: id,
-								messageId: interaction.user.id
-							}
-						});
+						return;
 					}
-
+						
+				} catch (e) {}}
+			
+			if (interaction.customId.startsWith("deabo_")) {
+				const id = interaction.customId.substring(6);
+				const embed = await prisma.embed.findFirst({
+					where: {
+						messageId: interaction.user.id,
+						swallowedId: id
+					}
+				});
+				if (embed === null) {
 					await interaction.reply({
 						ephemeral: true,
 						embeds: [
 							{
-								title: interaction.user.id == swallowed.author_id ? 'Gelöscht' : 'Deabonniert',
+								title: 'Noch nicht abonniert',
 								color: 0x12d900
 							}
 						]
 					});
-				} catch (e) {}
+					return;
+				}
+				await prisma.embed.deleteMany({
+					where: {
+						swallowedId: id,
+						messageId: interaction.user.id
+					}
+				});
 			}
+		
+			
 			if (interaction.customId.startsWith('edit_')) {
 				const id = interaction.customId.substring(5);
 				try {
