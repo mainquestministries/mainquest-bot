@@ -90,7 +90,8 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 							ephemeral: true,
 							embeds: [
 								{
-									title: 'Bereits abonniert',
+									title: 'Obsolet',
+									description: 'Du hast das bereits abonniert.',
 									color: 0x12d900
 								}
 							]
@@ -157,16 +158,16 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 								{
 									title: 'Keine Rechte',
 									description: 'Du hast das nicht gepostet!',
-									color: 0x12d900
+									color: 0xffffff
 								}
 							]
 						});
 						return;
 					}
-						
-				} catch (e) {}}
-			
-			if (interaction.customId.startsWith("deabo_")) {
+				} catch (e) {}
+			}
+
+			if (interaction.customId.startsWith('deabo_')) {
 				const id = interaction.customId.substring(6);
 				const embed = await prisma.embed.findFirst({
 					where: {
@@ -180,6 +181,7 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 						embeds: [
 							{
 								title: 'Noch nicht abonniert',
+								description: 'Overflow_defender exited with ERROR CODE 0',
 								color: 0x12d900
 							}
 						]
@@ -197,14 +199,14 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 					embeds: [
 						{
 							title: 'Deabonniert',
+							description: 'Du kannst die Nachricht natürlich wieder abonnieren.',
 							color: 0x12d900
 						}
 					]
-				})
-				return
+				});
+				return;
 			}
-		
-			
+
 			if (interaction.customId.startsWith('edit_')) {
 				const id = interaction.customId.substring(5);
 				try {
