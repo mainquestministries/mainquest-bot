@@ -40,17 +40,16 @@ export class UserCommand extends Command {
 				} else {
 					color_temp = embed.Swallowed.color;
 				}
-				const temp_embed = {
+				embeds.push({
 					title: `Gebetsanliegen von ${embed.Swallowed.author}`,
+					url: embed.Swallowed.url,
 					description: embed.Swallowed.message_content,
 					color: color_temp,
 					author: {
 						name: embed.Swallowed.author,
 						icon_url: embed.Swallowed.author_avatar_url ?? undefined
 					}
-				};
-				this.container.logger.debug(temp_embed);
-				embeds.push(temp_embed);
+				});
 			});
 			return interaction.reply({ content: 'Dein Feed', embeds: embeds, ephemeral: !interaction.channel?.isDMBased() });
 		} catch {
