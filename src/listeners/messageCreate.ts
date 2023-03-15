@@ -143,7 +143,8 @@ export class UserEvent extends Listener {
 					message_content: message.content,
 					author: message.member?.nickname ?? message.author.username,
 					author_avatar_url: avatar,
-					color: color_
+					color: color_,
+					url: new_msg.url
 				}
 			});
 			await message.delete();

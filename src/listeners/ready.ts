@@ -70,6 +70,7 @@ export class UserEvent extends Listener {
 					}
 					embeds.push({
 						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
+						url: embed.Swallowed.url,
 						description: embed.Swallowed.message_content,
 						color: color_temp,
 						author: {
