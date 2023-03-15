@@ -192,6 +192,16 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 						messageId: interaction.user.id
 					}
 				});
+				interaction.reply({
+					ephemeral: true,
+					embeds: [
+						{
+							title: 'Deabonniert',
+							color: 0x12d900
+						}
+					]
+				})
+				return
 			}
 		
 			
