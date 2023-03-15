@@ -68,7 +68,7 @@ export class UserEvent extends Listener {
 								days_of_week[msg.modulo]
 							}x pro Woche wieder bei dir auftauchen.`;
 					}
-					const temp_embed = {
+					embeds.push({
 						title: `Gebetsanliegen von ${embed.Swallowed.author}`,
 						description: embed.Swallowed.message_content,
 						color: color_temp,
@@ -76,9 +76,8 @@ export class UserEvent extends Listener {
 							name: embed.Swallowed.author,
 							icon_url: embed.Swallowed.author_avatar_url ?? undefined
 						},
-						footer: footer === null ? undefined : { text: footer }
-					};
-					embeds.push(temp_embed);
+						footer:  footer === null ? undefined :{ text: footer, icon_url: this.container.client.user?.displayAvatarURL()}
+					});
 				});
 				if (embeds.length > 0) {
 					this.container.logger.info(`Sending Message with ${embeds.length} Embeds to ${next_user.username}(${next_user.id})`);
