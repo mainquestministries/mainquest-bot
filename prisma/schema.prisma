@@ -37,7 +37,7 @@ model Embed {
 model Swallowed {
   id                String  @id //Id of the deleted Message
   channel_id        String
-  message_content   String
+  message_content   String  @db.LongText
   author            String
   author_avatar_url String?
   color             Int     @default(14180644)

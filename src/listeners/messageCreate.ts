@@ -13,12 +13,13 @@ export class UserEvent extends Listener {
 		if (message.guildId === null) return;
 		if (message.type === MessageType.Reply) return;
 		try {
-			await prisma.guild.findFirstOrThrow({
+			const guild_ = await prisma.guild.findFirst({
 				where: {
 					p_channel: message.channelId,
 					id: `${message.guildId}`
 				}
 			});
+			if (guild_ === null) return
 
 			this.container.logger.info('New valid Message...');
 
@@ -127,6 +128,7 @@ export class UserEvent extends Listener {
 				],
 				embeds: embeds
 			});
+			const color_ = (await message.author.fetch(true)).accentColor ?? undefined
 			await prisma.swallowed.create({
 				data: {
 					author_id: message.author.id,
@@ -141,10 +143,12 @@ export class UserEvent extends Listener {
 					message_content: message.content,
 					author: message.member?.nickname ?? message.author.username,
 					author_avatar_url: avatar,
-					color: (await message.author.fetch(true)).accentColor ?? undefined
+					color: color_
 				}
 			});
 			await message.delete();
-		} catch (e) {}
+		} catch (e) {
+			this.container.logger.error(e)
+		}
 	}
 }
