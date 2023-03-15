@@ -49,11 +49,6 @@
     "watch:start": "tsc-watch -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
     "preformat": "prisma format",
     "format": "prettier --write \"src/**/*.ts\"",
-    "studio": "prisma studio",
-    "preconfigure": "tsc",
-    "migrate": "prisma migrate dev",
-    "configure": "node dist/scripts/init.js",
-    "cleanup": "node src/scripts/cleanup.js",
     "preversion": "git pull",
     "postversion": "git push && git push --tags"
   },
