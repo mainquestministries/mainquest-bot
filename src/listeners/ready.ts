@@ -77,7 +77,7 @@ export class UserEvent extends Listener {
 							name: embed.Swallowed.author,
 							icon_url: embed.Swallowed.author_avatar_url ?? undefined
 						},
-						footer:  footer === null ? undefined :{ text: footer, icon_url: this.container.client.user?.displayAvatarURL()}
+						footer: footer === null ? undefined : { text: footer, icon_url: this.container.client.user?.displayAvatarURL() }
 					});
 				});
 				if (embeds.length > 0) {

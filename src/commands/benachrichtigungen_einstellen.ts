@@ -44,7 +44,7 @@ export class UserCommand extends Command {
 				data: {
 					id: interaction.user.id,
 					modulo: modulo_,
-					repetitions: days_of_week[modulo_] * weeks,
+					repetitions: days_of_week[modulo_] * weeks
 				}
 			});
 			const introduction = await interaction.user.send({
@@ -77,25 +77,26 @@ In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtes
 			});
 			await introduction.pin('Anleitung');
 		} else {
-		await prisma.message.update({
-			where: {
-				id: interaction.user.id
-			},
-			data: {
-				modulo: modulo_,
-				repetitions: days_of_week[modulo_] * weeks,
-				embeds: {
-					updateMany: {
-						where: {
-							messageId: interaction.user.id
-						},
-						data: {
-							sended: 0
+			await prisma.message.update({
+				where: {
+					id: interaction.user.id
+				},
+				data: {
+					modulo: modulo_,
+					repetitions: days_of_week[modulo_] * weeks,
+					embeds: {
+						updateMany: {
+							where: {
+								messageId: interaction.user.id
+							},
+							data: {
+								sended: 0
+							}
 						}
 					}
 				}
-			}
-		})};
+			});
+		}
 
 		return await interaction.reply({
 			embeds: [

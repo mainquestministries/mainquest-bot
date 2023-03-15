@@ -40,7 +40,7 @@ model Swallowed {
   message_content   String  @db.LongText
   author            String
   author_avatar_url String?
-  url String   // TODO: Make required
+  url               String // TODO: Make required
   color             Int     @default(14180644)
   author_id         String
   new_id            String  @unique

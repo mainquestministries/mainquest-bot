@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
 					id: `${message.guildId}`
 				}
 			});
-			if (guild_ === null) return
+			if (guild_ === null) return;
 
 			this.container.logger.info('New valid Message...');
 
@@ -113,13 +113,14 @@ export class UserEvent extends Listener {
 									name: `✔`
 								},
 								type: 2
-							}, {
+							},
+							{
 								style: 4,
 								custom_id: `delete_${message.id}`,
 								disabled: false,
 								emoji: {
 									id: undefined,
-									name: "🗑️"
+									name: '🗑️'
 								},
 								type: 2
 							}
@@ -128,7 +129,7 @@ export class UserEvent extends Listener {
 				],
 				embeds: embeds
 			});
-			const color_ = (await message.author.fetch(true)).accentColor ?? undefined
+			const color_ = (await message.author.fetch(true)).accentColor ?? undefined;
 			await prisma.swallowed.create({
 				data: {
 					author_id: message.author.id,
@@ -149,7 +150,7 @@ export class UserEvent extends Listener {
 			});
 			await message.delete();
 		} catch (e) {
-			this.container.logger.error(e)
+			this.container.logger.error(e);
 		}
 	}
 }
