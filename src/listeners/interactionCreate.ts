@@ -21,8 +21,8 @@ export class UserEvent extends Listener {
 						}
 					});
 					const introduction = await interaction.user.send({
-						content: `Hallo.\n Dein Gebets-Erinnerungsbot grüßt dich hiermit herzlichst. Es ist mir eine Ehre an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern.
-In dem Fall das du häufiger (oder auch seltener) Erinnerungen erhalten möchtest, kannst du durch Befehle im Chat meine Frequenz bearbeiten. `,
+						content: `Hallo!
+Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. Es ist mir eine Ehre, an deinem Gedächtnis anzuklopfen und dich an die Gebetsanliegen zu erinnern. Falls du ändern möchtest, wie häufig ich dich erinnere, kannst du dies durch die unten stehenden Befehle anpassen.`,
 						embeds: [
 							{
 								title: 'Kurzanleitung',
