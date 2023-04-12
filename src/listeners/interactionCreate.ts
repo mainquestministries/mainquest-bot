@@ -61,10 +61,8 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					});
 					let fetched_user = (
-						await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch({
-							force: true
-						})
-					)?.get(swallowed.author_id);
+						await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch(swallowed.author_id)
+					) //?.get(swallowed.author_id);
 					if (fetched_user == undefined) {
 						await interaction.reply({
 							ephemeral: true,

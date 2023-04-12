@@ -11,6 +11,9 @@ export class UserEvent extends Listener {
 		if (message.channel.isThread()) return;
 		if (message.channel.isDMBased()) return;
 		if (message.guildId === null) return;
+		if (message.mentions.members !== null) return;
+		if (message.mentions.roles !== null) return;
+		if (message.mentions.everyone === true) return;
 		if (message.type === MessageType.Reply) return;
 		try {
 			const guild_ = await prisma.guild.findFirst({
