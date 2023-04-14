@@ -2,17 +2,22 @@
 
 {
   # https://devenv.sh/basics/
-  env.GREET = "devenv";
+  env.GREET = "mainquestbot-devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+  packages = [ pkgs.git pkgs.nodejs-18_x 
+                pkgs.nodePackages.node-gyp-build 
+                pkgs.gcc9
+                pkgs.python310Full 
+                pkgs.gnumake
+                pkgs.python310Packages.gyp];
 
   # https://devenv.sh/scripts/
   scripts.hello.exec = "echo hello from $GREET";
 
   enterShell = ''
     hello
-    git --version
+    node --version
   '';
 
   # https://devenv.sh/languages/
