@@ -32,3 +32,9 @@ config.ts
 .db.env
 prisma/data/dev.db
 prisma/data/dev.db-journal
+
+# Devenv
+.devenv*
+devenv.local.nix
+.direnv/
+
