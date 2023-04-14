@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   # https://devenv.sh/basics/
   env.GREET = "mainquestbot-devenv";
+  
 
   # https://devenv.sh/packages/
   packages = [ pkgs.git pkgs.nodejs-18_x 
@@ -19,6 +20,17 @@
     hello
     node --version
   '';
+
+  services.mysql.enable = true;
+  services.mysql.package = pkgs.mariadb;
+  services.mysql.initialDatabases = [{ name = "app"; }];
+  services.mysql.ensureUsers = [
+    {
+      name = "app";
+      password = "app";
+      ensurePermissions = { "app.*" = "ALL PRIVILEGES"; };
+    }
+  ];
 
   # https://devenv.sh/languages/
   # languages.nix.enable = true;
