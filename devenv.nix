@@ -14,21 +14,22 @@
                 pkgs.python310Packages.gyp];
 
   # https://devenv.sh/scripts/
-  scripts.hello.exec = "echo hello from $GREET";
+  scripts.migrate.exec = "npx prisma migrate dev";
+  scripts.update.exec = "npm ci";
 
   enterShell = ''
-    hello
-    node --version
+    echo Use update to update to the latest packages and migrate to do a migration.
+    echo Node Version: `node --version`
   '';
 
   services.mysql.enable = true;
   services.mysql.package = pkgs.mariadb;
-  services.mysql.initialDatabases = [{ name = "app"; }];
+  services.mysql.initialDatabases = [{ name = "discord"; }];
   services.mysql.ensureUsers = [
     {
-      name = "app";
-      password = "app";
-      ensurePermissions = { "app.*" = "ALL PRIVILEGES"; };
+      name = "bot";
+      password = "12345";
+      ensurePermissions = { "*.*" = "ALL PRIVILEGES"; };
     }
   ];
 
@@ -40,6 +41,10 @@
 
   # https://devenv.sh/processes/
   # processes.ping.exec = "ping example.com";
+
+  processes = {
+    node.exec= "npm run watch:start";
+  };
 
   # See full reference at https://devenv.sh/reference/options/
 }
