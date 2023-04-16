@@ -39,7 +39,6 @@ pkgs.stdenv.mkDerivation rec {
      npm ci --no-progress
      npx prisma generate
      npm run build:production
-     python3 scripts/version.py >> version.txt
      rm -f dist/.tsbuildinfo
   '';
 

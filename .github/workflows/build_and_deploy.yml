@@ -28,7 +28,7 @@ jobs:
       with:
         path: checkout
     - name: Check Version
-      run: python3 checkout/scripts/version.py ${{github.ref_name}} >> $GITHUB_ENV
+      run: python3 checkout/scripts/check_version.py ${{github.ref_name}} >> $GITHUB_ENV
     - name: Delete script folder
       run: rm -rf checkout
     - uses: actions/setup-python@v3.1.3
