@@ -3,93 +3,121 @@ name: CI/CD Pipeline
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v19
-        with:
-          nix_path: nixpkgs=channel:nixos-22.11
-      - name: Build
-        run: nix-build --no-sandbox build.nix
-      - uses: actions/upload-artifact@v3
-        with:
-          name: result
-          path: result/
-
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Install Clean
+      run: npm ci
+    - name: Build
+      run: npm run build:production
+    - name: Remove Unused Files
+      run: | 
+           rm "dist/.tsbuildinfo"
+    - name: Upload
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        name: target_commonjs
+        path: dist
+        retention-days: 1
+        if-no-files-found: error
+        
   publish:
-    runs-on: ubuntu-22.04
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          path: checkout
-      - name: Check Version
-        run: python3 checkout/scripts/check_version.py ${{github.ref_name}} >> $GITHUB_ENV
-      - name: Delete script folder
-        run: rm -rf checkout
-      - uses: actions/setup-python@v3.1.3
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: result
-      - name: Bundle
-        run: zip -r ${{ github.event.repository.name }}-release-${{github.ref_name}}.zip . -x node_modules/
-      - name: Publish
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: Release ${{ github.ref_name}}
-          prerelease: ${{ env.is_prerelease }}
-          files: ${{ github.event.repository.name }}-release-${{github.ref_name}}.zip
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+   runs-on: ubuntu-22.04
+   needs: build
+   steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4.5.0
+      with:
+       python-version: 3.7
+    - name: Check Version
+      run: python3 scripts/check_version.py  >> $GITHUB_ENV
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with: 
+        name: target_commonjs
+        path: dist
+    - name: Bundle
+      run: |
+            zip -r ${{ github.event.repository.name }}-release-${{github.ref_name}}.zip . -x "node_modules/*" "src/*" ".git/*" ".github/*" "node_modules/*" ".gitignore" "tsconfig.json"
+    - name: Publish
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        name: Release ${{ github.ref_name}}
+        prerelease: ${{ env.is_prerelease }}
+        files:  ${{ github.event.repository.name }}-release-${{github.ref_name}}.zip
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
   deploy:
     runs-on: ubuntu-22.04
     needs: build
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: result
-      - name: Pre Transaction
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: deployer
-          key: ${{ secrets.KEY }}
-          script: |
-            sudo supervisorctl stop bots:mqbot
-            sudo /opt/deploy_scripts/chown_mqbot_deployer.sh
-            sudo /opt/deploy_scripts/cleanup_mqbot.sh
-      - name: Transaction
-        uses: up9cloud/action-rsync@master
-        env:
-          HOST: ${{ secrets.HOST }}
-          USER: deployer
-          KEY: ${{ secrets.KEY }}
-          TARGET: /var/www/mqbot
-          ARGS: -az --stats --delete
-          VERBOSE: true
-      - name: Post Transaction
-        uses: appleboy/ssh-action@master
-        env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        with:
-          host: ${{ secrets.HOST }}
-          username: deployer
-          key: ${{ secrets.KEY }}
-          envs: DISCORD_TOKEN, DATABASE_URL
-          script: |
-            cd /var/www/mqbot
-            echo "DATABASE_URL=$DATABASE_URL" > .env
-            echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
-            sudo /opt/deploy_scripts/chown_mqbot_mqadmin.sh
-            sudo -u mqadmin /opt/deploy_scripts/migrate_database.sh
-            sudo supervisorctl start bots:mqbot
+    steps: 
+    - uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3.6.0
+      with:
+        node-version: 18
+    - name: Install For Production
+      run: npm ci --omit=dev
+    - name: Generate Prisma
+      run: npx prisma generate
+    - name: Remove Unused Files
+      run: |
+            rm -rf src/ scripts/ .git/ .github/
+            rm .gitignore .sapphirerc.json *.md tsconfig.json .prettierignore
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: target_commonjs
+        path: dist
+    - name: Pre Transaction
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: deployer
+        key: ${{ secrets.KEY }}
+        script: |
+                 sudo supervisorctl stop bots:mqbot
+                 sudo /opt/deploy_scripts/chown_mqbot_deployer.sh
+                 sudo /opt/deploy_scripts/cleanup_mqbot.sh
+    - name: Transaction
+      uses: up9cloud/action-rsync@master
+      env:
+        HOST: ${{ secrets.HOST }}
+        USER: deployer
+        KEY: ${{ secrets.KEY }}
+        TARGET: /var/www/mqbot
+        ARGS: -az --stats --delete
+        VERBOSE: true
+    - name: Post Transaction
+      uses: appleboy/ssh-action@master
+      env: 
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: deployer
+        key: ${{ secrets.KEY }}
+        envs: DISCORD_TOKEN, DATABASE_URL
+        script: | 
+                cd /var/www/mqbot
+                echo "DATABASE_URL=$DATABASE_URL" > .env
+                echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
+                sudo /opt/deploy_scripts/chown_mqbot_mqadmin.sh
+                sudo -u mqadmin /opt/deploy_scripts/migrate_database.sh
+                sudo supervisorctl start bots:mqbot
+           
+    
+      
+      
+      
