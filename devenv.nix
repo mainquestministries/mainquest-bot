@@ -23,6 +23,9 @@
     echo Node Version: `node --version`
   '';
 
+  pre-commit.hooks.prettier.enable = true;
+  pre-commit.hooks.nixfmt.enable = true;
+
   services.mysql.enable = true;
   services.mysql.package = pkgs.mariadb;
   services.mysql.initialDatabases = [{ name = "discord"; }];
