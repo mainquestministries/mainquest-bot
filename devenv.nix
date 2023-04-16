@@ -6,7 +6,8 @@
   
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git pkgs.nodejs-18_x 
+  packages = [  pkgs.git 
+                pkgs.nodejs-18_x 
                 pkgs.nodePackages.node-gyp-build 
                 pkgs.gcc9
                 pkgs.python310Full 
