@@ -1,9 +1,7 @@
-import json, re
+import sys, re
 
-with open("package.json") as raw_data:
-    data = json.load(raw_data)
 
-version = data["version"]
+version = sys.argv[1][1:]
 
 prerelease = any(c.isalpha() for c in version)
 

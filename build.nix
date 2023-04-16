@@ -39,12 +39,16 @@ pkgs.stdenv.mkDerivation rec {
      npm ci --no-progress
      npx prisma generate
      npm run build:production
+     python3 scripts/version.py >> version.txt
      rm -f dist/.tsbuildinfo
   '';
 
   installPhase = ''
     mkdir -p $out
-    cp -t $out -r dist/ -r prisma/ LICENSE package-lock.json package.json tsconfig.json
+    cp -t $out -r dist/ -r prisma/ LICENSE package-lock.json package.json
+    cd $out
+    npm ci --omit=dev
+    npx prisma generate
   '';
 
 }
