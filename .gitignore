@@ -38,3 +38,4 @@ prisma/data/dev.db-journal
 devenv.local.nix
 .direnv/
 
+result

@@ -36,12 +36,14 @@ pkgs.stdenv.mkDerivation rec {
   buildPhase = ''
      export HOME=$PWD/.home
      export npm_config_cache=$PWD/.npm
-     npm ci
+     npm ci --no-progress
+     npx prisma generate
      npm run build:production
   '';
 
   installPhase = ''
-    cp -t -r $out dist/ prisma/ LICENSE package-lock.json package.json
+    mkdir -p $out
+    cp -t $out -r dist/ -r prisma/ LICENSE package-lock.json package.json tsconfig.json
   '';
 
 }
