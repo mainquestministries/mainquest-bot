@@ -39,6 +39,7 @@ pkgs.stdenv.mkDerivation rec {
      npm ci --no-progress
      npx prisma generate
      npm run build:production
+     rm -f dist/.tsbuildinfo
   '';
 
   installPhase = ''
