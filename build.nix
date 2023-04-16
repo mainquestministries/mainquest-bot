@@ -42,7 +42,7 @@ in pkgs.stdenv.mkDerivation rec {
     mkdir -p $out
     cp -t $out -r dist/ -r prisma/ LICENSE package-lock.json package.json
     cd $out
-    npm ci --omit=dev
+    npm ci --omit=dev --no-progress
     npx prisma generate
   '';
 
