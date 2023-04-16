@@ -1,6 +1,6 @@
 {
 	"name": "mainquest-bot",
-	"version": "2.7.3",
+	"version": "2.7.2",
 	"main": "dist/index.js",
 	"author": "@sapphire",
 	"license": "UNLICENSE",
@@ -49,6 +49,7 @@
 		"watch:start": "tsc-watch -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
 		"preformat": "prisma format",
 		"format": "prettier --write \"src/**/*.ts\"",
+		"preversion": "git pull",
 		"postversion": "git push && git push --tags"
 	},
 	"prettier": "@sapphire/prettier-config"
