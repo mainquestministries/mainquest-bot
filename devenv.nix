@@ -1,8 +1,6 @@
 { pkgs, inputs, ... }:
 
 {
-  # https://devenv.sh/basics/
-  env.GREET = "mainquestbot-devenv";
   
 
   # https://devenv.sh/packages/

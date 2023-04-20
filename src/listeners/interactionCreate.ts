@@ -113,6 +113,8 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 							}
 						}
 					});
+
+					// Hier weiterarbeiten: const fetched_message = await this.container.client.guilds.cache.
 					await interaction.reply({
 						ephemeral: true,
 						embeds: [
