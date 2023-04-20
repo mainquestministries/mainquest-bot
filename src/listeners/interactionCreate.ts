@@ -222,6 +222,17 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 								id: id
 							}
 						});
+
+						await interaction.reply({
+							ephemeral: true,
+							embeds: [
+								{
+									title: 'Gelöscht',
+									description: 'Gesagt, getan.',
+									color: 0x12d900
+								}
+							]
+						})
 					} else {
 						await interaction.reply({
 							ephemeral: true,
