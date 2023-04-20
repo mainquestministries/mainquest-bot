@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ActionRowBuilder, APIEmbed, Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { Listener, type ListenerOptions } from '@sapphire/framework';
+import { ActionRowBuilder, type APIEmbed, type Interaction, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})

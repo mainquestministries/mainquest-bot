@@ -7,7 +7,6 @@
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"module": "CommonJS", // CommonJS
         "moduleResolution": "Node",
 		"baseUrl": "./",
 		"paths": {

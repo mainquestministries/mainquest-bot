@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { APIEmbed, APIEmbedThumbnail, Attachment, Message, MessageType } from 'discord.js';
+import { Listener, type ListenerOptions } from '@sapphire/framework';
+import { type APIEmbed, type APIEmbedThumbnail, Attachment, Message, MessageType } from 'discord.js';
 const prisma = new PrismaClient();
 
 @ApplyOptions<ListenerOptions>({})
