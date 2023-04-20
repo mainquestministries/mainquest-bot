@@ -114,7 +114,78 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					});
 
-					// Hier weiterarbeiten: const fetched_message = await this.container.client.guilds.cache.
+					// Hier weiterarbeiten: 
+					const channel = await (
+						await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
+					)?.get(swallowed.channel_id);
+					const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)
+					const count = await prisma.embed.count({
+						where: {
+							swallowedId: id
+						}
+					})
+					await new_msg?.edit(
+						{	components: [{
+							type: 1,
+							components: [
+								{
+									style: 1,
+									label: `Abonnieren (${count})`,
+									custom_id: `abo_${swallowed.id}`,
+									disabled: false,
+									emoji: {
+										id: undefined,
+										name: `🔔`
+									},
+									type: 2
+								},
+								{
+									style: 4,
+									label: `Deabonnieren`,
+									custom_id: `deabo_${swallowed.id}`,
+									disabled: false,
+									emoji: {
+										id: undefined,
+										name: `✖️`
+									},
+									type: 2
+								},
+								{
+									style: 2,
+									label: '',
+									custom_id: `edit_${swallowed.id}`,
+									disabled: false,
+									emoji: {
+										id: undefined,
+										name: `📝`
+									},
+									type: 2
+								},
+								{
+									style: 3,
+									custom_id: `check_${swallowed.id}`,
+									disabled: false,
+									emoji: {
+										id: undefined,
+										name: `✔`
+									},
+									type: 2
+								},
+								{
+									style: 4,
+									custom_id: `delete_${swallowed.id}`,
+									disabled: false,
+									emoji: {
+										id: undefined,
+										name: '🗑️'
+									},
+									type: 2
+								}
+							
+							]
+						}]}
+					)
+
 					await interaction.reply({
 						ephemeral: true,
 						embeds: [
@@ -127,7 +198,7 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 					});
 					return;
 				} catch (e) {
-					return;
+					//console.log(e);
 				}
 			}
 			if (interaction.customId.startsWith('delete_')) {
@@ -169,6 +240,16 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 
 			if (interaction.customId.startsWith('deabo_')) {
 				const id = interaction.customId.substring(6);
+				try {
+				const swallowed = await prisma.swallowed.findFirstOrThrow({
+					where: {
+						id: id
+					},
+					include: {
+						Embed: true
+					}
+				});
+
 				const embed = await prisma.embed.findFirst({
 					where: {
 						messageId: interaction.user.id,
@@ -194,6 +275,83 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						messageId: interaction.user.id
 					}
 				});
+
+				const channel = await (
+					await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
+				)?.get(swallowed.channel_id);
+				const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)
+				const count = await prisma.embed.count({
+					where: {
+						swallowedId: id
+					}
+				})
+				let count_text = "";
+				if (count > 0) {
+					count_text = " (" + count.toString() + ")"
+				}
+
+				await new_msg?.edit(
+					{	components: [{
+						type: 1,
+						components: [
+							{
+								style: 1,
+								label: `Abonnieren${count_text}`,
+								custom_id: `abo_${swallowed.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `🔔`
+								},
+								type: 2
+							},
+							{
+								style: 4,
+								label: `Deabonnieren`,
+								custom_id: `deabo_${swallowed.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `✖️`
+								},
+								type: 2
+							},
+							{
+								style: 2,
+								label: '',
+								custom_id: `edit_${swallowed.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `📝`
+								},
+								type: 2
+							},
+							{
+								style: 3,
+								custom_id: `check_${swallowed.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: `✔`
+								},
+								type: 2
+							},
+							{
+								style: 4,
+								custom_id: `delete_${swallowed.id}`,
+								disabled: false,
+								emoji: {
+									id: undefined,
+									name: '🗑️'
+								},
+								type: 2
+							}
+						
+						]
+					}]}
+				)
+
 				interaction.reply({
 					ephemeral: true,
 					embeds: [
@@ -204,7 +362,9 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					]
 				});
-				return;
+				return;} catch (e) {
+
+				}
 			}
 
 			if (interaction.customId.startsWith('edit_')) {
