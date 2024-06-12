@@ -15,7 +15,8 @@ export class UserEvent extends Listener {
 			message.mentions.everyone === true ||
 			message.type === MessageType.Reply ||
 			message.type === MessageType.ThreadCreated ||
-			message.type === MessageType.ThreadStarterMessage
+			message.type === MessageType.ThreadStarterMessage ||
+			message.type === MessageType.ChannelPinnedMessage
 		) {
 			return;
 		}
