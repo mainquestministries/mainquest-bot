@@ -7,12 +7,18 @@ const prisma = new PrismaClient();
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public async run(message: Message) {
-		if (message.author.bot) return;
-		if (message.channel.isThread()) return;
-		if (message.channel.isDMBased()) return;
-		if (message.guildId === null) return;
-		if (message.mentions.everyone === true) return;
-		if (message.type === MessageType.Reply) return;
+		if (
+			message.author.bot ||
+			message.channel.isThread() ||
+			message.channel.isDMBased() ||
+			message.guildId === null ||
+			message.mentions.everyone === true ||
+			message.type === MessageType.Reply ||
+			message.type === MessageType.ThreadCreated ||
+			message.type === MessageType.ThreadStarterMessage
+		) {
+			return;
+		}
 		try {
 			const guild_ = await prisma.guild.findFirst({
 				where: {
