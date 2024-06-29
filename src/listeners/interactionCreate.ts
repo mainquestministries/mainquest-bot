@@ -213,7 +213,7 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					});
 					if (interaction.user.id == swallowed.author_id) {
-						const channel = await (
+						const channel = (
 							await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
 						)?.get(swallowed.channel_id);
 						(await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)?.delete();
