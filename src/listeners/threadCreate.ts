@@ -19,7 +19,7 @@ export class UserEvent extends Listener {
 				return this.container.client.logger.debug('Thread created by me, but not swallowed. Strange...');
 			}
 			const original_user = await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch(swallowed.author_id);
-			if (original_user?.id === swallowed.author_id) {
+			if (thread.ownerId === swallowed.author_id) {
 				return;
 			}
 
