@@ -29,6 +29,7 @@
 		"reflect-metadata": "^0.1.13"
 	},
 	"devDependencies": {
+		"@sapphire/cli": "^1.9.3",
 		"@sapphire/prettier-config": "^1.4.5",
 		"@sapphire/ts-config": "^4.0.0",
 		"@types/node": "^18.15.12",
