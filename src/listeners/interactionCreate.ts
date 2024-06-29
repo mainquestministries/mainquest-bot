@@ -60,9 +60,7 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 							Embed: true
 						}
 					});
-					let fetched_user = (
-						await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch(swallowed.author_id)
-					) //?.get(swallowed.author_id);
+					let fetched_user = await this.container.client.guilds.cache.get(swallowed.guildId)?.members.fetch(swallowed.author_id); //?.get(swallowed.author_id);
 					if (fetched_user == undefined) {
 						await interaction.reply({
 							ephemeral: true,
@@ -114,77 +112,78 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					});
 
-					// Hier weiterarbeiten: 
+					// Hier weiterarbeiten:
 					const channel = await (
 						await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
 					)?.get(swallowed.channel_id);
-					const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)
+					const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id);
 					const count = await prisma.embed.count({
 						where: {
 							swallowedId: id
 						}
-					})
-					await new_msg?.edit(
-						{	components: [{
-							type: 1,
-							components: [
-								{
-									style: 1,
-									label: `Abonnieren (${count})`,
-									custom_id: `abo_${swallowed.id}`,
-									disabled: false,
-									emoji: {
-										id: undefined,
-										name: `🔔`
+					});
+					await new_msg?.edit({
+						components: [
+							{
+								type: 1,
+								components: [
+									{
+										style: 1,
+										label: `Abonnieren (${count})`,
+										custom_id: `abo_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `🔔`
+										},
+										type: 2
 									},
-									type: 2
-								},
-								{
-									style: 4,
-									label: `Deabonnieren`,
-									custom_id: `deabo_${swallowed.id}`,
-									disabled: false,
-									emoji: {
-										id: undefined,
-										name: `✖️`
+									{
+										style: 4,
+										label: `Deabonnieren`,
+										custom_id: `deabo_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `✖️`
+										},
+										type: 2
 									},
-									type: 2
-								},
-								{
-									style: 2,
-									label: '',
-									custom_id: `edit_${swallowed.id}`,
-									disabled: false,
-									emoji: {
-										id: undefined,
-										name: `📝`
+									{
+										style: 2,
+										label: '',
+										custom_id: `edit_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `📝`
+										},
+										type: 2
 									},
-									type: 2
-								},
-								{
-									style: 3,
-									custom_id: `check_${swallowed.id}`,
-									disabled: false,
-									emoji: {
-										id: undefined,
-										name: `✔`
+									{
+										style: 3,
+										custom_id: `check_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `✔`
+										},
+										type: 2
 									},
-									type: 2
-								},
-								{
-									style: 4,
-									custom_id: `delete_${swallowed.id}`,
-									disabled: false,
-									emoji: {
-										id: undefined,
-										name: '🗑️'
-									},
-									type: 2
-								}
-							
-							]
-						}]}
-					)
+									{
+										style: 4,
+										custom_id: `delete_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: '🗑️'
+										},
+										type: 2
+									}
+								]
+							}
+						]
+					});
 
 					await interaction.reply({
 						ephemeral: true,
@@ -213,9 +212,9 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 						}
 					});
 					if (interaction.user.id == swallowed.author_id) {
-						const channel = (
-							await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
-						)?.get(swallowed.channel_id);
+						const channel = (await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch())?.get(
+							swallowed.channel_id
+						);
 						(await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)?.delete();
 						await prisma.swallowed.deleteMany({
 							where: {
@@ -232,7 +231,7 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 									color: 0x12d900
 								}
 							]
-						})
+						});
 					} else {
 						await interaction.reply({
 							ephemeral: true,
@@ -252,130 +251,130 @@ Ich, dein persönlicher Gebets-Erinnerungsbot, grüße dich hiermit herzlichst. 
 			if (interaction.customId.startsWith('deabo_')) {
 				const id = interaction.customId.substring(6);
 				try {
-				const swallowed = await prisma.swallowed.findFirstOrThrow({
-					where: {
-						id: id
-					},
-					include: {
-						Embed: true
-					}
-				});
+					const swallowed = await prisma.swallowed.findFirstOrThrow({
+						where: {
+							id: id
+						},
+						include: {
+							Embed: true
+						}
+					});
 
-				const embed = await prisma.embed.findFirst({
-					where: {
-						messageId: interaction.user.id,
-						swallowedId: id
+					const embed = await prisma.embed.findFirst({
+						where: {
+							messageId: interaction.user.id,
+							swallowedId: id
+						}
+					});
+					if (embed === null) {
+						await interaction.reply({
+							ephemeral: true,
+							embeds: [
+								{
+									title: 'Noch nicht abonniert',
+									description: 'Overflow_defender exited with ERROR CODE 0',
+									color: 0x12d900
+								}
+							]
+						});
+						return;
 					}
-				});
-				if (embed === null) {
-					await interaction.reply({
+					await prisma.embed.deleteMany({
+						where: {
+							swallowedId: id,
+							messageId: interaction.user.id
+						}
+					});
+
+					const channel = await (
+						await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
+					)?.get(swallowed.channel_id);
+					const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id);
+					const count = await prisma.embed.count({
+						where: {
+							swallowedId: id
+						}
+					});
+					let count_text = '';
+					if (count > 0) {
+						count_text = ' (' + count.toString() + ')';
+					}
+
+					await new_msg?.edit({
+						components: [
+							{
+								type: 1,
+								components: [
+									{
+										style: 1,
+										label: `Abonnieren${count_text}`,
+										custom_id: `abo_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `🔔`
+										},
+										type: 2
+									},
+									{
+										style: 4,
+										label: `Deabonnieren`,
+										custom_id: `deabo_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `✖️`
+										},
+										type: 2
+									},
+									{
+										style: 2,
+										label: '',
+										custom_id: `edit_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `📝`
+										},
+										type: 2
+									},
+									{
+										style: 3,
+										custom_id: `check_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: `✔`
+										},
+										type: 2
+									},
+									{
+										style: 4,
+										custom_id: `delete_${swallowed.id}`,
+										disabled: false,
+										emoji: {
+											id: undefined,
+											name: '🗑️'
+										},
+										type: 2
+									}
+								]
+							}
+						]
+					});
+
+					interaction.reply({
 						ephemeral: true,
 						embeds: [
 							{
-								title: 'Noch nicht abonniert',
-								description: 'Overflow_defender exited with ERROR CODE 0',
+								title: 'Deabonniert',
+								description: 'Du kannst die Nachricht natürlich wieder abonnieren.',
 								color: 0x12d900
 							}
 						]
 					});
 					return;
-				}
-				await prisma.embed.deleteMany({
-					where: {
-						swallowedId: id,
-						messageId: interaction.user.id
-					}
-				});
-
-				const channel = await (
-					await this.container.client.guilds.cache.get(swallowed.guildId)?.channels.fetch()
-				)?.get(swallowed.channel_id);
-				const new_msg = (await (channel as TextChannel).messages.fetch()).get(swallowed.new_id)
-				const count = await prisma.embed.count({
-					where: {
-						swallowedId: id
-					}
-				})
-				let count_text = "";
-				if (count > 0) {
-					count_text = " (" + count.toString() + ")"
-				}
-
-				await new_msg?.edit(
-					{	components: [{
-						type: 1,
-						components: [
-							{
-								style: 1,
-								label: `Abonnieren${count_text}`,
-								custom_id: `abo_${swallowed.id}`,
-								disabled: false,
-								emoji: {
-									id: undefined,
-									name: `🔔`
-								},
-								type: 2
-							},
-							{
-								style: 4,
-								label: `Deabonnieren`,
-								custom_id: `deabo_${swallowed.id}`,
-								disabled: false,
-								emoji: {
-									id: undefined,
-									name: `✖️`
-								},
-								type: 2
-							},
-							{
-								style: 2,
-								label: '',
-								custom_id: `edit_${swallowed.id}`,
-								disabled: false,
-								emoji: {
-									id: undefined,
-									name: `📝`
-								},
-								type: 2
-							},
-							{
-								style: 3,
-								custom_id: `check_${swallowed.id}`,
-								disabled: false,
-								emoji: {
-									id: undefined,
-									name: `✔`
-								},
-								type: 2
-							},
-							{
-								style: 4,
-								custom_id: `delete_${swallowed.id}`,
-								disabled: false,
-								emoji: {
-									id: undefined,
-									name: '🗑️'
-								},
-								type: 2
-							}
-						
-						]
-					}]}
-				)
-
-				interaction.reply({
-					ephemeral: true,
-					embeds: [
-						{
-							title: 'Deabonniert',
-							description: 'Du kannst die Nachricht natürlich wieder abonnieren.',
-							color: 0x12d900
-						}
-					]
-				});
-				return;} catch (e) {
-
-				}
+				} catch (e) {}
 			}
 
 			if (interaction.customId.startsWith('edit_')) {
