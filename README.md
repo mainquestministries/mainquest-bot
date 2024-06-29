@@ -6,11 +6,11 @@ Bot für den [Mainquest-Server](https://mainquest.org) (remastered)
 
 ## Kommandos
 
-### /prayerchannel
+### /prayerchannel [NUR ADMIN]
 
-Initialisiert den aktuellen Kanal als Gebets-channel. Nur für Admins verfügbar.
+Initialisiert den aktuellen Kanal als Gebets-channel.
 
-### /prayerchannel_deaktivieren
+### /prayerchannel_deaktivieren [NUR ADMIN]
 
 Deaktiviert die prayerchannel-Funktion des Servers. HINWEIS: Löscht ALLE Benachrichtigungen des Gebetschannel.
 
@@ -22,26 +22,20 @@ Deaktiviert die prayerchannel-Funktion des Servers. HINWEIS: Löscht ALLE Benach
 
 Stellt die Benachrichtigungen ein.
 
-### willkommen_channel
-
-Aktiviert einen Willkommmens-channel, der eine DM auslöst oder eine Rolle gibt (oder beides).
-Es muss mindestens eine Option angegeb werden.
-
-### willkommenchannel_deaktivieren
-
-Deaktiviert dein Willkommens-channel.
-
 ### Hinweis zu Losungen
 
 Losungen wurden verschoben: [Losungsbot](https://github.com/mainquestministries/losungsbot)
 
+### Hinweis zu Willkommenschannel
+
+Ich habe keine Ahnung, was der Zweck davon war. WONTIMPLEMENT
+
 ## Installieren / Aufsetzen
 
-Nur bei lokalen Systemen. Nicht nötig für Docker.
+Nur bei lokalen Systemen.
 
 ```sh
 npm install
-npm run configure
 ```
 
 Folge den Anweisungen des Programms.
@@ -74,33 +68,4 @@ Und zum ausführen:
 export NODE_ENV=production # Linux, MAC
 set NODE_ENV=production
 npm run start
-```
-
-### Produktionsumgebung mit Docker
-
-Docker erfordert keine Vorbereitung.
-Du benötigst dennoch deine Datenbank und die Verbindungsdetails.
-Die Migration wird jedoch MySQL NICHT automatisch ausgeführt.
-
-- Migrieren (Dedizierte Datebank):
-
-```sh
-npm install
-npm run configure # Du musst den Discord-Token nicht eingeben
-npm run migrate
-```
-
-Die Datenbank kann auch in einem CI/CD/CD-Prozess mittels `npx prisma migrate deploy` migriert werden.
-
-```sh
-docker build -t mainquestbot:latest .
-```
-
-- Ausführen mit einer dedizierten Datenbank:
-
-```sh
-docker run --network=host \ 
-           --env DATABASE_URL="mysql://DEIN_DATENBANK_STRING" \ 
-           --env DISCORD_TOKEN="DEIN_DISCORD_TOKEN" \
-     mainquestbot:latest
 ```
