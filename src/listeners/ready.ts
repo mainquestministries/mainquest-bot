@@ -81,7 +81,7 @@ export class UserEvent extends Listener {
 					});
 				});
 				if (embeds.length > 0) {
-					this.container.logger.info(`Sending Message with ${embeds.length} Embeds to ${next_user.username}(${next_user.id})`);
+					this.container.logger.info(`Sending Message with ${embeds.length} Embeds to ${next_user.id}`);
 					await prisma.message.update({
 						where: {
 							id: msg.id
